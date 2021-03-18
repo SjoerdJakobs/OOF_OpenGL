@@ -1,2 +1,2 @@
 # OOF_OpenGL
-this is the development repo for OOF_OpenGL aka Object Oriented Framework with OpenGL rendering 
+this is the development repo for my Object Oriented Framework with OpenGL rendering 
