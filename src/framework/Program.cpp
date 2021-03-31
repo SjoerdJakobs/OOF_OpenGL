@@ -1,5 +1,46 @@
 #include "Program.h"
+#include "StandardObject.h"
+#include "PriorityGroup.h"
+#include "Test.h"
+#include "TestClearColor.h"
 
+
+bool ShouldDestructStandardObject(StandardObject* object)
+{
+	if (object->GetShouldDestruct())
+	{
+		delete object;
+		return true;
+	}
+	return false;
+}
+
+bool ShouldRemoveStandardObjectFromLoop(StandardObject* object)
+{
+	return true;
+	/*switch (type)
+	{
+	case input:
+		return object->GetUsesInput();
+		break;
+	case update:
+		return object->GetUsesInput();
+		break;
+	case fixedUpdate:
+		return object->GetUsesUpdate();
+		break;
+	case render:
+		return object->GetUsesRenderer();
+		break;
+	case imGuiRender:
+		return object->GetUsesImGui();
+		break;
+	case debugRender:
+		return object->GetUsesDebugRenderer();
+		break;
+	default:;
+	}*/
+}
 
 Program::Program()
 {
@@ -33,6 +74,7 @@ void Program::Run()
 		ASSERT(false);
 		m_runProgram = false;
 	}
+	
 	const char* glsl_version = "#version 460";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -45,7 +87,7 @@ void Program::Run()
 	float InitialScreenHeight = 800.0f;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(InitialScreenWidth, InitialScreenHeight, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(static_cast<int>(InitialScreenWidth), static_cast<int>(InitialScreenHeight), "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -91,8 +133,8 @@ void Program::Run()
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
 				
-		tests::Test* current;
-		tests::TestClearColor test;
+		//tests::Test* current;
+		//tests::TestClearColor test;
 
 		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
 
@@ -116,15 +158,49 @@ void Program::Run()
 			//	//fixed update
 			//	m_fixedTimeStepTimer -= m_fixedTimeStep;
 			//}
-
-			std::cout << m_deltaTime << std::endl;
+			//std::cout << m_deltaTime << std::endl;
 
 			glViewport(0, 0, ScreenWidth, ScreenHeight);
 			renderer.Clear();
 
-			test.OnUpdate(0.0f);
-			test.OnRender();
+			if (!IsTruePaused())
+			{
+				for (PriorityGroup* group : m_pInputObjectGroups)
+				{
+					for (StandardObject* object : group->standardObjects) {
+						if(!IsPaused() || object->IsPauseImmune())
+						{
+							object->Input(m_unscaledDeltaTime);
+						}
+					}
+				}
+			}
 
+			if (!IsTruePaused())
+			{
+				for (PriorityGroup* group : m_pUpdateObjectGroups)
+				{
+					for (StandardObject* object : group->standardObjects) {
+						if (!IsPaused() || object->IsPauseImmune())
+						{
+							object->ImGuiRender(m_unscaledDeltaTime);
+						}
+					}
+				}
+			}
+
+			if (!IsTruePaused())
+			{
+				for (PriorityGroup* group : m_pRenderObjectGroups)
+				{
+					for (StandardObject* object : group->standardObjects) {
+						if (!IsPaused() || object->IsPauseImmune())
+						{
+							object->ImGuiRender(m_unscaledDeltaTime);
+						}
+					}
+				}
+			}
 			// Start the Dear ImGui frame
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
@@ -133,11 +209,49 @@ void Program::Run()
 			/* Poll for and process events */
 			GLCall(glfwPollEvents());
 
-			test.OnImGuiRender();
 
+			if (!IsTruePaused())
+			{
+				for (PriorityGroup* group : m_pImGuiRenderObjectGroups)
+				{
+					for (StandardObject* object : group->standardObjects) {
+						if (!IsPaused() || object->IsPauseImmune())
+						{
+							object->ImGuiRender(m_unscaledDeltaTime);
+						}
+					}
+				}
+			}
+
+			if(m_shouldRemoveFromInputList)
+			{
+				for (PriorityGroup* group : m_pInputObjectGroups)
+				{
+					//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+				}
+			}
+			
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+			//activate and deactivate objects
+			for (StandardObject* bo : m_objects) {
+				if (bo->IsShouldBeActive() && !bo->IsActiveState()) {
+					bo->AddToLists();
+					bo->SetActiveState(true);
+					bo->Awake();
+				}
+				else if (!bo->IsShouldBeActive() && bo->IsActiveState()) {
+					bo->RemoveFromLists();
+					bo->SetActiveState(false);
+					bo->Sleep();
+				}
+			}
+			
+			//std::remove_if(m_objects.begin(), m_objects.end(), ShouldDestructStandardObject);
+			//destroy objects that need to be destroyed
+			//std::remove_if(m_objects.begin(), m_objects.end(), ShouldDestructStandardObject);
+			
 			/* Swap front and back buffers */
 			GLCall(glfwSwapBuffers(window));
 
@@ -162,9 +276,6 @@ void Program::Start()
 	{
 		m_runProgram = true;
 		
-
-
-
 		
 		Run();
 	}
@@ -172,27 +283,35 @@ void Program::Start()
 
 void Program::CleanUp()
 {
+	
 }
 
 void Program::AddToList(StandardObject* p_obj, LoopType type)
 {
 	switch (type)
 	{
-	case input:
+	case LoopType::input:
 		m_shouldAddToInputList = true;
 		m_pInputObjectsToBeAdded.push_back(p_obj);
 		break;
-	case update:
+	case LoopType::update:
 		m_shouldAddToUpdateList = true;
 		m_pUpdateObjectsToBeAdded.push_back(p_obj);
 		break;
-	case fixedUpdate:
+	case LoopType::fixedUpdate:
 		m_shouldAddToFixedUpdateList = true;
 		m_pFixedUpdateObjectsToBeAdded.push_back(p_obj);
 		break;
-	case render:
+	case LoopType::render:
 		m_shouldAddToRenderList = true;
 		m_pRenderObjectsToBeAdded.push_back(p_obj);
+		break;
+	case LoopType::imGuiRender:
+		m_shouldAddToImGuiRenderList = true;
+		m_pImGuiRenderObjectsToBeAdded.push_back(p_obj);
+		break;
+	case LoopType::debugRender:
+
 		break;
 	default:
 		ASSERT(false);
@@ -203,29 +322,34 @@ void Program::AddToAllLists(StandardObject* p_obj)
 {
 	AddToList(p_obj, LoopType::input);
 	AddToList(p_obj, LoopType::update);
-	AddToList(p_obj, LoopType::fixedUpdate);
+	//AddToList(p_obj, LoopType::fixedUpdate);
 	AddToList(p_obj, LoopType::render);
+	AddToList(p_obj, LoopType::imGuiRender);
 }
 
 void Program::RemoveFromList(StandardObject* p_obj, LoopType type)
 {
 	switch (type)
 	{
-	case input:
+	case LoopType::input:
 		m_shouldRemoveFromInputList = true;
-		m_pInputObjectsToBeRemoved.push_back(p_obj);
+		//m_pInputObjectsToBeRemoved.push_back(p_obj);
 		break;
-	case update:
+	case LoopType::update:
 		m_shouldRemoveFromUpdateList = true;
-		m_pUpdateObjectsToBeRemoved.push_back(p_obj);
+		//m_pUpdateObjectsToBeRemoved.push_back(p_obj);
 		break;
-	case fixedUpdate:
+	case LoopType::fixedUpdate:
 		m_shouldRemoveFromFixedUpdateList = true;
-		m_pFixedUpdateObjectsToBeRemoved.push_back(p_obj);
+		//m_pFixedUpdateObjectsToBeRemoved.push_back(p_obj);
 		break;
-	case render:
+	case LoopType::render:
 		m_shouldRemoveFromRenderList = true;
-		m_pRenderObjectsToBeRemoved.push_back(p_obj);
+		//m_pRenderObjectsToBeRemoved.push_back(p_obj);
+		break;
+	case LoopType::imGuiRender:
+		m_shouldRemoveFromImGuiRenderList = true;
+		//m_pImGuiRenderObjectsToBeRemoved.push_back(p_obj);
 		break;
 	default:
 		ASSERT(false);
@@ -236,6 +360,8 @@ void Program::RemoveFromAllLists(StandardObject* p_obj)
 {
 	RemoveFromList(p_obj, LoopType::input);
 	RemoveFromList(p_obj, LoopType::update);
-	RemoveFromList(p_obj, LoopType::fixedUpdate);
+	//RemoveFromList(p_obj, LoopType::fixedUpdate);
 	RemoveFromList(p_obj, LoopType::render);
+	RemoveFromList(p_obj, LoopType::imGuiRender);
 }
+

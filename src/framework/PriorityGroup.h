@@ -1,10 +1,13 @@
 #pragma once
-#include <memory>
-#include <vector>
-#include "StandardObject.h"
+#include "Program.h"
 
-struct PriorityGroup
-{	
-	int PriorityNr{};
-	std::vector<StandardObject> standardObjects {};	
+
+class StandardObject;
+
+class PriorityGroup
+{
+public:
+	PriorityGroup(int priority):PriorityNr(priority){}
+	int PriorityNr;
+	std::vector<StandardObject*> standardObjects;	
 };

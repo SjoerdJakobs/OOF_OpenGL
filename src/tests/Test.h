@@ -1,7 +1,6 @@
 #pragma once
 #include <functional>
-#include <string>
-#include <vector>
+#include <iostream>
 
 namespace tests
 {
@@ -20,15 +19,18 @@ namespace tests
 	{
 	public:
 		TestMenu(Test*& current);
-		virtual ~TestMenu();
 
-		virtual void OnUpdate(float deltaTime) override;
-		virtual void OnRender() override;
-		virtual void OnImGuiRender() override;
+		void OnImGuiRender() override;
 
-	private:
-		Test* m_currentTest;
-		std::vector<std::pair<std::string, std::function<Test* ()>>> m_tests;
+		template<typename T>
+		void RegisterTest(const std::string& name)
+		{
+			std::cout << "registering test" << name <<std::endl;
+			m_tests.push_back(std::make_pair(name, []() {return new T(); }));
+		}
 		
+	private:
+		Test*& m_currentTest;
+		std::vector<std::pair<std::string, std::function<Test* ()>>> m_tests;
 	};
 }

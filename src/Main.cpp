@@ -62,7 +62,7 @@ int main(void)
 {
 	//ExampleProgram* pr = new ExampleProgram();
 	//pr->Start();
-	
+
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(glfw_error_callback);
@@ -78,8 +78,8 @@ int main(void)
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS);
 
-	float InitialScreenWidth = 1280;
-	float InitialScreenHeight = 800;
+	float InitialScreenWidth = 1280.0f;
+	float InitialScreenHeight = 800.0f;
 
 	/* Create a windowed mode window and its OpenGL context */
 	window = glfwCreateWindow(InitialScreenWidth, InitialScreenHeight, "Hello World", NULL, NULL);
@@ -129,34 +129,35 @@ int main(void)
 
 		tests::Test* currentTest = nullptr;
 		tests::TestMenu* testMenu = new tests::TestMenu(currentTest);
+
 		currentTest = testMenu;
-		tests::TestClearColor test;
+
+		testMenu->RegisterTest<tests::TestClearColor>("clear color");
+		//tests::TestClearColor test;
 
 		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
-		
+
 		/* Loop until the user closes the window */
 		while (!glfwWindowShouldClose(window))
 		{
 			glViewport(0, 0, ScreenWidth, ScreenHeight);
 			renderer.Clear();
-
-			test.OnUpdate(0.0f);
-			test.OnRender();
+			GLCall(glClearColor(0, 0, 0,1));
 
 			// Start the Dear ImGui frame
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
-			
+
 			/* Poll for and process events */
 			GLCall(glfwPollEvents());
 
-			if(currentTest)
+			if (currentTest)
 			{
 				currentTest->OnUpdate(0.0f);
 				currentTest->OnRender();
 				ImGui::Begin("Test");
-				if(currentTest != testMenu && ImGui::Button("<-"))
+				if (currentTest != testMenu && ImGui::Button("<-"))
 				{
 					delete currentTest;
 					currentTest = testMenu;
@@ -164,20 +165,19 @@ int main(void)
 				currentTest->OnImGuiRender();
 				ImGui::End();
 			}
-			test.OnImGuiRender();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			/* Swap front and back buffers */
 			GLCall(glfwSwapBuffers(window));
-			
+
 			if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 				glfwSetWindowShouldClose(window, 1);
 			}
 		}
 	}
-	
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

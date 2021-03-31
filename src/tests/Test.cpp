@@ -7,23 +7,11 @@ namespace tests
 	{
 	}
 
-	TestMenu::~TestMenu()
-	{
-	}
-
-	void TestMenu::OnUpdate(float deltaTime)
-	{
-	}
-
-	void TestMenu::OnRender()
-	{
-	}
-
 	void TestMenu::OnImGuiRender()
 	{
 		for (auto& test : m_tests)
 		{
-			if(ImGui::Button(test.first.c_str()))
+			if (ImGui::Button(test.first.c_str()))
 			{
 				m_currentTest = test.second();
 			}

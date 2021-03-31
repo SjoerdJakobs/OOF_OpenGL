@@ -1,7 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
+
 #include <memory>
 #include <vector>
 #include <list>
@@ -9,43 +9,45 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <Test.h>
-#include <TestClearColor.h>
-
 #include <chrono>
-#include "PriorityGroup.h"
+
 #include "Renderer.h"
 #include "Shader.h"
-#include "tests/TestClearColor.h"
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
 #define ASSERT(x) if(!(x)) __debugbreak();
 
-enum LoopType
+enum class LoopType
 {
 	input = 0,
 	update = 1,
 	fixedUpdate = 2,
-	render = 3
+	render = 3,
+	imGuiRender = 4,
+	debugRender = 5
 };
 
 class StandardObject;
+class PriorityGroup;
+
+bool ShouldDestructStandardObject(const StandardObject* object);
+bool ShouldRemoveStandardObjectFromLoop(StandardObject* object);
 
 class Program
 {
 protected:
 	Program();
     virtual ~Program();
+	
 	GLsizei ScreenWidth = 1280;
 	GLsizei ScreenHeight = 800;
-	
-
-	//all objects will be in this vector regardless of which loops they use, if you change shit in here directly chances are the program will break
-	std::vector<std::shared_ptr<StandardObject>> m_pAllStandardObjects{};
 
 private:
+	static Program* instance;
+	//threadsave singleton from https://refactoring.guru/design-patterns/singleton/cpp/example#example-1 ?
 	
 	void Run();
 
@@ -59,17 +61,19 @@ private:
 	bool m_isTruePaused	{ false };
 	std::atomic<bool> atomic_isTruePaused = m_isTruePaused;
 
+
+	std::vector<StandardObject*> m_objects{};
+
 	double m_fixedTimeStepTimer	{ 0.0 };
 	double m_deltaTime			{ 0.0 };
 	double m_unscaledDeltaTime	{ 0.0 };
 	double m_timeScale			{ 1.0 };
 	std::atomic<double> atomic_timeScale = m_timeScale;
 
-	//std::unique_ptr<PriorityGroup> pointer1 = std::make_unique<PriorityGroup>(1);
+	
 	//all objects that use the input loop placed in priority groups to allow execution orders	
 	std::vector<PriorityGroup*> m_pInputObjectGroups;
 	std::list <StandardObject*> m_pInputObjectsToBeAdded;
-	std::list <StandardObject*> m_pInputObjectsToBeRemoved;
 	bool m_shouldAddToInputList{ false };
 	bool m_shouldRemoveFromInputList{ false };
 
@@ -77,7 +81,6 @@ private:
 	//all objects that use the update loop placed in priority groups to allow execution orders
 	std::vector<PriorityGroup*> m_pUpdateObjectGroups;
 	std::list <StandardObject*> m_pUpdateObjectsToBeAdded;
-	std::list <StandardObject*> m_pUpdateObjectsToBeRemoved;
 	bool m_shouldAddToUpdateList { false };
 	bool m_shouldRemoveFromUpdateList { false };
 
@@ -85,7 +88,6 @@ private:
 	//all objects that use the fixed update loop placed in priority groups to allow execution orders
 	std::vector<PriorityGroup*> m_pFixedUpdateObjectGroups;
 	std::list <StandardObject*> m_pFixedUpdateObjectsToBeAdded;
-	std::list <StandardObject*> m_pFixedUpdateObjectsToBeRemoved;
 	bool m_shouldAddToFixedUpdateList { false };
 	bool m_shouldRemoveFromFixedUpdateList { false };
 
@@ -93,11 +95,18 @@ private:
 	//all objects that use the render loop placed in priority groups to allow execution orders
 	std::vector<PriorityGroup*> m_pRenderObjectGroups;
 	std::list <StandardObject*> m_pRenderObjectsToBeAdded;
-	std::list <StandardObject*> m_pRenderObjectsToBeRemoved;
 	bool m_shouldAddToRenderList { false };
 	bool m_shouldRemoveFromRenderList { false };
 
+	//all objects that use the render loop placed in priority groups to allow execution orders
+	std::vector<PriorityGroup*> m_pImGuiRenderObjectGroups;
+	std::list <StandardObject*> m_pImGuiRenderObjectsToBeAdded;
+	bool m_shouldAddToImGuiRenderList{ false };
+	bool m_shouldRemoveFromImGuiRenderList{ false };
+
 public:
+
+	
 	inline bool GetRunProgram() const { return m_runProgram; }
 	inline bool IsPaused()		const { return m_isPaused; }
 	inline bool IsTruePaused()	const { return m_isTruePaused; }
@@ -112,18 +121,6 @@ public:
 	
 	inline void SetTimeScale(float f) { m_timeScale = f; atomic_timeScale = f; }
 
-	//inline void SetShouldAddToInputList(bool b)			{ m_shouldAddToInputList = b; }
-	//inline void SetShouldRemoveFromInputList(bool b)	{ m_shouldRemoveFromInputList = b; }
-	//
-	//inline void SetShouldAddToUpdateList(bool b)		{ m_shouldAddToUpdateList = b; }
-	//inline void SetShouldRemoveFromUpdateList(bool b)	{ m_shouldRemoveFromUpdateList = b; }
-
-	//inline void SetShouldAddToFixedUpdateList(bool b)	{ m_shouldAddToFixedUpdateList = b; }
-	//inline void SetShouldRemoveFromFixedUpdateList(bool b) { m_shouldRemoveFromFixedUpdateList = b; }
-	//
-	//inline void SetShouldAddToRenderList(bool b)		{ m_shouldAddToRenderList = b; }
-	//inline void SetShouldRemoveFromRenderList(bool b)	{ m_shouldRemoveFromRenderList = b; }
-
 	void Start();
 	void CleanUp();
 	void AddToList(StandardObject* p_obj,LoopType type);
@@ -131,3 +128,9 @@ public:
 	void RemoveFromList(StandardObject* p_obj,LoopType type);
 	void RemoveFromAllLists(StandardObject* p_obj);
 };
+
+static Program* p_Instance;
+static Program* GetInstance()
+{
+	return p_Instance;
+}
