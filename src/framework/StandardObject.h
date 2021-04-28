@@ -1,5 +1,7 @@
 #pragma once
 
+class Program;
+
 class StandardObject
 {
 protected:
@@ -7,27 +9,29 @@ protected:
     StandardObject(int priority);
 	StandardObject(bool startsActivated, bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer, int inputPriority, int updatePriority, int renderPriority, int imGuiPriority);
     
-    //Program* m_program = Program::getInstance();
+    //Program& m_Program;
+    Program* m_Program;
     
-    bool m_pauseImmune;         //if this is true then normal pause will have no effect on this object, no object can escape truepause though 
-    bool m_isPersistentObject;  //if this is true then this object wont be destroyed when switching scenes
+    bool m_PauseImmune          { false };  //if this is true then normal pause will have no effect on this object, no object can escape truepause though 
+    bool m_IsPersistentObject   { false };  //if this is true then this object wont be destroyed when switching scenes
+	bool m_ShouldDestruct       { false };  //should this object be destroyed at the end of the loop
 	
 	//bools that tell which loops are used by this object
-    bool m_usesInput;           //tells if this object use the input loop
-    bool m_usesUpdate;          //tells if this object use the update loop
-    bool m_usesFixedUpdate;     //tells if this object use the fixedUpdate loop
-    bool m_usesRenderer;        //tells if this object use the render loop
-    bool m_usesDebugRenderer;   //tells if this object use the debugRender loop
-    bool m_usesImGui;           //tells if this object use the ImGui loop
+    bool m_UsesInput;           //tells if this object use the input loop
+    bool m_UsesUpdate;          //tells if this object use the update loop
+    bool m_UsesFixedUpdate;     //tells if this object use the fixedUpdate loop
+    bool m_UsesRenderer;        //tells if this object use the render loop
+    bool m_UsesDebugRenderer;   //tells if this object use the debugRender loop
+    bool m_UsesImGui;           //tells if this object use the ImGui loop
 
-    unsigned int m_inputPriority;   //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int m_updatePriority;  //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int m_renderPriority;  //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int m_imGuiPriority;   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int m_InputPriority;       //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int m_UpdatePriority;      //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int m_FixedUpdatePriority; //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int m_RenderPriority;      //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int m_ImGuiPriority;       //lower goes first, the object created first goes first if priority numbers are the same
 
-	bool m_shouldDestruct;  //should this object be destroyed at the end of the loop
-	bool m_shouldBeActive;	//says if the object should be active or not
-	bool m_isActiveState;	//is the actual active/inactive state of the object
+	bool m_ShouldBeActive;	//says if the object should be active or not
+	bool m_IsActiveState;	//is the actual active/inactive state of the object
 
 public:
     ~StandardObject();
@@ -68,19 +72,28 @@ public:
 	
     virtual void DebugRender(double deltaTime);
 
-    bool GetUsesInput()          const{ return m_usesInput; }
-    bool GetUsesUpdate()         const{ return m_usesUpdate; }
-    bool GetUsesFixedUpdate()    const{ return m_usesFixedUpdate; }
-    bool GetUsesRenderer()       const{ return m_usesRenderer; }
-    bool GetUsesDebugRenderer()  const{ return m_usesDebugRenderer; }
-    bool GetUsesImGui()          const{ return m_usesImGui; }
+    bool GetUsesInput()          const{ return m_UsesInput; }
+    bool GetUsesUpdate()         const{ return m_UsesUpdate; }
+    bool GetUsesFixedUpdate()    const{ return m_UsesFixedUpdate; }
+    bool GetUsesRenderer()       const{ return m_UsesRenderer; }
+    bool GetUsesDebugRenderer()  const{ return m_UsesDebugRenderer; }
+    bool GetUsesImGui()          const{ return m_UsesImGui; }
+
+    unsigned int GetInputPriority()         const{ return m_InputPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetUpdatePriority()        const{ return m_UpdatePriority; }   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetFixedUpdatePriority()   const{ return m_FixedUpdatePriority; }   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetRenderPriority()        const{ return m_RenderPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetImGuiPriority()         const{ return m_ImGuiPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
 	
-	bool GetShouldDestruct()    const { return m_shouldDestruct; }
-	bool IsShouldBeActive()     const { return m_shouldBeActive; }
-	bool IsActiveState()		const { return m_isActiveState; }
-    bool IsPauseImmune()        const { return m_pauseImmune; }
-    bool IsPersistentObject()   const { return m_isPersistentObject; }
+	bool GetShouldDestruct()     const { return m_ShouldDestruct; }
+	bool IsShouldBeActive()      const { return m_ShouldBeActive; }
+	bool IsActiveState()		 const { return m_IsActiveState; }
+    bool IsPauseImmune()         const { return m_PauseImmune; }
+    bool IsPersistentObject()    const { return m_IsPersistentObject; }
+	
     
-	void SetShouldBeActive   (bool b) { m_shouldBeActive = b; }
-	void SetActiveState      (bool b) { m_isActiveState  = b; }
+	void SetShouldBeActive   (bool b) { m_ShouldBeActive = b; }
+	void SetActiveState      (bool b) { m_IsActiveState  = b; }
+    
+private:
 };

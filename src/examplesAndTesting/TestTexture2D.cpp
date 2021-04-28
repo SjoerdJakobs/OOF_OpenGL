@@ -13,7 +13,9 @@
 namespace tests
 {
 	TestTexture2D::TestTexture2D()
-	: m_TranslationA(0, 0, 0), m_TranslationB(500, 200, 0)
+	:m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)),
+	m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))),
+	m_TranslationA(0, 0, 0), m_TranslationB(500, 200, 0)
 	{
 		const unsigned int xSize{ 1 };
 		const unsigned int ySize{ 1 };
@@ -35,14 +37,10 @@ namespace tests
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		GLCall(glEnable(GL_BLEND));
 
-
-		m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 		m_VAO = std::make_unique<VertexArray>();
-		
-		//create VertexArray
-		VertexArray va;
+
 		//create VertexBuffer
-		VertexBuffer vb(positions, xSize * ySize * 16 * sizeof(float));
+		m_VertexBuffer = std::make_unique<VertexBuffer>(positions, xSize * ySize * 16 * sizeof(float));
 		//create VertexBufferLayout
 		VertexBufferLayout layout;
 
@@ -53,22 +51,13 @@ namespace tests
 		layout.Push<float>(2);
 
 		//add VertexBuffer with its layout to VertexArray
-		m_VAO->AddBuffer(vb, layout);
-		m_IndexBuffer = std::make_unique<IndexBuffer>();
-
-		IndexBuffer ib(indices, xSize * ySize * 6);
-		
+		m_VAO->AddBuffer(*m_VertexBuffer, layout);
+		m_IndexBuffer = std::make_unique<IndexBuffer>(indices, xSize * ySize * 6);
+				
+		m_Shader = std::make_unique<Shader>("res/shaders/Basic.shader");
 		m_Shader->Bind();
-
-		Texture texture("res/textures/LogoOpenGL.png");
-		texture.Bind();
+		m_Texture = std::make_unique<Texture>("res/textures/LogoOpenGL.png");
 		m_Shader->SetUniform1i("u_Texture", 0);
-
-		va.UnBind();
-		vb.Unbind();
-		ib.Unbind();
-		m_Shader->UnBind();
-		
 	}
 
 	TestTexture2D::~TestTexture2D()
@@ -83,23 +72,28 @@ namespace tests
 
 	void TestTexture2D::OnRender()
 	{
-		/*GLCall(glClearColor(0.0f,0.0f,0.0f,1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT))
-			shader.Bind();
+		GLCall(glClearColor(0.0f,0.0f,0.0f,1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+
+		Renderer renderer;
+				
+		m_Texture->Bind();
 
 		{
 			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);
-			glm::mat4 mvp = proj * view * model;	//hah pvm cus opengl
-			shader.SetUniformMat4f("u_MVP", mvp);
-			renderer.Draw(va, ib, shader);
+			glm::mat4 mvp = m_Proj * m_View * model;	//hah pvm cus opengl
+			m_Shader->Bind();
+			m_Shader->SetUniformMat4f("u_MVP", mvp);
+			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
 		}
 
 		{
 			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationB);
-			glm::mat4 mvp = proj * view * model;	//hah pvm cus opengl
-			shader.SetUniformMat4f("u_MVP", mvp);
-			renderer.Draw(va, ib, shader);
-		}*/
+			glm::mat4 mvp = m_Proj * m_View * model;	//hah pvm cus opengl
+			m_Shader->Bind();
+			m_Shader->SetUniformMat4f("u_MVP", mvp);
+			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+		}
 	}
 
 	void TestTexture2D::OnImGuiRender()

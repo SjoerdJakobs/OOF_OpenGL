@@ -96,7 +96,7 @@ Index of this file:
 
 struct ImBitVector;                 // Store 1-bit per value
 struct ImRect;                      // An axis-aligned rectangle (2 points)
-struct ImDrawDataBuilder;           // Helper to build a ImDrawData instance
+struct ImDrawDataBuilder;           // Helper to build a ImDrawData m_Instance
 struct ImDrawListSharedData;        // Data shared between all ImDrawList instances
 struct ImGuiColorMod;               // Stacked color modifier, backup of modified data so we can restore it
 struct ImGuiContext;                // Main Dear ImGui context
@@ -628,7 +628,7 @@ struct IMGUI_API ImChunkStream
 #endif
 
 // Data shared between all ImDrawList instances
-// You may want to create your own instance of this if you want to use ImDrawList completely without ImGui. In that case, watch out for future changes to this structure.
+// You may want to create your own m_Instance of this if you want to use ImDrawList completely without ImGui. In that case, watch out for future changes to this structure.
 struct IMGUI_API ImDrawListSharedData
 {
     ImVec2          TexUvWhitePixel;            // UV of white pixel in the atlas
@@ -1148,7 +1148,7 @@ struct ImGuiOldColumns
 //-----------------------------------------------------------------------------
 
 // ImGuiViewport Private/Internals fields (cardinal sin: we are using inheritance!)
-// Every instance of ImGuiViewport is in fact a ImGuiViewportP.
+// Every m_Instance of ImGuiViewport is in fact a ImGuiViewportP.
 struct ImGuiViewportP : public ImGuiViewport
 {
     int                 DrawListsLastFrame[2];  // Last frame number the background (0) and foreground (1) draw lists were used
@@ -2025,7 +2025,7 @@ struct ImGuiTable
     int                         CurrentRow;
     int                         CurrentColumn;
     ImS16                       InstanceCurrent;            // Count of BeginTable() calls with same ID in the same frame (generally 0). This is a little bit similar to BeginCount for a window, but multiple table with same ID look are multiple tables, they are just synched.
-    ImS16                       InstanceInteracted;         // Mark which instance (generally 0) of the same ID is being interacted with
+    ImS16                       InstanceInteracted;         // Mark which m_Instance (generally 0) of the same ID is being interacted with
     float                       RowPosY1;
     float                       RowPosY2;
     float                       RowMinHeight;               // Height submitted to TableNextRow()
@@ -2154,7 +2154,7 @@ struct ImGuiTableSettings
     ImGuiTableFlags             SaveFlags;              // Indicate data we want to save using the Resizable/Reorderable/Sortable/Hideable flags (could be using its own flags..)
     float                       RefScale;               // Reference scale to be able to rescale columns on font/dpi changes.
     ImGuiTableColumnIdx         ColumnsCount;
-    ImGuiTableColumnIdx         ColumnsCountMax;        // Maximum number of columns this settings instance can store, we can recycle a settings instance with lower number of columns but not higher
+    ImGuiTableColumnIdx         ColumnsCountMax;        // Maximum number of columns this settings m_Instance can store, we can recycle a settings m_Instance with lower number of columns but not higher
     bool                        WantApply;              // Set when loaded from .ini data (to enable merging/loading .ini data into an already running context)
 
     ImGuiTableSettings()        { memset(this, 0, sizeof(*this)); }

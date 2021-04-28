@@ -1,30 +1,22 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <iostream>
-#include <fstream>
-#include <string>
-
-#include "Renderer.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "VertexBufferLayout.h"
+#include "ExampleProgram.h"
+#include "Game.h"
+#include "Test.h"
 #include "TestClearColor.h"
-#include "exampleProgram.h"
+#include "TestTexture2D.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+////ML Detection Extension
+//#ifdef _DEBUG
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+//#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#define new DEBUG_NEW
+//#endif
+//#include <heapapi.h>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include <stdio.h>
-
-//dont even ask i have probably forgot how this works by the moment you ask me, but here is a video about it:
+//dont even ask i have probably forgotten how this works by the moment you ask me, but here is a video about it:
 //https://www.youtube.com/watch?v=p8u_k2LIZyo
+
 inline float Q_rsqrt(float number)
 {
 	long i;
@@ -57,12 +49,25 @@ static void glfw_window_size_callback(GLFWwindow* window, int width, int height)
 
 	/* update any perspective matrices used here */
 }
+//
+//void StartHeapControl();
+//void DumpMemoryLeaks();
 
-int main(void)
+int main(int argc, char* argv[])
 {
-	//ExampleProgram* pr = new ExampleProgram();
-	//pr->Start();
+	srand(static_cast<unsigned int>(time(nullptr)));
 
+	//StartHeapControl();
+	
+	Game::CreateInstance();
+	Game* pr =  static_cast<Game*>(Game::GetInstance());
+	pr->ProgramStart();
+
+	//DumpMemoryLeaks();
+	
+	return 0;
+
+	
 	GLFWwindow* window;
 
 	glfwSetErrorCallback(glfw_error_callback);
@@ -82,7 +87,7 @@ int main(void)
 	float InitialScreenHeight = 800.0f;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(InitialScreenWidth, InitialScreenHeight, "Hello World", NULL, NULL);
+	window = glfwCreateWindow((int)InitialScreenWidth, (int)InitialScreenHeight, "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -133,6 +138,7 @@ int main(void)
 		currentTest = testMenu;
 
 		testMenu->RegisterTest<tests::TestClearColor>("clear color");
+		testMenu->RegisterTest<tests::TestTexture2D>("a texture");
 		//tests::TestClearColor test;
 
 		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
@@ -186,3 +192,47 @@ int main(void)
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }
+
+//void StartHeapControl()
+//{
+//#if defined(DEBUG) | defined(_DEBUG)
+//	// Notify user if heap is corrupt
+//	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+//
+//	// Report detected leaks when the program exits
+//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//
+//	// Set a breakpoint on the specified object allocation order number
+//	_CrtSetBreakAlloc( 156 );
+//#endif
+//}
+//
+//void DumpMemoryLeaks()
+//{
+//#if defined(DEBUG) | defined(_DEBUG)
+//	_CrtDumpMemoryLeaks();
+//#endif
+//}
+
+
+/*
+	std::list<int> ints1 = std::list<int>();
+	ints1.push_back(1);
+	ints1.push_back(2);
+	ints1.push_back(3);
+	ints1.push_back(4);
+
+	std::list<int> ints2 = std::list<int>();
+	ints2.push_back(ints1.front());
+	ints1.pop_front();
+	ints2.push_back(ints1.front());
+	ints1.pop_front();
+
+	for (int i : ints1)
+	{
+		std::cout << std::to_string(i) << " in ints1 "<< std::endl;
+	}
+	for (int i : ints2)
+	{
+		std::cout << std::to_string(i) << " in ints2 " << std::endl;
+	}*/

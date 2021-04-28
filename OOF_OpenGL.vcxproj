@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\examplesAndTesting;src\framework\rendering;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\examplesAndTesting;src\framework\rendering;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -157,15 +157,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="src\framework\rendering\renderShapes\Rectangle.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp" />
+    <ClCompile Include="src\framework\Scene.cpp" />
     <ClCompile Include="src\framework\Program.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\framework\rendering\Shader.cpp" />
+    <ClCompile Include="src\framework\rendering\IndexBuffer.cpp" />
+    <ClCompile Include="src\framework\rendering\Renderer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\tests\ExampleProgram.cpp" />
-    <ClCompile Include="src\tests\Test.cpp" />
-    <ClCompile Include="src\tests\TestTexture2D.cpp" />
+    <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp" />
+    <ClCompile Include="src\examplesAndTesting\Test.cpp" />
+    <ClCompile Include="src\examplesAndTesting\TestTexture2D.cpp" />
     <ClCompile Include="src\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui_demo.cpp" />
@@ -174,11 +179,11 @@
     <ClCompile Include="src\Vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\framework\rendering\VertexBuffer.cpp" />
+    <ClCompile Include="src\framework\rendering\VertexArray.cpp" />
     <ClCompile Include="src\Vendor\stb_image.h\stb_image.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\tests\TestClearColor.cpp" />
+    <ClCompile Include="src\framework\rendering\Texture.cpp" />
+    <ClCompile Include="src\examplesAndTesting\TestClearColor.cpp" />
     <ClCompile Include="src\framework\StandardObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -321,14 +326,20 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="src\framework\rendering\renderShapes\Rectangle.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\examplesAndTesting\ExampleObject.h" />
+    <ClInclude Include="src\framework\Scene.h" />
     <ClInclude Include="src\framework\PriorityGroup.h" />
     <ClInclude Include="src\framework\Program.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\tests\ExampleProgram.h" />
-    <ClInclude Include="src\tests\TestTexture2D.h" />
+    <ClInclude Include="src\IDamageable.h" />
+    <ClInclude Include="src\framework\rendering\Shader.h" />
+    <ClInclude Include="src\framework\rendering\IndexBuffer.h" />
+    <ClInclude Include="src\framework\rendering\Renderer.h" />
+    <ClInclude Include="src\examplesAndTesting\ExampleProgram.h" />
+    <ClInclude Include="src\examplesAndTesting\TestTexture2D.h" />
     <ClInclude Include="src\Vendor\glm\common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_vector_relational.hpp" />
@@ -619,13 +630,13 @@
     <ClInclude Include="src\Vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\Vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\Vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBufferLayout.h" />
+    <ClInclude Include="src\framework\rendering\VertexBuffer.h" />
+    <ClInclude Include="src\framework\rendering\VertexArray.h" />
+    <ClInclude Include="src\framework\rendering\VertexBufferLayout.h" />
     <ClInclude Include="src\Vendor\stb_image.h\stb_image.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\tests\Test.h" />
-    <ClInclude Include="src\tests\TestClearColor.h" />
+    <ClInclude Include="src\framework\rendering\Texture.h" />
+    <ClInclude Include="src\examplesAndTesting\Test.h" />
+    <ClInclude Include="src\examplesAndTesting\TestClearColor.h" />
     <ClInclude Include="src\framework\StandardObject.h" />
   </ItemGroup>
   <ItemGroup>
