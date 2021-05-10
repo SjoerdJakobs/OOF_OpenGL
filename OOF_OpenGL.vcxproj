@@ -157,6 +157,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\framework\SceneManager.cpp" />
+    <ClCompile Include="src\framework\rendering\SpriteSheetFramePicker.cpp" />
+    <ClCompile Include="src\framework\rendering\RendererOld.cpp" />
     <ClCompile Include="src\framework\rendering\renderShapes\Rectangle.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -188,6 +191,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\BasicColor.shader" />
+    <None Include="res\shaders\BasicTexture.shader" />
     <None Include="src\Vendor\glm\detail\func_common.inl" />
     <None Include="src\Vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\Vendor\glm\detail\func_exponential.inl" />
@@ -326,6 +331,9 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\framework\SceneManager.h" />
+    <ClInclude Include="src\framework\rendering\SpriteSheetFramePicker.h" />
+    <ClInclude Include="src\framework\rendering\RendererOld.h" />
     <ClInclude Include="src\framework\rendering\renderShapes\Rectangle.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Camera.h" />
@@ -640,7 +648,14 @@
     <ClInclude Include="src\framework\StandardObject.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\textures\BlueBlock.png" />
+    <Image Include="res\textures\GreenBlock.png" />
     <Image Include="res\textures\LogoOpenGL.png" />
+    <Image Include="res\textures\NoTexture.jpg" />
+    <Image Include="res\textures\NoTexture.png" />
+    <Image Include="res\textures\OrangeBlock.png" />
+    <Image Include="res\textures\professor_walk_cycle_no_hat.png" />
+    <Image Include="res\textures\PurpleBlock.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

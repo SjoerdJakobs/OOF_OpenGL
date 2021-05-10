@@ -41,7 +41,7 @@ void Camera::Input(double deltaTime)
 
 void Camera::Update(double deltaTime)
 {
-	m_CurrentDistance = GetDistance(m_PlayerPos, m_CameraPos);
+	m_CurrentDistance = GetDistance(m_TargetPos, m_CameraPos);
 	m_LerpRenewTickCounter += deltaTime;
 
 	if (m_LerpRenewTickCounter >= m_LerpRenewTickInterfall)
@@ -63,10 +63,10 @@ void Camera::Update(double deltaTime)
 		}
 	}
 	m_LerpValue += m_LerpSpeed * deltaTime;
-	m_CameraPos.x = Lerp(m_LastCameraPos.x, m_PlayerPos.x, m_LerpValue);
-	m_CameraPos.y = Lerp(m_LastCameraPos.y, m_PlayerPos.y, m_LerpValue);
+	m_CameraPos.x = Lerp(m_LastCameraPos.x, m_TargetPos.x, m_LerpValue);
+	m_CameraPos.y = Lerp(m_LastCameraPos.y, m_TargetPos.y, m_LerpValue);
 
-	m_View = glm::translate(glm::mat4(1.0f), glm::vec3(m_CameraPos.x, m_CameraPos.y, 0));
+	m_View = glm::translate(glm::mat4(1.0f), glm::vec3(-m_CameraPos.x, -m_CameraPos.y, 0));
 }
 
 void Camera::ImGuiRender(double deltaTime)

@@ -1,6 +1,7 @@
 #pragma once
 #include "Program.h"
 
+class Rectangle;
 class Player;
 
 class Game final : public Program

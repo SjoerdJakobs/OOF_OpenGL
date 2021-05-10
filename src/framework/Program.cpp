@@ -68,7 +68,7 @@ static void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-static void glfw_window_size_callback(GLFWwindow* window, int width, int height) {
+static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int height) {
 	//m_ScreenWidth = width;
 	//m_ScreenHeight = height;
 
@@ -77,7 +77,7 @@ static void glfw_window_size_callback(GLFWwindow* window, int width, int height)
 
 void Program::Run()
 {
-	GLFWwindow* window;
+	
 
 	glfwSetErrorCallback(glfw_error_callback);
 	/* Initialize the library */
@@ -98,21 +98,21 @@ void Program::Run()
 	float InitialScreenWidth = m_ScreenWidth;
 	float InitialScreenHeight = m_ScreenHeight;
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(static_cast<int>(InitialScreenWidth), static_cast<int>(InitialScreenHeight), "Hello World", NULL, NULL);
-	if (!window)
+	/* Create a windowed mode m_pWindow and its OpenGL context */
+	m_pWindow = glfwCreateWindow(static_cast<int>(InitialScreenWidth), static_cast<int>(InitialScreenHeight), "Hello World", NULL, NULL);
+	if (!m_pWindow)
 	{
 		glfwTerminate();
 		ASSERT(false);
 		m_RunProgram = false;
 	}
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
+	/* Make the m_pWindow's context current */
+	glfwMakeContextCurrent(m_pWindow);
 
 	glfwSwapInterval(1);//vsync
 
-	glfwSetWindowSizeCallback(window, glfw_window_size_callback);
+	glfwSetWindowSizeCallback(m_pWindow, glfw_window_size_callback);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -124,8 +124,8 @@ void Program::Run()
 	}
 	
 	{
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		GLCall(glEnable(GL_BLEND));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 		Renderer renderer;
 
@@ -133,7 +133,7 @@ void Program::Run()
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiWindowFlags_NoMove;				// Prevent window movement
+		//io.ConfigFlags |= ImGuiWindowFlags_NoMove;				// Prevent m_pWindow movement
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -142,19 +142,16 @@ void Program::Run()
 		//ImGui::StyleColorsClassic();
 
 		// Setup Platform/Renderer backends
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplGlfw_InitForOpenGL(m_pWindow, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
 				
-		//tests::Test* current;
-		//tests::TestClearColor test;
-
 		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
 
 		this->AtProgramStart();
 		
 		// Set start time
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		while (!glfwWindowShouldClose(window)&&m_RunProgram)
+		while (!glfwWindowShouldClose(m_pWindow)&&m_RunProgram)
 		{
 			// Get current time
 			std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
@@ -176,6 +173,11 @@ void Program::Run()
 
 			glViewport(0, 0, m_ScreenWidth, m_ScreenHeight);
 			renderer.Clear();
+			GLCall(glClearColor(0, 0, 0, 1));
+			
+
+			/* Poll for and process events */
+			GLCall(glfwPollEvents());
 
 			this->AddToProgramLoopBegin();
 
@@ -199,7 +201,7 @@ void Program::Run()
 					for (StandardObject* p_obj : p_group->standardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
-							p_obj->ImGuiRender(m_UnscaledDeltaTime);
+							p_obj->Update(m_DeltaTime);
 						}
 					}
 				}
@@ -212,19 +214,16 @@ void Program::Run()
 					for (StandardObject* p_obj : p_group->standardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
-							p_obj->ImGuiRender(m_UnscaledDeltaTime);
+							p_obj->Render(m_DeltaTime);
 						}
 					}
 				}
 			}
+
 			// Start the Dear ImGui frame
 			ImGui_ImplOpenGL3_NewFrame();
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
-
-			/* Poll for and process events */
-			GLCall(glfwPollEvents());
-
 
 			if (!IsTruePaused())
 			{
@@ -237,13 +236,7 @@ void Program::Run()
 						}
 					}
 				}
-			}			
-			
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-			
-			/* Swap front and back buffers */
-			GLCall(glfwSwapBuffers(window));
+			}
 
 			//activate and deactivate objects
 			for (StandardObject* p_obj : m_Objects) {
@@ -261,10 +254,15 @@ void Program::Run()
 
 			AddStandardObjectsMarkedForAdding();
 			RemoveStandardObjectsMarkedForRemove();
-					
 
-			if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-				glfwSetWindowShouldClose(window, 1);
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+			/* Swap front and back buffers */
+			GLCall(glfwSwapBuffers(m_pWindow));
+
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
+				glfwSetWindowShouldClose(m_pWindow, 1);
 			}
 		}
 	}
@@ -273,7 +271,7 @@ void Program::Run()
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);	
 }

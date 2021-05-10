@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "Player.h"
+#include "Rectangle.h"
 
 Game::Game() :Program()
 {
@@ -43,12 +44,13 @@ void Game::ProgramStart()
 void Game::AtProgramStart()
 {
 	std::cout << "CHILD PROGRAM AT_PROGRAM_START" << std::endl;
+	
 	m_Player = new Player(1000);
 	//func();
 }
 
 void Game::AddToProgramLoopBegin()
 {
-	std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
+	//std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
 }
 

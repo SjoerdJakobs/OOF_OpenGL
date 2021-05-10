@@ -89,26 +89,32 @@ void StandardObject::AddToLists()
 		m_Program->AddToAllLists(this);
 		return;
 	}
+	
 	if (m_UsesInput)
 	{
 		m_Program->AddToList(this, LoopType::input);
 	}
+	
 	if (m_UsesFixedUpdate)
 	{
 		m_Program->AddToList(this, LoopType::fixedUpdate);
 	}
+	
 	if (m_UsesUpdate)
 	{
 		m_Program->AddToList(this, LoopType::update);
 	}
+	
 	if (m_UsesRenderer)
 	{
 		m_Program->AddToList(this, LoopType::render);
 	}
+	
 	if (m_UsesImGui)
 	{
 		m_Program->AddToList(this, LoopType::imGuiRender);
 	}
+	
 	if (m_UsesDebugRenderer)
 	{
 		m_Program->AddToList(this, LoopType::debugRender);

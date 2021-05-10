@@ -4,7 +4,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-class Camera : public StandardObject
+class Camera final : public StandardObject
 {
 public:
 	static Camera& instance()
@@ -29,8 +29,8 @@ private:
 	float m_CurrentDistance{ 0 };
 
 	
-	glm::vec2 m_PlayerPos{ 100,100 };
-	glm::vec2 m_LastPlayerPos{ 100,100 };
+	glm::vec2 m_TargetPos{ 100,100 };
+	glm::vec2 m_LastTargetPos{ 100,100 };
 	
 	glm::vec2 m_CameraPos{ 0,0 };
 	glm::vec2 m_LastCameraPos{ 0,0 };
@@ -40,7 +40,10 @@ private:
 	
 	float Lerp(float a, float b, float f);
 	float GetDistance(glm::vec2 v1, glm::vec2 v2);
+
 public:
+
+	void SetTargetPos(glm::vec2 pos) { m_TargetPos = pos; }
 	
 	void Start() override;
 	void Awake() override;

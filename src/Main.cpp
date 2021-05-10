@@ -1,5 +1,6 @@
 #include "ExampleProgram.h"
 #include "Game.h"
+#include "RendererOld.h"
 #include "Test.h"
 #include "TestClearColor.h"
 #include "TestTexture2D.h"
@@ -43,7 +44,7 @@ static void glfw_error_callback(int error, const char* description)
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-static void glfw_window_size_callback(GLFWwindow* window, int width, int height) {
+static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int height) {
 	ScreenWidth = width;
 	ScreenHeight = height;
 
@@ -68,7 +69,7 @@ int main(int argc, char* argv[])
 	return 0;
 
 	
-	GLFWwindow* window;
+	GLFWwindow* m_pWindow;
 
 	glfwSetErrorCallback(glfw_error_callback);
 	/* Initialize the library */
@@ -86,20 +87,20 @@ int main(int argc, char* argv[])
 	float InitialScreenWidth = 1280.0f;
 	float InitialScreenHeight = 800.0f;
 
-	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow((int)InitialScreenWidth, (int)InitialScreenHeight, "Hello World", NULL, NULL);
-	if (!window)
+	/* Create a windowed mode m_pWindow and its OpenGL context */
+	m_pWindow = glfwCreateWindow((int)InitialScreenWidth, (int)InitialScreenHeight, "Hello World", NULL, NULL);
+	if (!m_pWindow)
 	{
 		glfwTerminate();
 		return -1;
 	}
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
+	/* Make the m_pWindow's context current */
+	glfwMakeContextCurrent(m_pWindow);
 
 	glfwSwapInterval(1);//vsync
 
-	glfwSetWindowSizeCallback(window, glfw_window_size_callback);
+	glfwSetWindowSizeCallback(m_pWindow, glfw_window_size_callback);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -114,13 +115,13 @@ int main(int argc, char* argv[])
 		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 		GLCall(glEnable(GL_BLEND));
 
-		Renderer renderer;
+		RendererOld renderer;
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiWindowFlags_NoMove;					// Prevent window movement
+		//io.ConfigFlags |= ImGuiWindowFlags_NoMove;					// Prevent m_pWindow movement
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -129,7 +130,7 @@ int main(int argc, char* argv[])
 		//ImGui::StyleColorsClassic();
 
 		// Setup Platform/Renderer backends
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
+		ImGui_ImplGlfw_InitForOpenGL(m_pWindow, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
 
 		tests::Test* currentTest = nullptr;
@@ -143,8 +144,8 @@ int main(int argc, char* argv[])
 
 		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
 
-		/* Loop until the user closes the window */
-		while (!glfwWindowShouldClose(window))
+		/* Loop until the user closes the m_pWindow */
+		while (!glfwWindowShouldClose(m_pWindow))
 		{
 			glViewport(0, 0, ScreenWidth, ScreenHeight);
 			renderer.Clear();
@@ -176,10 +177,10 @@ int main(int argc, char* argv[])
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			/* Swap front and back buffers */
-			GLCall(glfwSwapBuffers(window));
+			GLCall(glfwSwapBuffers(m_pWindow));
 
-			if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) {
-				glfwSetWindowShouldClose(window, 1);
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
+				glfwSetWindowShouldClose(m_pWindow, 1);
 			}
 		}
 	}
@@ -188,7 +189,7 @@ int main(int argc, char* argv[])
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }

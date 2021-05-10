@@ -35,7 +35,7 @@ class StandardObject;
 class ExampleObject;
 class PriorityGroup;
 
-class Program
+class Program 
 { 
 public:
 	//http ://www.yolinux.com/TUTORIALS/C++Singleton.html
@@ -54,6 +54,7 @@ protected:
 	GLsizei m_ScreenWidth = 1280;
 	GLsizei m_ScreenHeight = 800;
 
+	GLFWwindow* m_pWindow;
 private:
 	
 	void Run();
@@ -62,6 +63,7 @@ private:
 
 	const double m_MaxElapsedSeconds{0.1};
 	const double m_FixedTimeStep{ 1.0 / 60.0 };
+
 
 	bool m_RunProgram	{ false };
 	std::atomic<bool> atomic_RunProgram = m_RunProgram;
@@ -122,6 +124,8 @@ private:
 
 public:
 
+	GLFWwindow* GetGLFWwindow() { return m_pWindow; }
+	
 	int GetScreenWidth() { return  m_ScreenWidth; };
 	int GetScreenHeight() { return  m_ScreenHeight; };
 	

@@ -1,6 +1,6 @@
 #include "TestTexture2D.h"
 
-#include "Renderer.h"
+#include "RendererOld.h"
 #include "imgui/imgui.h"
 
 #include "VertexBuffer.h"
@@ -72,35 +72,35 @@ namespace tests
 
 	void TestTexture2D::OnRender()
 	{
-		GLCall(glClearColor(0.0f,0.0f,0.0f,1.0f));
+		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-		Renderer renderer;
-				
+		RendererOld renderer;
+
 		m_Texture->Bind();
 
-		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);
-			glm::mat4 mvp = m_Proj * m_View * model;	//hah pvm cus opengl
-			m_Shader->Bind();
-			m_Shader->SetUniformMat4f("u_MVP", mvp);
-			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
-		}
 
-		{
-			glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationB);
-			glm::mat4 mvp = m_Proj * m_View * model;	//hah pvm cus opengl
-			m_Shader->Bind();
-			m_Shader->SetUniformMat4f("u_MVP", mvp);
-			renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
-		}
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), m_TranslationA);
+		glm::mat4 mvp = m_Proj * m_View * model;	//hah pvm cus opengl
+		m_Shader->Bind();
+		m_Shader->SetUniformMat4f("u_MVP", mvp);
+		renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+
+
+
+		glm::mat4 model2 = glm::translate(glm::mat4(1.0f), m_TranslationB);
+		glm::mat4 mvp2 = m_Proj * m_View * model2;	//hah pvm cus opengl
+		m_Shader->Bind();
+		m_Shader->SetUniformMat4f("u_MVP", mvp2);
+		renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
+
 	}
 
 	void TestTexture2D::OnImGuiRender()
 	{
 		ImGui::Begin("Debug");
 
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);                   // Create a window called "Hello, world!" and append into it.
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);                   // Create a m_pWindow called "Hello, world!" and append into it.
 		ImGui::SliderFloat3("positionA", &m_TranslationA.x, 0, 1280);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::SliderFloat3("positionB", &m_TranslationB.x, 0, 1280);            // Edit 1 float using a slider from 0.0f to 1.0f
 

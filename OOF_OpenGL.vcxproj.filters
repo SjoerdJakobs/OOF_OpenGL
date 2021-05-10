@@ -102,9 +102,17 @@
     <ClCompile Include="src\framework\rendering\renderShapes\Rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\framework\rendering\RendererOld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\rendering\SpriteSheetFramePicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\Basic.shader" />
     <None Include="src\Vendor\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -513,6 +521,9 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="res\shaders\Basic.shader" />
+    <None Include="res\shaders\BasicColor.shader" />
+    <None Include="res\shaders\BasicTexture.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vendor\stb_image.h\stb_image.h">
@@ -1451,9 +1462,39 @@
     <ClInclude Include="src\framework\rendering\renderShapes\Rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\framework\rendering\RendererOld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\rendering\SpriteSheetFramePicker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\SceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\LogoOpenGL.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\PurpleBlock.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\OrangeBlock.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\GreenBlock.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\BlueBlock.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\NoTexture.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\NoTexture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\professor_walk_cycle_no_hat.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
