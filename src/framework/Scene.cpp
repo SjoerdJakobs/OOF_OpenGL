@@ -13,6 +13,12 @@ void Scene::UpdateObjectContainers()
 	m_ObjectsNeedToBeAddedToScene = false;
 }
 
+void Scene::Start()
+{
+	m_pObjectsToBeAddedToScene 
+
+}
+
 void Scene::Stop()
 {
 	for (StandardObject* obj : m_pStandardObjectsInScene)
