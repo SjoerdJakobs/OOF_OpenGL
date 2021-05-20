@@ -48,10 +48,14 @@ Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::stri
 
 Rectangle::~Rectangle()
 {
-	
+	m_VAO->UnBind();
+	m_VertexBuffer->Unbind();
+	m_IndexBuffer->Unbind();
+	m_Shader->UnBind();
+	m_Texture->UnBind();
 }
 
-void Rectangle::Draw()
+void Rectangle::Draw() const
 {
 	Renderer renderer;
 	

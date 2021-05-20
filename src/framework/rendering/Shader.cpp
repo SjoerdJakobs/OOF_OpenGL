@@ -45,7 +45,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 		}
 		else
 		{
-			ss[(int)type] << line << '\n';
+			ss[static_cast<int>(type)] << line << '\n';
 		}
 	}
 

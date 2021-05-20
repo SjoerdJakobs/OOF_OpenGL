@@ -12,6 +12,8 @@
 #include <string>
 #include <chrono>
 
+
+#include "Enums.h"
 #include "Renderer.h"
 #include "Shader.h"
 
@@ -19,21 +21,14 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-#define ASSERT(x) if(!(x)) __debugbreak();
+//#define ASSERT(x) if(!(x)) __debugbreak();
 
-enum class LoopType
-{
-	input = 0,
-	update = 1,
-	fixedUpdate = 2,
-	render = 3,
-	imGuiRender = 4,
-	debugRender = 5
-};
 
+class Scene;
 class StandardObject;
 class ExampleObject;
 class PriorityGroup;
+class SceneManager;
 
 class Program 
 { 
@@ -50,19 +45,24 @@ protected:
 	virtual void ProgramStart();
 	virtual void AtProgramStart();
 	virtual void AddToProgramLoopBegin();
+
+	void AddScene(Scene* newScene) const;
+
+	int m_UpdateVectorsResizeStep = 50;
 	
 	GLsizei m_ScreenWidth = 1280;
 	GLsizei m_ScreenHeight = 800;
 
 	GLFWwindow* m_pWindow;
+	SceneManager* m_pSceneManager;
 private:
 	
 	void Run();
 	void AddStandardObjectsMarkedForAdding();
 	void AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::list<StandardObject*> objectsForInsert);
 
-	const double m_MaxElapsedSeconds{0.1};
-	const double m_FixedTimeStep{ 1.0 / 60.0 };
+	const float m_MaxElapsedSeconds{0.1f};
+	const float m_FixedTimeStep{ 1.0f / 60.0f };
 
 
 	bool m_RunProgram	{ false };
@@ -72,19 +72,20 @@ private:
 	bool m_IsTruePaused	{ false };
 	std::atomic<bool> atomic_IsTruePaused = m_IsTruePaused;
 
+	
 
 	std::vector<StandardObject*> m_Objects;
 	std::list <StandardObject*> m_pObjectsToBeAdded;
 	bool m_ShouldAddToObjectList{ false };
 	bool m_ShouldRemoveFromObjectList{ false };
 
-	int m_VectorResizeThreshold{ 50 };
+	int m_ObjectListResizeThreshold{ 50 };
 
-	double m_FixedTimeStepTimer	{ 0.0 };
-	double m_DeltaTime			{ 0.0 };
-	double m_UnscaledDeltaTime	{ 0.0 };
-	double m_TimeScale			{ 1.0 };
-	std::atomic<double> atomic_TimeScale = m_TimeScale;
+	float m_FixedTimeStepTimer	{ 0.0f };
+	float m_DeltaTime			{ 0.0f };
+	float m_UnscaledDeltaTime	{ 0.0f };
+	float m_TimeScale			{ 1.0f };
+	std::atomic<float> atomic_TimeScale = m_TimeScale;
 
 	
 	//all objects that use the input loop placed in priority groups to allow execution orders	
@@ -124,10 +125,12 @@ private:
 
 public:
 
-	GLFWwindow* GetGLFWwindow() { return m_pWindow; }
+	GLFWwindow* GetGLFWwindow() const { return m_pWindow; }
+
+	SceneManager* GetSceneManager() const { return m_pSceneManager; }
 	
-	int GetScreenWidth() { return  m_ScreenWidth; };
-	int GetScreenHeight() { return  m_ScreenHeight; };
+	int GetScreenWidth() const { return  m_ScreenWidth; };
+	int GetScreenHeight() const { return  m_ScreenHeight; };
 	
 	bool GetRunProgram() const { return m_RunProgram; }
 	bool IsPaused()		const { return m_IsPaused; }

@@ -1,4 +1,5 @@
 #pragma once
+#include "Scene.h"
 
 class Program;
 
@@ -7,11 +8,16 @@ class StandardObject
 protected:
     StandardObject();
     StandardObject(int priority);
-	StandardObject(bool startsActivated, bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer, int inputPriority, int updatePriority, int renderPriority, int imGuiPriority);
-    
-    //Program& m_Program;
-    Program* m_Program;
-    
+	StandardObject(bool startsActivated, bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer,
+	               bool usesImGui, bool usesDebugRenderer, int inputPriority, int updatePriority, int renderPriority,
+	               int imGuiPriority);
+
+
+    unsigned int m_Id{};
+    //Program& m_pProgram;
+    Program* m_pProgram;
+
+    bool m_IsInAScene           { false };	
     bool m_PauseImmune          { false };  //if this is true then normal pause will have no effect on this object, no object can escape truepause though 
     bool m_IsPersistentObject   { false };  //if this is true then this object wont be destroyed when switching scenes
 	bool m_ShouldDestruct       { false };  //should this object be destroyed at the end of the loop
@@ -33,8 +39,6 @@ protected:
 	bool m_ShouldBeActive;	//says if the object should be active or not
 	bool m_IsActiveState;	//is the actual active/inactive state of the object
 
-public:
-    ~StandardObject();
 
     void AddToLists();      //adds this object to its appropriate list
 
@@ -60,18 +64,47 @@ public:
      */
     virtual void Sleep();
 
-    virtual void Destroy();
 
-    virtual void Input(double deltaTime);
 	
-    virtual void Update(double deltaTime);
+    /**
+     * these update functions are called in this order regardless of their priority nr.
+     * an object with a priority of 1 will call their update loop before an object with the priority of 2,
+     * but not before the input loop of object with the priority of 2 even though its own priority is 1
+     */	
+    virtual void Input(float deltaTime);
 	
-    virtual void Render(double deltaTime);
+    virtual void Update(float deltaTime);
 	
-    virtual void ImGuiRender(double deltaTime);
+    virtual void Render(float deltaTime);
 	
-    virtual void DebugRender(double deltaTime);
+    virtual void ImGuiRender(float deltaTime);
+	
+    virtual void DebugRender(float deltaTime);
 
+    /**
+     * this is called when the object gets destroyed
+     */
+    virtual void OnDestroy();
+
+public:
+    /**
+     * this destroys the object
+     */
+    void Destroy();
+	
+    void Activate();
+    void Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer,
+					int inputPriority = 1000, int updatePriority = 1000, int renderPriority = 1000, int imGuiPriority = 1000);
+    void DeActivate();
+	
+    virtual ~StandardObject();
+
+	//friend classes and functions are such a nice c++ thing
+    friend bool ShouldDestructStandardObject(StandardObject* object);
+    friend class Scene;
+    friend class Program;
+
+    bool GetIsInAScene()         const{ return m_IsInAScene; }
     bool GetUsesInput()          const{ return m_UsesInput; }
     bool GetUsesUpdate()         const{ return m_UsesUpdate; }
     bool GetUsesFixedUpdate()    const{ return m_UsesFixedUpdate; }
@@ -79,11 +112,11 @@ public:
     bool GetUsesDebugRenderer()  const{ return m_UsesDebugRenderer; }
     bool GetUsesImGui()          const{ return m_UsesImGui; }
 
-    unsigned int GetInputPriority()         const{ return m_InputPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int GetUpdatePriority()        const{ return m_UpdatePriority; }   //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int GetFixedUpdatePriority()   const{ return m_FixedUpdatePriority; }   //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int GetRenderPriority()        const{ return m_RenderPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
-    unsigned int GetImGuiPriority()         const{ return m_ImGuiPriority; }   //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetInputPriority()         const{ return m_InputPriority; }        //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetUpdatePriority()        const{ return m_UpdatePriority; }       //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetFixedUpdatePriority()   const{ return m_FixedUpdatePriority; }  //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetRenderPriority()        const{ return m_RenderPriority; }       //lower goes first, the object created first goes first if priority numbers are the same
+    unsigned int GetImGuiPriority()         const{ return m_ImGuiPriority; }        //lower goes first, the object created first goes first if priority numbers are the same
 	
 	bool GetShouldDestruct()     const { return m_ShouldDestruct; }
 	bool IsShouldBeActive()      const { return m_ShouldBeActive; }
@@ -94,6 +127,4 @@ public:
     
 	void SetShouldBeActive   (bool b) { m_ShouldBeActive = b; }
 	void SetActiveState      (bool b) { m_IsActiveState  = b; }
-    
-private:
 };

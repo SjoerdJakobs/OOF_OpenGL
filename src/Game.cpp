@@ -1,7 +1,9 @@
 #include "Game.h"
 
-#include "Player.h"
+#include "GameScene0.h"
+#include "MainMenuScene.h"
 #include "Rectangle.h"
+#include "SceneManager.h"
 
 Game::Game() :Program()
 {
@@ -26,31 +28,18 @@ void Game::CreateInstance()
 
 void Game::ProgramStart()
 {
-	std::cout << "CHILD PROGRAM CALLS PROGRAM_START" << std::endl;
 	Program::ProgramStart();
-
 }
-//
-//void Game::func()
-//{
-//	//std::cout << GetTimeScale();
-//	for (int i = 0; i < 1000; ++i)
-//	{
-//		ExampleObject* obj2 = new ExampleObject((rand() % 2000) + 1000);
-//	}
-//	ExampleObject* obj = new ExampleObject(1000);
-//}
 
 void Game::AtProgramStart()
 {
-	std::cout << "CHILD PROGRAM AT_PROGRAM_START" << std::endl;
-	
-	m_Player = new Player(1000);
-	//func();
+	AddScene(static_cast<Scene*>(new MainMenuScene()));
+	AddScene(static_cast<Scene*>(new GameScene0()));
+	m_pSceneManager->Start();
 }
 
 void Game::AddToProgramLoopBegin()
 {
-	//std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
+
 }
 

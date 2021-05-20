@@ -1,19 +1,27 @@
 #pragma once
+#include <vector>
+
+#include "Enums.h"
 #include "StandardObject.h"
 
-class SceneManager final : public StandardObject
+class Scene;
+
+class SceneManager final
 {
-public:
-	SceneManager() :StandardObject(true, false, true, false, false, false, false,1000,1000,1000,1000)
-	{
-		Start();
-	}
-	~SceneManager();
+	std::vector<Scene*>* m_pAllScenes;
+	Scene* m_pCurrentScene = nullptr;
 	
-	void Start() override;
-	void Awake() override;
-	void Sleep() override;
-	void Destroy() override;
-	void Update(double deltaTime) override;
+	SceneManager();
+	~SceneManager();
+	friend class Program;
+	friend void StandardObject::Destroy();
+
+	void UpdateScene()const;
+public:
+	void Start();
+	void Start(SceneNames sceneName);
+	void AddScene(Scene* newScene)const;
+	void SwitchToScene(const SceneNames sceneName);
+	
 };
 

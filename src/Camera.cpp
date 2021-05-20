@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera(int priority) :StandardObject(priority),
-m_Proj(glm::ortho(0.0f, static_cast<float>(m_Program->GetScreenWidth()), 0.0f, static_cast<float>(m_Program->GetScreenHeight()), -1.0f, 1.0f))
+m_Proj(glm::ortho(0.0f, static_cast<float>(m_pProgram->GetScreenWidth()), 0.0f, static_cast<float>(m_pProgram->GetScreenHeight()), -1.0f, 1.0f))
 {
 	Start();
 }
@@ -29,17 +29,17 @@ void Camera::Sleep()
 {
 }
 
-void Camera::Destroy()
-{
-	StandardObject::Destroy();
-}
-
-void Camera::Input(double deltaTime)
+void Camera::OnDestroy()
 {
 	
 }
 
-void Camera::Update(double deltaTime)
+void Camera::Input(float deltaTime)
+{
+	
+}
+
+void Camera::Update(float deltaTime)
 {
 	m_CurrentDistance = GetDistance(m_TargetPos, m_CameraPos);
 	m_LerpRenewTickCounter += deltaTime;
@@ -69,6 +69,6 @@ void Camera::Update(double deltaTime)
 	m_View = glm::translate(glm::mat4(1.0f), glm::vec3(-m_CameraPos.x, -m_CameraPos.y, 0));
 }
 
-void Camera::ImGuiRender(double deltaTime)
+void Camera::ImGuiRender(float deltaTime)
 {
 }

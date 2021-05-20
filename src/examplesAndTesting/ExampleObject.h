@@ -13,11 +13,11 @@ public:
 	void Start() override;
 	void Awake() override;
 	void Sleep() override;
-	void Destroy() override;
-	void Input(double deltaTime) override;
-	void Update(double deltaTime) override;
-	void Render(double deltaTime) override;
-	void ImGuiRender(double deltaTime) override;
-	void DebugRender(double deltaTime) override;
+	void OnDestroy() override;
+	void Input(float deltaTime) override;
+	void Update(float deltaTime) override;
+	void Render(float deltaTime) override;
+	void ImGuiRender(float deltaTime) override;
+	void DebugRender(float deltaTime) override;
 };
 

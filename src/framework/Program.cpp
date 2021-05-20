@@ -1,14 +1,14 @@
 #include "Program.h"
 #include "StandardObject.h"
 #include "PriorityGroup.h"
-#include "Test.h"
-#include "TestClearColor.h"
+#include "SceneManager.h"
 
 
 bool ShouldDestructStandardObject(StandardObject * object)
 {
 	if (object->GetShouldDestruct())
 	{
+		object->OnDestroy();
 		delete object;
 		return true;
 	}
@@ -58,9 +58,7 @@ bool Program::Exists()
 	return (m_pInstance != nullptr);
 }
 
-Program::Program()
-{
-}
+Program::Program() = default;
 
 
 static void glfw_error_callback(int error, const char* description)
@@ -71,7 +69,6 @@ static void glfw_error_callback(int error, const char* description)
 static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int height) {
 	//m_ScreenWidth = width;
 	//m_ScreenHeight = height;
-
 	/* update any perspective matrices used here */
 }
 
@@ -91,12 +88,11 @@ void Program::Run()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+	
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS);
-
-	float InitialScreenWidth = m_ScreenWidth;
-	float InitialScreenHeight = m_ScreenHeight;
+	const float InitialScreenWidth = static_cast<float>(m_ScreenWidth);
+	const float InitialScreenHeight = static_cast<float>(m_ScreenHeight);
 
 	/* Create a windowed mode m_pWindow and its OpenGL context */
 	m_pWindow = glfwCreateWindow(static_cast<int>(InitialScreenWidth), static_cast<int>(InitialScreenHeight), "Hello World", NULL, NULL);
@@ -129,6 +125,8 @@ void Program::Run()
 
 		Renderer renderer;
 
+		m_pSceneManager = new SceneManager();
+		
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -254,6 +252,7 @@ void Program::Run()
 
 			AddStandardObjectsMarkedForAdding();
 			RemoveStandardObjectsMarkedForRemove();
+			m_pSceneManager->UpdateScene();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -266,6 +265,8 @@ void Program::Run()
 			}
 		}
 	}
+
+	delete m_pSceneManager;
 	
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -280,6 +281,10 @@ void Program::AddStandardObjectsMarkedForAdding()
 {
 	if(m_ShouldAddToObjectList)
 	{
+		if(static_cast<int>(m_Objects.capacity())-(static_cast<int>(m_Objects.size())+ static_cast<int>(m_pObjectsToBeAdded.size()))<0)
+		{
+			m_Objects.reserve(m_Objects.size() + m_pObjectsToBeAdded.size() + m_ObjectListResizeThreshold);
+		}
 		m_Objects.insert(m_Objects.end(), m_pObjectsToBeAdded.begin(), m_pObjectsToBeAdded.end());
 		m_pObjectsToBeAdded.clear();
 		m_ShouldAddToObjectList = false;
@@ -296,7 +301,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		unsigned int lastPriorityNr = m_pInputObjectsToBeAdded.front()->GetInputPriority();
 		std::list<StandardObject*>::iterator i = m_pInputObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
-		int listSize = m_pInputObjectsToBeAdded.size();
+		const int listSize = m_pInputObjectsToBeAdded.size();
 		for (int i = 0; i < listSize; ++i)
 		{
 			StandardObject* currentObj = m_pInputObjectsToBeAdded.front();
@@ -327,7 +332,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		unsigned int lastPriorityNr = m_pUpdateObjectsToBeAdded.front()->GetUpdatePriority();
 		std::list<StandardObject*>::iterator i = m_pUpdateObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
-		int listSize = m_pUpdateObjectsToBeAdded.size();
+		const int listSize = m_pUpdateObjectsToBeAdded.size();
 		for (int i = 0; i < listSize; ++i)
 		{
 			StandardObject* currentObj = m_pUpdateObjectsToBeAdded.front();
@@ -357,7 +362,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		unsigned int lastPriorityNr = m_pFixedUpdateObjectsToBeAdded.front()->GetUpdatePriority();
 		std::list<StandardObject*>::iterator i = m_pFixedUpdateObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
-		int listSize = m_pFixedUpdateObjectsToBeAdded.size();
+		const int listSize = m_pFixedUpdateObjectsToBeAdded.size();
 		for (int i = 0; i < listSize; ++i)
 		{
 			StandardObject* currentObj = m_pFixedUpdateObjectsToBeAdded.front();
@@ -387,7 +392,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		unsigned int lastPriorityNr = m_pRenderObjectsToBeAdded.front()->GetRenderPriority();
 		std::list<StandardObject*>::iterator i = m_pRenderObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
-		int listSize = m_pRenderObjectsToBeAdded.size();
+		const int listSize = m_pRenderObjectsToBeAdded.size();
 		for (int i = 0; i < listSize; ++i)
 		{
 			StandardObject* currentObj = m_pRenderObjectsToBeAdded.front();
@@ -417,7 +422,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		unsigned int lastPriorityNr = m_pImGuiRenderObjectsToBeAdded.front()->GetUpdatePriority();
 		std::list<StandardObject*>::iterator i = m_pImGuiRenderObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
-		int listSize = m_pImGuiRenderObjectsToBeAdded.size();
+		const int listSize = m_pImGuiRenderObjectsToBeAdded.size();
 		for (int i = 0; i < listSize; ++i)
 		{
 			StandardObject* currentObj = m_pImGuiRenderObjectsToBeAdded.front();
@@ -529,7 +534,7 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		objectsForInsert.clear();
 		break;
 	case LoopType::debugRender:
-		//TODO: implement debug renderer
+		//TODO: implement debug rendering
 		//currentGroup = m_pDebugRenderObjectGroups;
 		break;
 	}
@@ -546,7 +551,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->standardObjects.erase(
 				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromInputLoop),
 				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_VectorResizeThreshold)
+			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 				group->standardObjects.shrink_to_fit();
 			}
@@ -562,7 +567,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->standardObjects.erase(
 				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromUpdateLoop),
 				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_VectorResizeThreshold)
+			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 				group->standardObjects.shrink_to_fit();
 			}
@@ -578,7 +583,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->standardObjects.erase(
 				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromFixedUpdateLoop),
 				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_VectorResizeThreshold)
+			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 				group->standardObjects.shrink_to_fit();
 			}
@@ -594,7 +599,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->standardObjects.erase(
 				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromRenderLoop),
 				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_VectorResizeThreshold)
+			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 				group->standardObjects.shrink_to_fit();
 			}
@@ -610,7 +615,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->standardObjects.erase(
 				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromImGuiLoop),
 				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_VectorResizeThreshold)
+			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 			}
 				group->standardObjects.shrink_to_fit();
@@ -624,7 +629,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			std::remove_if(m_Objects.begin(), m_Objects.end(), ShouldDestructStandardObject),
 			m_Objects.end());
 		
-		if (m_Objects.capacity() >= m_Objects.size() + m_VectorResizeThreshold)
+		if (m_Objects.capacity() >= m_Objects.size() + m_ObjectListResizeThreshold)
 		{
 		}
 			m_Objects.shrink_to_fit();
@@ -637,9 +642,7 @@ void Program::ProgramStart()
 {
 	if(!m_RunProgram)
 	{
-		m_RunProgram = true;
-		
-		
+		m_RunProgram = true;		
 		Run();
 	}
 }
@@ -650,6 +653,11 @@ void Program::AtProgramStart()
 
 void Program::AddToProgramLoopBegin()
 {
+}
+
+void Program::AddScene(Scene* newScene) const
+{
+	m_pSceneManager->AddScene(newScene);
 }
 
 void Program::CleanUp()
@@ -711,7 +719,7 @@ void Program::AddToAllLists(StandardObject* p_obj)
 	//AddToList(p_obj, LoopType::debugRender);
 }
 
-void Program::RemoveFromList(LoopType type)
+void Program::RemoveFromList(const LoopType type)
 {
 	switch (type)
 	{
@@ -743,25 +751,3 @@ void Program::RemoveFromAllLists()
 	RemoveFromList(LoopType::render);
 	RemoveFromList(LoopType::imGuiRender);
 }
-
-
-/*if (shouldAddToMainGroup) {
-	for (StandardObject ro : mainObjectsToBeAdded) {
-		boolean hasGroup = false;
-		for (PriorityGroup group : mainGroups) {
-			if (group.priorityNr == ro.getObjectPriority()) {
-				group.standardObjects.add(ro);
-				hasGroup = true;
-			}
-		}
-		if (!hasGroup) {
-			final PriorityGroup addGroup = new PriorityGroup(ro.getObjectPriority());
-			addGroup.standardObjects.add(ro);
-			mainGroups.add(addGroup);
-		}
-	}
-	mainGroups.sort(Comparator.comparing(PriorityGroup::getPriorityNr));
-	mainObjectsToBeAdded.clear();
-	shouldAddToMainGroup = false;
-}
-*/

@@ -1,24 +1,38 @@
 #pragma once
 #include <list>
 #include <vector>
+#include "Enums.h"
 
 class StandardObject;
 
 class Scene
 {
 private:
+	unsigned int m_Id = reinterpret_cast<unsigned int>(this);
+	
 	bool m_ObjectsNeedToBeAddedToScene{ false };
-	std::vector<StandardObject*> m_pStandardObjectsInScene;
-	std::list<StandardObject*> m_pObjectsToBeAddedToScene;
+	bool m_ObjectsNeedToBeRemovedFromScene{ false };
 	
-public:
+	std::list<StandardObject*>	m_pStandardObjectsInScene;
+	std::list<StandardObject*>	m_pObjectsToBeAddedToScene;
+	std::list<StandardObject*>	m_pObjectsToBeRemovedFromScene;
 	
-	bool GetIfObjectsNeedToBeAdded() { return m_ObjectsNeedToBeAddedToScene; }
-	
-	void AddObjectToScene(StandardObject* obj);
-	void UpdateObjectContainers();
+	bool GetIfObjectsNeedToBeAdded() const {	return m_ObjectsNeedToBeAddedToScene; }
+	void UpdateAddObjects();
+	void UpdateRemoveObjects();
+	void Start();
+	void Stop();
 
-	virtual void Start();
-	virtual void Stop();
+protected:
+	virtual void OnStart();
+	virtual void OnStop();
+	SceneNames m_SceneName;
+
+public:
+	virtual ~Scene() = default;
+	friend class SceneManager;	
+	void AddObjectToScene(StandardObject* p_obj);
+	void RemoveObjectFromScene(StandardObject* p_obj);
+
 };
 

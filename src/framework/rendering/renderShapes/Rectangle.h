@@ -20,7 +20,7 @@ public:
 	
 	~Rectangle();
 	
-	void Draw();
+	void Draw() const;
 	void DrawWithColor();
 	void DrawWithTexture();
 	void DrawWithSpritesheetTexture();

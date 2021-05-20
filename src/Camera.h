@@ -35,8 +35,8 @@ private:
 	glm::vec2 m_CameraPos{ 0,0 };
 	glm::vec2 m_LastCameraPos{ 0,0 };
 
-	glm::mat4 m_View;
-	glm::mat4 m_Proj;
+	glm::mat4 m_View{};
+	glm::mat4 m_Proj{};
 	
 	float Lerp(float a, float b, float f);
 	float GetDistance(glm::vec2 v1, glm::vec2 v2);
@@ -48,10 +48,10 @@ public:
 	void Start() override;
 	void Awake() override;
 	void Sleep() override;
-	void Destroy() override;
-	void Input(double deltaTime) override;
-	void Update(double deltaTime) override;
-	void ImGuiRender(double deltaTime) override;
+	void OnDestroy() override;
+	void Input(float deltaTime) override;
+	void Update(float deltaTime) override;
+	void ImGuiRender(float deltaTime) override;
 
 	glm::mat4 GetCameraView() const { return m_View; }
 	glm::mat4 GetCameraProj() const { return m_Proj; }

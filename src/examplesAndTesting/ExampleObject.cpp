@@ -16,12 +16,12 @@ void ExampleObject::Sleep()
 {
 }
 
-void ExampleObject::Destroy()
+void ExampleObject::OnDestroy()
 {
-	StandardObject::Destroy();
+	
 }
 
-void ExampleObject::Input(double deltaTime)
+void ExampleObject::Input(float deltaTime)
 {
 	m_Counter++;
 	std::cout << "priorityNr " << m_DeathPoint<< " and counter: "<< m_Counter<< std::endl;
@@ -31,18 +31,18 @@ void ExampleObject::Input(double deltaTime)
 	}
 }
 
-void ExampleObject::Update(double deltaTime)
+void ExampleObject::Update(float deltaTime)
 {
 }
 
-void ExampleObject::Render(double deltaTime)
+void ExampleObject::Render(float deltaTime)
 {
 }
 
-void ExampleObject::ImGuiRender(double deltaTime)
+void ExampleObject::ImGuiRender(float deltaTime)
 {
 }
 
-void ExampleObject::DebugRender(double deltaTime)
+void ExampleObject::DebugRender(float deltaTime)
 {
 }
