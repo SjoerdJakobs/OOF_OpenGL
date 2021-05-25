@@ -23,28 +23,29 @@ void ExampleProgram::CreateInstance()
 
 void ExampleProgram::ProgramStart()
 {
-	std::cout << "CHILD PROGRAM CALLS PROGRAM_START"<<std::endl;
+	//std::cout << "CHILD PROGRAM CALLS PROGRAM_START"<<std::endl;
 	Program::ProgramStart();
 
 }
 
 void ExampleProgram::func()
 {
-	//std::cout << GetTimeScale();
-	for (int i = 0; i < 1000; ++i)
+	std::cout << "start \n";
+	for (int i = 0; i < 2000000; ++i)
 	{
-		ExampleObject* obj2 = new ExampleObject((rand() % 2000) + 1000);
+		//new ExampleObject((rand() % 2000) + 1000);
+		new ExampleObject(1000);
 	}
-	ExampleObject* obj = new ExampleObject(1000);
+	std::cout << "stop \n";
 }
 
 void ExampleProgram::AtProgramStart()
 {
-	std::cout << "CHILD PROGRAM AT_PROGRAM_START" << std::endl;
+	//std::cout << "CHILD PROGRAM AT_PROGRAM_START" << std::endl;
 	func();
 }
 
 void ExampleProgram::AddToProgramLoopBegin()
 {
-	std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
+	//std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
 }

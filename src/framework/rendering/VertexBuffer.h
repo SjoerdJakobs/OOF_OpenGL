@@ -1,5 +1,5 @@
 #pragma once
-class VertexBuffer
+class VertexBuffer final
 {
 private:
 	unsigned int m_RenderID;

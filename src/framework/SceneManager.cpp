@@ -20,41 +20,42 @@ SceneManager::~SceneManager()
 void SceneManager::AddScene(Scene* newScene)const
 {
 	m_pAllScenes->push_back(newScene);
-	
 }
 
-void SceneManager::SwitchToScene(const SceneNames sceneName)
+void SceneManager::SwitchToScene(SceneNames sceneName)
 {
 	m_pCurrentScene->Stop();
 	for (Scene* scene : *m_pAllScenes)
 	{
-		if(scene->m_SceneName == sceneName)
+		if (scene->m_SceneName == sceneName)
 		{
 			m_pCurrentScene = scene;
 			break;
 		}
 	}
 	m_pCurrentScene->Start();
-	
 }
 
 void SceneManager::UpdateScene()const
 {
-	if (m_pCurrentScene->m_ObjectsNeedToBeAddedToScene)
+	if (m_pCurrentScene != nullptr)
 	{
-		m_pCurrentScene->UpdateAddObjects();
-	}
-	if(m_pCurrentScene->m_ObjectsNeedToBeRemovedFromScene)
-	{
-		m_pCurrentScene->UpdateRemoveObjects();
+		if (m_pCurrentScene->m_ObjectsNeedToBeAddedToScene)
+		{
+			m_pCurrentScene->UpdateAddObjects();
+		}
+		if (m_pCurrentScene->m_ObjectsNeedToBeRemovedFromScene)
+		{
+			m_pCurrentScene->UpdateRemoveObjects();
+		}
 	}
 }
 
 void SceneManager::Start()
 {
-	if(m_pCurrentScene == nullptr)
+	if (m_pCurrentScene == nullptr)
 	{
-		if(!m_pAllScenes->empty())
+		if (!m_pAllScenes->empty())
 		{
 			m_pCurrentScene = m_pAllScenes->front();
 			m_pCurrentScene->Start();

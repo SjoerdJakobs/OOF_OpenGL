@@ -9,7 +9,7 @@ struct ShaderProgramSource
 	std::string FragmentSource;
 };
 
-class Shader
+class Shader final
 {
 private:
 	std::string m_FilePath;

@@ -23,7 +23,7 @@ void Scene::UpdateAddObjects()
 
 void Scene::UpdateRemoveObjects()
 {
-	for(StandardObject* p_obj : m_pObjectsToBeRemovedFromScene)
+	for (StandardObject* p_obj : m_pObjectsToBeRemovedFromScene)
 	{
 		m_pStandardObjectsInScene.remove(p_obj);
 	}
@@ -38,10 +38,10 @@ void Scene::Start()
 
 void Scene::Stop()
 {
-	this->OnStop();
+	OnStop();
 	for (StandardObject* obj : m_pStandardObjectsInScene)
 	{
-		if(!obj->IsPersistentObject())
+		if (!obj->IsPersistentObject())
 		{
 			obj->m_IsInAScene = false;
 			obj->Destroy();

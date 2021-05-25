@@ -50,7 +50,7 @@ static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int heig
 
 	/* update any perspective matrices used here */
 }
-//
+////
 //void StartHeapControl();
 //void DumpMemoryLeaks();
 
@@ -59,16 +59,15 @@ int main(int argc, char* argv[])
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	//StartHeapControl();
-	
+
 	Game::CreateInstance();
-	Game* pr =  static_cast<Game*>(Game::GetInstance());
+	Game* pr = static_cast<Game*>(Game::GetInstance());
 	pr->ProgramStart();
 
 	//DumpMemoryLeaks();
-	
+
 	return 0;
 
-	
 	GLFWwindow* m_pWindow;
 
 	glfwSetErrorCallback(glfw_error_callback);
@@ -112,8 +111,8 @@ int main(int argc, char* argv[])
 	}
 
 	{
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-		GLCall(glEnable(GL_BLEND));
+		GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		GL_CALL(glEnable(GL_BLEND));
 
 		RendererOld renderer;
 
@@ -149,7 +148,7 @@ int main(int argc, char* argv[])
 		{
 			glViewport(0, 0, ScreenWidth, ScreenHeight);
 			renderer.Clear();
-			GLCall(glClearColor(0, 0, 0,1));
+			GL_CALL(glClearColor(0, 0, 0, 1));
 
 			// Start the Dear ImGui frame
 			ImGui_ImplOpenGL3_NewFrame();
@@ -157,7 +156,7 @@ int main(int argc, char* argv[])
 			ImGui::NewFrame();
 
 			/* Poll for and process events */
-			GLCall(glfwPollEvents());
+			GL_CALL(glfwPollEvents());
 
 			if (currentTest)
 			{
@@ -177,7 +176,7 @@ int main(int argc, char* argv[])
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			/* Swap front and back buffers */
-			GLCall(glfwSwapBuffers(m_pWindow));
+			GL_CALL(glfwSwapBuffers(m_pWindow));
 
 			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
 				glfwSetWindowShouldClose(m_pWindow, 1);
@@ -193,7 +192,26 @@ int main(int argc, char* argv[])
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }
-
+//void StartHeapControl()
+//{
+//#if defined(DEBUG) | defined(_DEBUG)
+//	// Notify user if heap is corrupt
+//	HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0);
+//
+//	// Report detected leaks when the program exits
+//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//
+//	// Set a breakpoint on the specified object allocation order number
+//	_CrtSetBreakAlloc(156);
+//#endif
+//}
+//
+//void DumpMemoryLeaks()
+//{
+//#if defined(DEBUG) | defined(_DEBUG)
+//	_CrtDumpMemoryLeaks();
+//#endif
+//}
 //void StartHeapControl()
 //{
 //#if defined(DEBUG) | defined(_DEBUG)
@@ -214,7 +232,6 @@ int main(int argc, char* argv[])
 //	_CrtDumpMemoryLeaks();
 //#endif
 //}
-
 
 /*
 	std::list<int> ints1 = std::list<int>();

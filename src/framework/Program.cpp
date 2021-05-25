@@ -3,8 +3,7 @@
 #include "PriorityGroup.h"
 #include "SceneManager.h"
 
-
-bool ShouldDestructStandardObject(StandardObject * object)
+bool ShouldDestructStandardObject(StandardObject* object)
 {
 	if (object->GetShouldDestruct())
 	{
@@ -60,13 +59,12 @@ bool Program::Exists()
 
 Program::Program() = default;
 
-
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int height) {
+static void glfw_window_size_callback(GLFWwindow * m_pWindow, int width, int height) {
 	//m_ScreenWidth = width;
 	//m_ScreenHeight = height;
 	/* update any perspective matrices used here */
@@ -74,8 +72,6 @@ static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int heig
 
 void Program::Run()
 {
-	
-
 	glfwSetErrorCallback(glfw_error_callback);
 	/* Initialize the library */
 	if (!glfwInit())
@@ -83,12 +79,12 @@ void Program::Run()
 		ASSERT(false);
 		m_RunProgram = false;
 	}
-	
+
 	const char* glsl_version = "#version 460";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	
+
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS);
 	const float InitialScreenWidth = static_cast<float>(m_ScreenWidth);
@@ -118,23 +114,24 @@ void Program::Run()
 	{
 		std::cout << glGetString(GL_VERSION) << std::endl;
 	}
-	
-	{
-		GLCall(glEnable(GL_BLEND));
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-		Renderer renderer;
+	{
+		GL_CALL(glEnable(GL_BLEND));
+		GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+
+		const Renderer renderer;
 
 		m_pSceneManager = new SceneManager();
-		
+
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		//io.ConfigFlags |= ImGuiWindowFlags_NoMove;				// Prevent m_pWindow movement
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+		//todo: make a system to manage fonts
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("res/fonts/Open_Sans/OpenSans-Regular.ttf", 18);//font 0
+		io.Fonts->AddFontFromFileTTF("res/fonts/Orbitron/Orbitron-Bold.ttf", 56);//font 1
+		
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
 		//ImGui::StyleColorsClassic();
@@ -142,14 +139,12 @@ void Program::Run()
 		// Setup Platform/Renderer backends
 		ImGui_ImplGlfw_InitForOpenGL(m_pWindow, true);
 		ImGui_ImplOpenGL3_Init(glsl_version);
-				
-		io.ConfigFlags |= ImGuiWindowFlags_NoMove;
-
-		this->AtProgramStart();
 		
+		this->AtProgramStart();
+
 		// Set start time
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
-		while (!glfwWindowShouldClose(m_pWindow)&&m_RunProgram)
+		while (!glfwWindowShouldClose(m_pWindow) && m_RunProgram)
 		{
 			// Get current time
 			std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
@@ -171,11 +166,10 @@ void Program::Run()
 
 			glViewport(0, 0, m_ScreenWidth, m_ScreenHeight);
 			renderer.Clear();
-			GLCall(glClearColor(0, 0, 0, 1));
-			
+			GL_CALL(glClearColor(0, 0, 0, 1));
 
 			/* Poll for and process events */
-			GLCall(glfwPollEvents());
+			GL_CALL(glfwPollEvents());
 
 			this->AddToProgramLoopBegin();
 
@@ -184,7 +178,7 @@ void Program::Run()
 				for (PriorityGroup* p_group : m_pInputObjectGroups)
 				{
 					for (StandardObject* p_obj : p_group->standardObjects) {
-						if(!IsPaused() || p_obj->IsPauseImmune())
+						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
 							p_obj->Input(m_UnscaledDeltaTime);
 						}
@@ -258,7 +252,7 @@ void Program::Run()
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 			/* Swap front and back buffers */
-			GLCall(glfwSwapBuffers(m_pWindow));
+			GL_CALL(glfwSwapBuffers(m_pWindow));
 
 			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
 				glfwSetWindowShouldClose(m_pWindow, 1);
@@ -267,21 +261,22 @@ void Program::Run()
 	}
 
 	delete m_pSceneManager;
-	
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
 	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
-	exit(EXIT_SUCCESS);	
+	exit(EXIT_SUCCESS);
 }
 
+//Todo: template the repeated code here or make a function which can be used by all looptypes
 void Program::AddStandardObjectsMarkedForAdding()
 {
-	if(m_ShouldAddToObjectList)
+	if (m_ShouldAddToObjectList)
 	{
-		if(static_cast<int>(m_Objects.capacity())-(static_cast<int>(m_Objects.size())+ static_cast<int>(m_pObjectsToBeAdded.size()))<0)
+		if (static_cast<int>(m_Objects.capacity()) - (static_cast<int>(m_Objects.size()) + static_cast<int>(m_pObjectsToBeAdded.size())) < 0)
 		{
 			m_Objects.reserve(m_Objects.size() + m_pObjectsToBeAdded.size() + m_ObjectListResizeThreshold);
 		}
@@ -289,7 +284,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 		m_pObjectsToBeAdded.clear();
 		m_ShouldAddToObjectList = false;
 	}
-	
+
 	if (m_ShouldAddToInputList)
 	{
 		//sort list with lambda
@@ -297,7 +292,7 @@ void Program::AddStandardObjectsMarkedForAdding()
 			{
 				return p_obj1->GetInputPriority() < p_obj2->GetInputPriority();
 			});
-		
+
 		unsigned int lastPriorityNr = m_pInputObjectsToBeAdded.front()->GetInputPriority();
 		std::list<StandardObject*>::iterator i = m_pInputObjectsToBeAdded.begin();
 		std::list<StandardObject*>objectsForInsert = std::list<StandardObject*>();
@@ -320,11 +315,10 @@ void Program::AddStandardObjectsMarkedForAdding()
 		m_pInputObjectsToBeAdded.clear();
 	}
 
-	
 	if (m_ShouldAddToUpdateList)
 	{
 		//sort list with lambda
-		m_pUpdateObjectsToBeAdded.sort([](const StandardObject* p_obj1,const StandardObject* p_obj2)
+		m_pUpdateObjectsToBeAdded.sort([](const StandardObject* p_obj1, const StandardObject* p_obj2)
 			{
 				return p_obj1->GetUpdatePriority() < p_obj2->GetUpdatePriority();
 			});
@@ -440,9 +434,9 @@ void Program::AddStandardObjectsMarkedForAdding()
 		m_ShouldAddToImGuiRenderList = false;
 		m_pImGuiRenderObjectsToBeAdded.clear();
 	}
-	
 }
 
+//Todo: template the repeated code here or make a function which can be used by all looptypes
 void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::list<StandardObject*>objectsForInsert)
 {
 	switch (type) {
@@ -540,7 +534,7 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 	}
 }
 
-
+//Todo: template the repeated code here or make a function which can be used by all looptypes
 void Program::RemoveStandardObjectsMarkedForRemove()
 {
 	if (m_ShouldRemoveFromInputList)
@@ -618,21 +612,21 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
 			{
 			}
-				group->standardObjects.shrink_to_fit();
+			group->standardObjects.shrink_to_fit();
 		}
 		m_ShouldRemoveFromImGuiRenderList = false;
 	}
 
-	if(m_ShouldRemoveFromObjectList)
+	if (m_ShouldRemoveFromObjectList)
 	{
 		m_Objects.erase(
 			std::remove_if(m_Objects.begin(), m_Objects.end(), ShouldDestructStandardObject),
 			m_Objects.end());
-		
+
 		if (m_Objects.capacity() >= m_Objects.size() + m_ObjectListResizeThreshold)
 		{
 		}
-			m_Objects.shrink_to_fit();
+		m_Objects.shrink_to_fit();
 
 		m_ShouldRemoveFromObjectList = false;
 	}
@@ -640,9 +634,9 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 
 void Program::ProgramStart()
 {
-	if(!m_RunProgram)
+	if (!m_RunProgram)
 	{
-		m_RunProgram = true;		
+		m_RunProgram = true;
 		Run();
 	}
 }
@@ -655,21 +649,19 @@ void Program::AddToProgramLoopBegin()
 {
 }
 
-void Program::AddScene(Scene* newScene) const
+void Program::AddScene(Scene * newScene) const
 {
 	m_pSceneManager->AddScene(newScene);
 }
 
 void Program::CleanUp()
 {
-	
 }
 
-void Program::AddToObjectsList(StandardObject* p_obj)
-{		
-
+void Program::AddToObjectsList(StandardObject * p_obj)
+{
 	m_ShouldAddToObjectList = true;
-	m_pObjectsToBeAdded.push_back(p_obj);		
+	m_pObjectsToBeAdded.push_back(p_obj);
 }
 
 void Program::RemoveFromObjectsList()
@@ -677,7 +669,7 @@ void Program::RemoveFromObjectsList()
 	m_ShouldRemoveFromObjectList = true;
 }
 
-void Program::AddToList(StandardObject* p_obj, LoopType type)
+void Program::AddToList(StandardObject * p_obj, LoopType type)
 {
 	switch (type)
 	{
@@ -709,7 +701,7 @@ void Program::AddToList(StandardObject* p_obj, LoopType type)
 	}
 }
 
-void Program::AddToAllLists(StandardObject* p_obj)
+void Program::AddToAllLists(StandardObject * p_obj)
 {
 	AddToList(p_obj, LoopType::input);
 	AddToList(p_obj, LoopType::update);

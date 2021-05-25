@@ -3,7 +3,7 @@
 
 class VertexBufferLayout;
 
-class VertexArray
+class VertexArray final
 {
 private:
 	unsigned int m_RendererID;

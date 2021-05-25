@@ -5,7 +5,7 @@
 #include "Shader.h"
 
 #define ASSERT(x) if(!(x)) __debugbreak();
-#define GLCall(x) GLClearError();\
+#define GL_CALL(x) GLClearError();\
     x;\
 ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
@@ -22,8 +22,8 @@ public:
 	Renderer();
 
 	static void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
-	void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader, glm::mat4 model);
-	void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader, glm::vec3 position);
-	
+	void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader, glm::mat4 model) const;
+	void Draw(const VertexArray& va, const IndexBuffer& ib, Shader& shader, glm::vec3 position) const;
+
 	void Clear() const;
 };

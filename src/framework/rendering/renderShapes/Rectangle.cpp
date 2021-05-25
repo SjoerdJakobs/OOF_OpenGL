@@ -4,18 +4,17 @@
 #include "VertexBufferLayout.h"
 #include "glm/gtc/matrix_transform.hpp"
 
-Rectangle::Rectangle(float xSize, float ySize, glm::vec2 pos):m_XSize(xSize),m_YSize(ySize),m_Pos(pos),m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0),m_Color{0,0,0,0}
-{
-	
-	ConstructWithColor();
-}
-
-Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos) : m_XSize(xSize), m_YSize(ySize), m_Pos(glm::vec2(xPos, yPos)), m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0),m_Color { 0, 0, 0, 0 }
+Rectangle::Rectangle(float xSize, float ySize, glm::vec2 pos) :m_XSize(xSize), m_YSize(ySize), m_Pos(pos), m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0), m_Color{ 0,0,0,0 }
 {
 	ConstructWithColor();
 }
 
-Rectangle::Rectangle(float xSize, float ySize, glm::vec2 pos, float color[4]) :m_XSize(xSize), m_YSize(ySize), m_Pos(pos), m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0),m_Color{color[0],color[1],color[2],color[3]}
+Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos) : m_XSize(xSize), m_YSize(ySize), m_Pos(glm::vec2(xPos, yPos)), m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0), m_Color{ 0, 0, 0, 0 }
+{
+	ConstructWithColor();
+}
+
+Rectangle::Rectangle(float xSize, float ySize, glm::vec2 pos, float color[4]) : m_XSize(xSize), m_YSize(ySize), m_Pos(pos), m_TexturePath("res/textures/NoTexture.jpg"), m_TextureSlot(0), m_Color{ color[0],color[1],color[2],color[3] }
 {
 	ConstructWithColor();
 }
@@ -37,7 +36,7 @@ Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::stri
 
 Rectangle::Rectangle(float xSize, float ySize, glm::vec2 pos, std::string texturePath, int textureSlot, float xStart, float xEnd, float yStart, float yEnd) : m_XSize(xSize), m_YSize(ySize), m_Pos(pos), m_TexturePath(texturePath), m_TextureSlot(textureSlot)
 {
-	ConstructWithTexture(xStart,xEnd,yStart,yEnd);
+	ConstructWithTexture(xStart, xEnd, yStart, yEnd);
 }
 
 Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::string texturePath, int textureSlot, float xStart, float xEnd, float yStart, float yEnd) : m_XSize(xSize), m_YSize(ySize), m_Pos(glm::vec2(xPos, yPos)), m_TexturePath(texturePath), m_TextureSlot(textureSlot)
@@ -45,38 +44,43 @@ Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::stri
 	ConstructWithTexture(xStart, xEnd, yStart, yEnd);
 }
 
-
 Rectangle::~Rectangle()
 {
-	m_VAO->UnBind();
-	m_VertexBuffer->Unbind();
-	m_IndexBuffer->Unbind();
-	m_Shader->UnBind();
-	m_Texture->UnBind();
+	m_pVAO->UnBind();
+	m_pVertexBuffer->Unbind();
+	m_pIndexBuffer->Unbind();
+	m_pShader->UnBind();
+	m_pTexture->UnBind();
+
+	delete m_pVAO;
+	delete m_pVertexBuffer;
+	delete m_pIndexBuffer;
+	delete m_pShader;
+	delete m_pTexture;
 }
 
 void Rectangle::Draw() const
 {
 	Renderer renderer;
-	
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x,m_Pos.y,0));
-	renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader, model);
+
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
 void Rectangle::DrawWithColor()
 {
 	Renderer renderer;
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
-	renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader, model);	
+	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
 void Rectangle::DrawWithTexture()
-{	
+{
 	Renderer renderer;
-	
-	m_Texture->Bind(m_TextureSlot);
-	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));	
-	renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader, model);	
+
+	m_pTexture->Bind(m_TextureSlot);
+	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
 void Rectangle::DrawWithSpritesheetTextureAnimation(float xStart, float xEnd, float yStart, float yEnd)
@@ -109,14 +113,14 @@ void Rectangle::DrawWithSpritesheetTextureAnimation(float xStart, float xEnd, fl
 
 	//add VertexBuffer with its layout to VertexArray
 	VAO.AddBuffer(VBuffer, layout);
-	//m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
+	//m_pIndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
 
-	m_Texture->Bind(m_TextureSlot);
+	m_pTexture->Bind(m_TextureSlot);
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
-	renderer.Draw(VAO, *m_IndexBuffer, *m_Shader, model);
+	renderer.Draw(VAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
-void Rectangle::ConstructWithTexture(float xStart, float xEnd , float yStart , float yEnd)
+void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, float yEnd)
 {
 	const unsigned int xSize{ 1 };
 	const unsigned int ySize{ 1 };
@@ -124,19 +128,19 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd , float yStart , f
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2, xStart, yStart,	//0.0f, 0.0f,
-		m_XSize  / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
-		m_XSize  / 2, m_YSize  / 2, xEnd, yEnd,		//1.0f, 1.0f,
-		-m_XSize / 2, m_YSize  / 2, xStart, yEnd	//0.0f, 1.0f
+		m_XSize / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
+		m_XSize / 2, m_YSize / 2, xEnd, yEnd,		//1.0f, 1.0f,
+		-m_XSize / 2, m_YSize / 2, xStart, yEnd	//0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0,
 	};
-	
-	m_VAO = std::make_unique<VertexArray>();
+
+	m_pVAO = new VertexArray();
 	//create VertexBuffer
-	m_VertexBuffer = std::make_unique<VertexBuffer>(positions, xSize * ySize * 16 * sizeof(float));
+	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 16 * sizeof(float));
 	//create VertexBufferLayout
 	VertexBufferLayout layout;
 
@@ -147,15 +151,14 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd , float yStart , f
 	layout.Push<float>(2);
 
 	//add VertexBuffer with its layout to VertexArray
-	m_VAO->AddBuffer(*m_VertexBuffer, layout);
-	m_IndexBuffer = std::make_unique<IndexBuffer>(indices, xSize * ySize * 6);
+	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
+	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
 
-	m_Shader = std::make_unique<Shader>("res/shaders/BasicTexture.shader");
-	m_Shader->Bind();
-	m_Texture = std::make_unique<Texture>(m_TexturePath);
-	m_Shader->SetUniform1i("u_Texture", m_TextureSlot);
+	m_pShader = new Shader("res/shaders/BasicTexture.shader");
+	m_pShader->Bind();
+	m_pTexture = new Texture(m_TexturePath);
+	m_pShader->SetUniform1i("u_Texture", m_TextureSlot);
 }
-
 
 void Rectangle::ConstructWithColor()
 {
@@ -164,8 +167,8 @@ void Rectangle::ConstructWithColor()
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2,
-		m_XSize / 2, -m_YSize / 2, 
-		m_XSize / 2, m_YSize / 2, 
+		m_XSize / 2, -m_YSize / 2,
+		m_XSize / 2, m_YSize / 2,
 		-m_XSize / 2, m_YSize / 2
 	};
 
@@ -174,9 +177,9 @@ void Rectangle::ConstructWithColor()
 		2, 3, 0,
 	};
 
-	m_VAO = std::make_unique<VertexArray>();
+	m_pVAO = new VertexArray();
 	//create VertexBuffer
-	m_VertexBuffer = std::make_unique<VertexBuffer>(positions, xSize * ySize * 8 * sizeof(float));
+	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 8 * sizeof(float));
 	//create VertexBufferLayout
 	VertexBufferLayout layout;
 
@@ -185,12 +188,10 @@ void Rectangle::ConstructWithColor()
 	layout.Push<float>(2);
 
 	//add VertexBuffer with its layout to VertexArray
-	m_VAO->AddBuffer(*m_VertexBuffer, layout);
-	m_IndexBuffer = std::make_unique<IndexBuffer>(indices, xSize * ySize * 6);
+	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
+	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
 
-	m_Shader = std::make_unique<Shader>("res/shaders/BasicColor.shader");
-	m_Shader->Bind();
-	m_Shader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
+	m_pShader = new Shader("res/shaders/BasicColor.shader");
+	m_pShader->Bind();
+	m_pShader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
 }
-
-

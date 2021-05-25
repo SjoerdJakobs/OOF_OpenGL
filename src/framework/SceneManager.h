@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-
 #include "Enums.h"
 #include "StandardObject.h"
 
@@ -10,7 +9,7 @@ class SceneManager final
 {
 	std::vector<Scene*>* m_pAllScenes;
 	Scene* m_pCurrentScene = nullptr;
-	
+
 	SceneManager();
 	~SceneManager();
 	friend class Program;
@@ -21,7 +20,5 @@ public:
 	void Start();
 	void Start(SceneNames sceneName);
 	void AddScene(Scene* newScene)const;
-	void SwitchToScene(const SceneNames sceneName);
-	
+	void SwitchToScene(SceneNames sceneName);
 };
-

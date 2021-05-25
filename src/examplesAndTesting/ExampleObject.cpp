@@ -2,10 +2,15 @@
 
 #include <iostream>
 
+ExampleObject::~ExampleObject()
+{
+	
+}
+
 void ExampleObject::Start()
 {
-	std::cout << "example object start called"<<std::endl;
-	m_DeathPoint = GetUpdatePriority();
+	m_DeathPoint = ( static_cast<float>(rand() % 600) + 300.0f)/100.0f;
+	//std::cout << m_DeathPoint <<std::endl;
 }
 
 void ExampleObject::Awake()
@@ -23,9 +28,9 @@ void ExampleObject::OnDestroy()
 
 void ExampleObject::Input(float deltaTime)
 {
-	m_Counter++;
-	std::cout << "priorityNr " << m_DeathPoint<< " and counter: "<< m_Counter<< std::endl;
-	if(m_Counter >= 10)
+	m_Counter += deltaTime;
+	//std::cout << "deathpoint " << m_DeathPoint<< " and counter: "<< m_Counter<< std::endl;
+	if(m_Counter >= m_DeathPoint)
 	{
 		Destroy();
 	}

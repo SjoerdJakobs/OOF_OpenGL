@@ -3,10 +3,10 @@
 enum class SceneNames
 {
 	MainMenu = 0,
-	Tutorial = 1,
-	Scene1 = 2
+	HowToPlay = 1,
+	Options = 2,
+	Scene1 = 3
 };
-
 
 enum class LoopType
 {

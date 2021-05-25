@@ -28,23 +28,22 @@ private:
 	float m_MaxDistance{ 500 };
 	float m_CurrentDistance{ 0 };
 
-	
 	glm::vec2 m_TargetPos{ 100,100 };
 	glm::vec2 m_LastTargetPos{ 100,100 };
-	
+
 	glm::vec2 m_CameraPos{ 0,0 };
 	glm::vec2 m_LastCameraPos{ 0,0 };
 
 	glm::mat4 m_View{};
 	glm::mat4 m_Proj{};
-	
+
 	float Lerp(float a, float b, float f);
-	float GetDistance(glm::vec2 v1, glm::vec2 v2);
+	float GetDistance(glm::vec2 vector1, glm::vec2 vector2);
 
 public:
 
 	void SetTargetPos(glm::vec2 pos) { m_TargetPos = pos; }
-	
+
 	void Start() override;
 	void Awake() override;
 	void Sleep() override;

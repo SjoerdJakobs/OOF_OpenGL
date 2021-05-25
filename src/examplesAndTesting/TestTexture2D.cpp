@@ -34,8 +34,8 @@ namespace tests
 			2, 3, 0,
 		};
 
-		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-		GLCall(glEnable(GL_BLEND));
+		GL_CALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+		GL_CALL(glEnable(GL_BLEND));
 
 		m_VAO = std::make_unique<VertexArray>();
 
@@ -72,8 +72,8 @@ namespace tests
 
 	void TestTexture2D::OnRender()
 	{
-		GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT));
+		GL_CALL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+		GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
 
 		RendererOld renderer;
 

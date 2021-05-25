@@ -12,4 +12,3 @@ public:
 	GameScene0();
 	~GameScene0() override;
 };
-

@@ -9,30 +9,30 @@ class Scene
 {
 private:
 	unsigned int m_Id = reinterpret_cast<unsigned int>(this);
-	
+
 	bool m_ObjectsNeedToBeAddedToScene{ false };
 	bool m_ObjectsNeedToBeRemovedFromScene{ false };
-	
+
 	std::list<StandardObject*>	m_pStandardObjectsInScene;
 	std::list<StandardObject*>	m_pObjectsToBeAddedToScene;
 	std::list<StandardObject*>	m_pObjectsToBeRemovedFromScene;
-	
-	bool GetIfObjectsNeedToBeAdded() const {	return m_ObjectsNeedToBeAddedToScene; }
+
+	bool GetIfObjectsNeedToBeAdded() const { return m_ObjectsNeedToBeAddedToScene; }
 	void UpdateAddObjects();
 	void UpdateRemoveObjects();
-	void Start();
-	void Stop();
+
+	virtual void Start();
+	virtual void Stop();
 
 protected:
+	
 	virtual void OnStart();
 	virtual void OnStop();
-	SceneNames m_SceneName;
+	SceneNames m_SceneName{};
 
 public:
 	virtual ~Scene() = default;
-	friend class SceneManager;	
+	friend class SceneManager;
 	void AddObjectToScene(StandardObject* p_obj);
 	void RemoveObjectFromScene(StandardObject* p_obj);
-
 };
-

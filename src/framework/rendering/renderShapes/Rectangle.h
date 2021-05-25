@@ -1,12 +1,10 @@
 #pragma once
-#include <memory>
-
 #include "VertexBuffer.h"
 #include "Texture.h"
 #include "glm/glm.hpp"
 #include "string"
 
-class Rectangle
+class Rectangle final
 {
 public:
 	Rectangle(float xSize, float ySize, glm::vec2 pos);
@@ -17,9 +15,9 @@ public:
 	Rectangle(float xSize, float ySize, float xPos, float yPos, std::string texturePath, int textureSlot);
 	Rectangle(float xSize, float ySize, glm::vec2 pos, std::string texturePath, int textureSlot, float xStart, float xEnd, float yStart, float yEnd);
 	Rectangle(float xSize, float ySize, float xPos, float yPos, std::string texturePath, int textureSlot, float xStart, float xEnd, float yStart, float yEnd);
-	
+
 	~Rectangle();
-	
+
 	void Draw() const;
 	void DrawWithColor();
 	void DrawWithTexture();
@@ -27,19 +25,19 @@ public:
 	void DrawWithSpritesheetTextureAnimation(float xStart = 0.0f, float xEnd = 1.0f, float yStart = 0.0f, float yEnd = 1.0f);
 
 private:
-	
+
 	std::string m_TexturePath;
 	int			m_TextureSlot;
 	float		m_XSize;
 	float		m_YSize;
 	glm::vec2	m_Pos;
 	float m_Color[4];
-	
-	std::unique_ptr<VertexArray>	m_VAO;
-	std::unique_ptr<VertexBuffer>	m_VertexBuffer;
-	std::unique_ptr<IndexBuffer>	m_IndexBuffer;
-	std::unique_ptr<Shader>			m_Shader;
-	std::unique_ptr<Texture>		m_Texture;
+
+	VertexArray*	m_pVAO;
+	VertexBuffer*	m_pVertexBuffer;
+	IndexBuffer*	m_pIndexBuffer;
+	Shader*			m_pShader;
+	Texture*		m_pTexture;
 
 	void ConstructWithTexture(float xStart = 0.0f, float xEnd = 1.0f, float yStart = 0.0f, float yEnd = 1.0f);
 	void ConstructWithColor();
@@ -50,12 +48,12 @@ public:
 	{
 		m_Pos.x += xPos;
 	}
-	
+
 	void AddToYPos(float yPos)
 	{
 		m_Pos.y += yPos;
 	}
-	
+
 	void AddToPos(float xPos, float yPos)
 	{
 		m_Pos.x += xPos;
@@ -66,7 +64,7 @@ public:
 	{
 		m_Pos += pos;
 	}
-	
+
 	void SetPos(float xPos, float yPos)
 	{
 		m_Pos.x = xPos;
@@ -94,4 +92,3 @@ public:
 
 	float GetYPos() const { return m_Pos.y; }
 };
-

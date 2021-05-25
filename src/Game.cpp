@@ -11,7 +11,6 @@ Game::Game() :Program()
 
 Game::~Game()
 {
-	
 }
 
 void Game::CreateInstance()
@@ -40,6 +39,4 @@ void Game::AtProgramStart()
 
 void Game::AddToProgramLoopBegin()
 {
-
 }
-

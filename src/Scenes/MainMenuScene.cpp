@@ -8,7 +8,6 @@ void MainMenuScene::OnStart()
 
 void MainMenuScene::OnStop()
 {
-	
 }
 
 MainMenuScene::MainMenuScene()

@@ -9,7 +9,7 @@ private:
 	void OnStart() override;
 	void OnStop() override;
 public:
-	
+
 	MainMenuScene();
 	~MainMenuScene() override;
 };

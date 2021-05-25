@@ -2,12 +2,12 @@
 
 #include "renderer.h"
 
-class Texture
+class Texture final
 {
 private:
 	unsigned int	m_RendererID;
 	std::string		m_FilePath;
-	unsigned char*	m_LocalBuffer;
+	unsigned char* m_LocalBuffer;
 	int m_Width;
 	int m_Height;
 	int m_BPP;

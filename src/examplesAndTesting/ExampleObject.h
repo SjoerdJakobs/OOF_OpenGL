@@ -3,13 +3,14 @@
 class ExampleObject : public StandardObject
 {
 private:
-	int m_Counter{ 0 };
-	int m_DeathPoint{ 0 };
+	float m_Counter{ 0 };
+	float m_DeathPoint{ 0 };
 public:
 	ExampleObject(int priority) :StandardObject(priority)
 	{
 		Start();
 	}
+	~ExampleObject();
 	void Start() override;
 	void Awake() override;
 	void Sleep() override;
