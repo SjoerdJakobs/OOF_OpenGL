@@ -3,29 +3,28 @@
 
 SceneManager::SceneManager()
 {
-	m_pAllScenes = new std::vector<Scene*>();
+	m_AllScenes = std::vector<Scene*>();
 }
 
 SceneManager::~SceneManager()
 {
-	for (Scene* scene : *m_pAllScenes)
+	for (Scene* scene : m_AllScenes)
 	{
 		delete scene;
 	}
-	m_pAllScenes->clear();
-	m_pAllScenes = nullptr;
+	m_AllScenes.clear();
 	m_pCurrentScene = nullptr;
 }
 
-void SceneManager::AddScene(Scene* newScene)const
+void SceneManager::AddScene(Scene* newScene)
 {
-	m_pAllScenes->push_back(newScene);
+	m_AllScenes.push_back(newScene);
 }
 
 void SceneManager::SwitchToScene(SceneNames sceneName)
 {
 	m_pCurrentScene->Stop();
-	for (Scene* scene : *m_pAllScenes)
+	for (Scene* scene : m_AllScenes)
 	{
 		if (scene->m_SceneName == sceneName)
 		{
@@ -51,13 +50,23 @@ void SceneManager::UpdateScene()const
 	}
 }
 
+void SceneManager::CleanUp()
+{
+	for (int i = 0; i < m_AllScenes.size(); i++)
+	{
+		m_AllScenes[i]->Stop();
+		delete m_AllScenes[i];
+	}
+	m_AllScenes.clear();
+}
+
 void SceneManager::Start()
 {
 	if (m_pCurrentScene == nullptr)
 	{
-		if (!m_pAllScenes->empty())
+		if (!m_AllScenes.empty())
 		{
-			m_pCurrentScene = m_pAllScenes->front();
+			m_pCurrentScene = m_AllScenes.front();
 			m_pCurrentScene->Start();
 		}
 	}
@@ -69,7 +78,7 @@ void SceneManager::Start()
 
 void SceneManager::Start(SceneNames sceneName)
 {
-	for (Scene* scene : *m_pAllScenes)
+	for (Scene* scene : m_AllScenes)
 	{
 		if (scene->m_SceneName == sceneName)
 		{

@@ -7,11 +7,12 @@ class Game final : public Program
 {
 public:
 	static void CreateInstance();
-	void ProgramStart() override;
+	static void DeleteInstance();
 
+	~Game() override;
 private:
 	Game();
-	~Game() override;
 	void AtProgramStart() override;
 	void AddToProgramLoopBegin() override;
+	void OnProgramEnd() override;
 };

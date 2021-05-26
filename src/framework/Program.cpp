@@ -41,11 +41,11 @@ bool ShouldRemoveStandardObjectFromDebugRenderLoop(const StandardObject* object)
 
 Program::~Program() = default;
 
-Program* Program::m_pInstance = 0;
+Program* Program::m_pInstance = nullptr;
 
 Program* Program::GetInstance()
 {
-	if (m_pInstance == 0)
+	if (m_pInstance == nullptr)
 	{
 		std::cout << "Class has not been created" << std::endl;
 	}
@@ -121,7 +121,7 @@ void Program::Run()
 
 		const Renderer renderer;
 
-		m_pSceneManager = new SceneManager();
+		m_pSceneManager = DBG_NEW SceneManager();
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -141,7 +141,8 @@ void Program::Run()
 		ImGui_ImplOpenGL3_Init(glsl_version);
 		
 		this->AtProgramStart();
-
+		m_pSceneManager->Start();
+		
 		// Set start time
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		while (!glfwWindowShouldClose(m_pWindow) && m_RunProgram)
@@ -177,10 +178,10 @@ void Program::Run()
 			{
 				for (PriorityGroup* p_group : m_pInputObjectGroups)
 				{
-					for (StandardObject* p_obj : p_group->standardObjects) {
+					for (StandardObject* p_obj : p_group->m_StandardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
-							p_obj->Input(m_UnscaledDeltaTime);
+							p_obj->Input(m_DeltaTime);
 						}
 					}
 				}
@@ -190,7 +191,7 @@ void Program::Run()
 			{
 				for (PriorityGroup* p_group : m_pUpdateObjectGroups)
 				{
-					for (StandardObject* p_obj : p_group->standardObjects) {
+					for (StandardObject* p_obj : p_group->m_StandardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
 							p_obj->Update(m_DeltaTime);
@@ -203,7 +204,7 @@ void Program::Run()
 			{
 				for (PriorityGroup* p_group : m_pRenderObjectGroups)
 				{
-					for (StandardObject* p_obj : p_group->standardObjects) {
+					for (StandardObject* p_obj : p_group->m_StandardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
 							p_obj->Render(m_DeltaTime);
@@ -221,7 +222,7 @@ void Program::Run()
 			{
 				for (PriorityGroup* p_group : m_pImGuiRenderObjectGroups)
 				{
-					for (StandardObject* p_obj : p_group->standardObjects) {
+					for (StandardObject* p_obj : p_group->m_StandardObjects) {
 						if (!IsPaused() || p_obj->IsPauseImmune())
 						{
 							p_obj->ImGuiRender(m_UnscaledDeltaTime);
@@ -254,12 +255,19 @@ void Program::Run()
 			/* Swap front and back buffers */
 			GL_CALL(glfwSwapBuffers(m_pWindow));
 
-			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
+			/*if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
 				glfwSetWindowShouldClose(m_pWindow, 1);
-			}
+			}*/
 		}
 	}
 
+	CleanUp();
+	//exit(EXIT_SUCCESS);
+}
+
+void Program::CleanUp()
+{
+	m_pSceneManager->CleanUp();
 	delete m_pSceneManager;
 
 	ImGui_ImplOpenGL3_Shutdown();
@@ -268,7 +276,47 @@ void Program::Run()
 
 	glfwDestroyWindow(m_pWindow);
 	glfwTerminate();
-	exit(EXIT_SUCCESS);
+
+	for (PriorityGroup* p_group : m_pInputObjectGroups)
+	{
+		delete p_group;
+	}
+	m_pInputObjectGroups.clear();
+	m_pInputObjectsToBeAdded.clear();
+
+	for (PriorityGroup* p_group : m_pUpdateObjectGroups)
+	{
+		delete p_group;
+	}
+	m_pUpdateObjectGroups.clear();
+	m_pUpdateObjectsToBeAdded.clear();
+
+	for (PriorityGroup* p_group : m_pFixedUpdateObjectGroups)
+	{
+		delete p_group;
+	}
+	m_pFixedUpdateObjectGroups.clear();
+	m_pFixedUpdateObjectsToBeAdded.clear();
+
+	for (PriorityGroup* p_group : m_pRenderObjectGroups)
+	{
+		delete p_group;
+	}
+	m_pRenderObjectGroups.clear();
+	m_pRenderObjectsToBeAdded.clear();
+
+	for (PriorityGroup* p_group : m_pImGuiRenderObjectGroups)
+	{
+		delete p_group;
+	}
+	m_pImGuiRenderObjectGroups.clear();
+	m_pImGuiRenderObjectsToBeAdded.clear();
+
+	for (StandardObject* p_objects : m_Objects)
+	{
+		delete p_objects;
+	}
+	m_Objects.clear();
 }
 
 //Todo: template the repeated code here or make a function which can be used by all looptypes
@@ -281,6 +329,10 @@ void Program::AddStandardObjectsMarkedForAdding()
 			m_Objects.reserve(m_Objects.size() + m_pObjectsToBeAdded.size() + m_ObjectListResizeThreshold);
 		}
 		m_Objects.insert(m_Objects.end(), m_pObjectsToBeAdded.begin(), m_pObjectsToBeAdded.end());
+		for(StandardObject* p_object : m_pObjectsToBeAdded)
+		{
+			p_object->Start();
+		}
 		m_pObjectsToBeAdded.clear();
 		m_ShouldAddToObjectList = false;
 	}
@@ -445,13 +497,13 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		{
 			if (group->PriorityNr == priorityNr)
 			{
-				group->standardObjects.insert(group->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+				group->m_StandardObjects.insert(group->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 				objectsForInsert.clear();
 				return;
 			}
 		}
-		m_pInputObjectGroups.push_back(new PriorityGroup(priorityNr));
-		m_pInputObjectGroups.back()->standardObjects.insert(m_pInputObjectGroups.back()->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+		m_pInputObjectGroups.push_back(DBG_NEW PriorityGroup(priorityNr));
+		m_pInputObjectGroups.back()->m_StandardObjects.insert(m_pInputObjectGroups.back()->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 
 		std::sort(m_pInputObjectGroups.begin(), m_pInputObjectGroups.end(), [](PriorityGroup* p_priorityGroup1, PriorityGroup* p_priorityGroup2)
 			{
@@ -464,12 +516,12 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		{
 			if (group->PriorityNr == priorityNr)
 			{
-				group->standardObjects.insert(group->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+				group->m_StandardObjects.insert(group->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 				return;
 			}
 		}
-		m_pUpdateObjectGroups.push_back(new PriorityGroup(priorityNr));
-		m_pUpdateObjectGroups.back()->standardObjects.insert(m_pUpdateObjectGroups.back()->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+		m_pUpdateObjectGroups.push_back(DBG_NEW PriorityGroup(priorityNr));
+		m_pUpdateObjectGroups.back()->m_StandardObjects.insert(m_pUpdateObjectGroups.back()->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 		std::sort(m_pUpdateObjectGroups.begin(), m_pUpdateObjectGroups.end(), [](PriorityGroup* p_priorityGroup1, PriorityGroup* p_priorityGroup2)
 			{
 				return p_priorityGroup1->PriorityNr < p_priorityGroup2->PriorityNr;
@@ -481,12 +533,12 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		{
 			if (group->PriorityNr == priorityNr)
 			{
-				group->standardObjects.insert(group->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+				group->m_StandardObjects.insert(group->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 				return;
 			}
 		}
-		m_pFixedUpdateObjectGroups.push_back(new PriorityGroup(priorityNr));
-		m_pFixedUpdateObjectGroups.back()->standardObjects.insert(m_pFixedUpdateObjectGroups.back()->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+		m_pFixedUpdateObjectGroups.push_back(DBG_NEW PriorityGroup(priorityNr));
+		m_pFixedUpdateObjectGroups.back()->m_StandardObjects.insert(m_pFixedUpdateObjectGroups.back()->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 		std::sort(m_pFixedUpdateObjectGroups.begin(), m_pFixedUpdateObjectGroups.end(), [](PriorityGroup* p_priorityGroup1, PriorityGroup* p_priorityGroup2)
 			{
 				return p_priorityGroup1->PriorityNr < p_priorityGroup2->PriorityNr;
@@ -498,12 +550,12 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		{
 			if (group->PriorityNr == priorityNr)
 			{
-				group->standardObjects.insert(group->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+				group->m_StandardObjects.insert(group->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 				return;
 			}
 		}
-		m_pRenderObjectGroups.push_back(new PriorityGroup(priorityNr));
-		m_pRenderObjectGroups.back()->standardObjects.insert(m_pRenderObjectGroups.back()->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+		m_pRenderObjectGroups.push_back(DBG_NEW PriorityGroup(priorityNr));
+		m_pRenderObjectGroups.back()->m_StandardObjects.insert(m_pRenderObjectGroups.back()->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 		std::sort(m_pRenderObjectGroups.begin(), m_pRenderObjectGroups.end(), [](PriorityGroup* p_priorityGroup1, PriorityGroup* p_priorityGroup2)
 			{
 				return p_priorityGroup1->PriorityNr < p_priorityGroup2->PriorityNr;
@@ -515,12 +567,12 @@ void Program::AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::li
 		{
 			if (group->PriorityNr == priorityNr)
 			{
-				group->standardObjects.insert(group->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+				group->m_StandardObjects.insert(group->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 				return;
 			}
 		}
-		m_pImGuiRenderObjectGroups.push_back(new PriorityGroup(priorityNr));
-		m_pImGuiRenderObjectGroups.back()->standardObjects.insert(m_pImGuiRenderObjectGroups.back()->standardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
+		m_pImGuiRenderObjectGroups.push_back(DBG_NEW PriorityGroup(priorityNr));
+		m_pImGuiRenderObjectGroups.back()->m_StandardObjects.insert(m_pImGuiRenderObjectGroups.back()->m_StandardObjects.end(), objectsForInsert.begin(), objectsForInsert.end());
 		std::sort(m_pImGuiRenderObjectGroups.begin(), m_pImGuiRenderObjectGroups.end(), [](PriorityGroup* p_priorityGroup1, PriorityGroup* p_priorityGroup2)
 			{
 				return p_priorityGroup1->PriorityNr < p_priorityGroup2->PriorityNr;
@@ -541,13 +593,13 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 	{
 		for (PriorityGroup* group : m_pInputObjectGroups)
 		{
-			//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
-			group->standardObjects.erase(
-				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromInputLoop),
-				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
+			//std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+			group->m_StandardObjects.erase(
+				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromInputLoop),
+				group->m_StandardObjects.end());
+			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
-				group->standardObjects.shrink_to_fit();
+				group->m_StandardObjects.shrink_to_fit();
 			}
 		}
 		m_ShouldRemoveFromInputList = false;
@@ -557,13 +609,13 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 	{
 		for (PriorityGroup* group : m_pUpdateObjectGroups)
 		{
-			//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
-			group->standardObjects.erase(
-				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromUpdateLoop),
-				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
+			//std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+			group->m_StandardObjects.erase(
+				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromUpdateLoop),
+				group->m_StandardObjects.end());
+			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
-				group->standardObjects.shrink_to_fit();
+				group->m_StandardObjects.shrink_to_fit();
 			}
 		}
 		m_ShouldRemoveFromUpdateList = false;
@@ -573,13 +625,13 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 	{
 		for (PriorityGroup* group : m_pFixedUpdateObjectGroups)
 		{
-			//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
-			group->standardObjects.erase(
-				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromFixedUpdateLoop),
-				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
+			//std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+			group->m_StandardObjects.erase(
+				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromFixedUpdateLoop),
+				group->m_StandardObjects.end());
+			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
-				group->standardObjects.shrink_to_fit();
+				group->m_StandardObjects.shrink_to_fit();
 			}
 		}
 		m_ShouldRemoveFromFixedUpdateList = false;
@@ -589,13 +641,13 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 	{
 		for (PriorityGroup* group : m_pRenderObjectGroups)
 		{
-			//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
-			group->standardObjects.erase(
-				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromRenderLoop),
-				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
+			//std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+			group->m_StandardObjects.erase(
+				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromRenderLoop),
+				group->m_StandardObjects.end());
+			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
-				group->standardObjects.shrink_to_fit();
+				group->m_StandardObjects.shrink_to_fit();
 			}
 		}
 		m_ShouldRemoveFromRenderList = false;
@@ -605,14 +657,14 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 	{
 		for (PriorityGroup* group : m_pImGuiRenderObjectGroups)
 		{
-			//std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromLoop);
-			group->standardObjects.erase(
-				std::remove_if(group->standardObjects.begin(), group->standardObjects.end(), ShouldRemoveStandardObjectFromImGuiLoop),
-				group->standardObjects.end());
-			if (group->standardObjects.capacity() >= group->standardObjects.size() + m_ObjectListResizeThreshold)
+			//std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromLoop);
+			group->m_StandardObjects.erase(
+				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromImGuiLoop),
+				group->m_StandardObjects.end());
+			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
 			}
-			group->standardObjects.shrink_to_fit();
+			group->m_StandardObjects.shrink_to_fit();
 		}
 		m_ShouldRemoveFromImGuiRenderList = false;
 	}
@@ -641,21 +693,9 @@ void Program::ProgramStart()
 	}
 }
 
-void Program::AtProgramStart()
-{
-}
-
-void Program::AddToProgramLoopBegin()
-{
-}
-
 void Program::AddScene(Scene * newScene) const
 {
 	m_pSceneManager->AddScene(newScene);
-}
-
-void Program::CleanUp()
-{
 }
 
 void Program::AddToObjectsList(StandardObject * p_obj)
@@ -696,8 +736,6 @@ void Program::AddToList(StandardObject * p_obj, LoopType type)
 	case LoopType::debugRender:
 
 		break;
-	default:
-		ASSERT(false);
 	}
 }
 

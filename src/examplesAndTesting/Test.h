@@ -2,6 +2,8 @@
 #include <functional>
 #include <iostream>
 
+#include "Camera.h"
+
 namespace tests
 {
 	class Test
@@ -26,7 +28,7 @@ namespace tests
 		void RegisterTest(const std::string& name)
 		{
 			std::cout << "registering test" << name <<std::endl;
-			m_tests.push_back(std::make_pair(name, []() {return new T(); }));
+			m_tests.push_back(std::make_pair(name, []() {return DBG_NEW T(); }));
 		}
 		
 	private:

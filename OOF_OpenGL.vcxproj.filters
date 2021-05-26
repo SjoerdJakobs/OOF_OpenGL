@@ -129,6 +129,15 @@
     <ClCompile Include="src\framework\Transform2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\InGameMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ParallaxBackground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Vendor\glm\detail\func_common.inl">
@@ -1511,6 +1520,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\framework\audio\AudioEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InGameMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ParallaxBackground.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

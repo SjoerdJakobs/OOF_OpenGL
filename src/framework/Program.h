@@ -1,4 +1,18 @@
 #pragma once
+// debug_new.cpp
+// compile by using: cl /EHsc /W4 /D_DEBUG /MDd debug_new.cpp
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -34,16 +48,16 @@ public:
 	//http ://www.yolinux.com/TUTORIALS/C++Singleton.html
 	static Program* GetInstance();
 	static bool Exists();
+	void ProgramStart();
+	virtual ~Program();
 
 protected:
 	static Program* m_pInstance;
 
 	Program();
-	virtual ~Program();
-	virtual void ProgramStart();
-	virtual void AtProgramStart();
-	virtual void AddToProgramLoopBegin();
-
+	virtual void AddToProgramLoopBegin() = 0;
+	virtual void AtProgramStart() = 0;
+	virtual void OnProgramEnd() = 0;
 	void AddScene(Scene* newScene) const;
 
 	int m_UpdateVectorsResizeStep = 50;
@@ -51,9 +65,12 @@ protected:
 	GLsizei m_ScreenWidth = 1280;
 	GLsizei m_ScreenHeight = 800;
 
-	GLFWwindow* m_pWindow;
+	GLFWwindow*   m_pWindow;
 	SceneManager* m_pSceneManager;
+
 private:
+
+	void CleanUp();
 
 	void Run();
 	void AddStandardObjectsMarkedForAdding();
@@ -120,8 +137,8 @@ public:
 
 	SceneManager* GetSceneManager() const { return m_pSceneManager; }
 
-	int GetScreenWidth() const { return  m_ScreenWidth; };
-	int GetScreenHeight() const { return  m_ScreenHeight; };
+	int GetScreenWidth() const { return  m_ScreenWidth; }
+	int GetScreenHeight() const { return  m_ScreenHeight; }
 
 	bool GetRunProgram() const { return m_RunProgram; }
 	bool IsPaused()		const { return m_IsPaused; }
@@ -131,13 +148,12 @@ public:
 	void SetPaused(bool b) { m_IsPaused = b; atomic_IsPaused = b; }
 	void SetTruePaused(bool b) { m_IsTruePaused = b; atomic_IsTruePaused = b; }
 
-	double GetDeltaTime() const { return m_DeltaTime; }
-	double GetTimeScale() const { return m_TimeScale; }
-	double GetUnscaledDeltaTime() const { return m_UnscaledDeltaTime; }
+	float GetDeltaTime() const { return m_DeltaTime; }
+	float GetTimeScale() const { return m_TimeScale; }
+	float GetUnscaledDeltaTime() const { return m_UnscaledDeltaTime; }
 
 	void SetTimeScale(float f) { m_TimeScale = f; atomic_TimeScale = f; }
 
-	void CleanUp();
 	void AddToObjectsList(StandardObject* p_obj);
 	void RemoveFromObjectsList();
 

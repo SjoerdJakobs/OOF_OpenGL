@@ -1,13 +1,16 @@
 #pragma once
-#include <string>
-
 #include "Program.h"
 #include "StandardObject.h"
 #include "imgui/imgui.h"
 
-class MainMenu final : public StandardObject
+class InGameMenu final : public StandardObject
 {
 private:
+
+	bool m_ShowMenu;
+	bool m_HasPressedESC;
+	float m_TimeScaleWhenPaused;
+	
 	ImGuiIO& m_rIO = ImGui::GetIO();
 	ImFont* m_pMenuFont = m_rIO.Fonts->Fonts[1];
 	ImGuiWindowFlags m_WindowFlags = 0;
@@ -16,23 +19,15 @@ private:
 	const int m_WindowWidth = m_pProgram->GetScreenWidth();
 	const int m_WindowHeight = m_pProgram->GetScreenHeight();
 
-	const int m_ButtonDistanceYPos = 40;
-	
-	const std::string m_StartButtonLabel = "START";
-	const float m_StartButtonWidth = 300.0f;
-	const float m_StartButtonHalfWidth = m_StartButtonWidth / 2.0f;
-	const float m_StartButtonHeight = 100.0f;
-	const float m_StartButtonHalfHeight = m_StartButtonHeight / 2.0f;
-	const float m_StartButtonXPos = m_WindowWidth / 2.0f - m_StartButtonHalfWidth;
-	const float m_StartButtonYPos = m_WindowHeight / 2.0f - 250.0f;
+	const int m_ButtonDistancePos = 15;
 
-	const std::string m_HowToPlayButtonLabel = "HOW TO PLAY";
-	const float m_HowToPlayButtonWidth = 450.0f;
-	const float m_HowToPlayButtonHalfWidth = m_HowToPlayButtonWidth / 2.0f;
-	const float m_HowToPlayButtonHeight = 100.0f;
-	const float m_HowToPlayButtonHalfHeight = m_HowToPlayButtonHeight / 2.0f;
-	const float m_HowToPlayButtonXPos = m_WindowWidth / 2.0f - m_HowToPlayButtonHalfWidth;
-	const float m_HowToPlayButtonYPos = m_StartButtonYPos+m_StartButtonHeight+m_ButtonDistanceYPos;
+	const std::string m_QuitButtonLabel = "MAIN MENU";
+	const float m_QuitButtonWidth = 300.0f;
+	const float m_QuitButtonHalfWidth = m_QuitButtonWidth / 2.0f;
+	const float m_QuitButtonHeight = 100.0f;
+	const float m_QuitButtonHalfHeight = m_QuitButtonHeight / 2.0f;
+	const float m_QuitButtonXPos = m_WindowWidth / 2.0f - m_QuitButtonHalfWidth;
+	const float m_QuitButtonYPos = m_WindowHeight / 2.0f - 250.0f;
 
 	const std::string m_OptionsButtonLabel = "OPTIONS";
 	const float m_OptionsButtonWidth = 300.0f;
@@ -40,16 +35,19 @@ private:
 	const float m_OptionsButtonHeight = 100.0f;
 	const float m_OptionsButtonHalfHeight = m_OptionsButtonHeight / 2.0f;
 	const float m_OptionsButtonXPos = m_WindowWidth / 2.0f - m_OptionsButtonHalfWidth;
-	const float m_OptionsButtonYPos = m_HowToPlayButtonYPos + m_HowToPlayButtonHeight + m_ButtonDistanceYPos;
-	
+	const float m_OptionsButtonYPos = m_QuitButtonYPos + m_QuitButtonHeight + m_ButtonDistancePos;
+
 	const std::string m_ExitButtonLabel = "EXIT";
 	const float m_ExitButtonWidth = 300.0f;
 	const float m_ExitButtonHalfWidth = m_ExitButtonWidth / 2.0f;
 	const float m_ExitButtonHeight = 100.0f;
 	const float m_ExitButtonHalfHeight = m_ExitButtonHeight / 2.0f;
 	const float m_ExitButtonXPos = m_WindowWidth / 2.0f - m_ExitButtonHalfWidth;
-	const float m_ExitButtonYPos = m_OptionsButtonYPos + m_OptionsButtonHeight + m_ButtonDistanceYPos;
-	
+	const float m_ExitButtonYPos = m_OptionsButtonYPos + m_OptionsButtonHeight + m_ButtonDistancePos;
+
+	const float m_MenuWidth = m_QuitButtonWidth+ m_ButtonDistancePos;
+	const float m_MenuHeight = m_QuitButtonHeight + m_OptionsButtonHeight + m_ExitButtonHeight + m_ButtonDistancePos*2 - 5;
+
 protected:
 	void Start() override;
 	void Awake() override;
@@ -58,6 +56,8 @@ protected:
 	void ImGuiRender(float deltaTime) override;
 	void OnDestroy() override;
 public:
-	MainMenu();
-	~MainMenu() override;
+	InGameMenu();
+	~InGameMenu() override;
 };
+
+

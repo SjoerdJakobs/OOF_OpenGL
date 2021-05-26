@@ -1,6 +1,4 @@
 #include "MainMenu.h"
-
-#include "Program.h"
 #include "SceneManager.h"
 #include "imgui/imgui.h"
 
@@ -82,9 +80,11 @@ void MainMenu::OnDestroy()
 {
 }
 
-MainMenu::MainMenu()
+MainMenu::MainMenu():
+StandardObject(true,false,false,false,true,false,true,
+								1000,1000,1000,1000)
 {
-	Start();
+	
 }
 
 MainMenu::~MainMenu()

@@ -22,7 +22,6 @@ StandardObject::StandardObject(int priority) :
 	m_pProgram->AddToObjectsList(this);
 	AddToLists();
 }
-
 StandardObject::StandardObject
 (bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer, bool startsActivated = true,
 	int inputPriority = 1000, int updatePriority = 1000, int renderPriority = 1000, int imGuiPriority = 1000) :
@@ -38,10 +37,6 @@ StandardObject::StandardObject
 	}
 }
 
-void StandardObject::Start()
-{
-	ASSERT(true); //"baseclass start should not be called");
-}
 
 void StandardObject::Destroy()
 {
@@ -118,10 +113,6 @@ void StandardObject::DebugRender(float deltaTime)
 {
 }
 
-void StandardObject::OnDestroy()
-{
-}
-
 void StandardObject::AddToLists()
 {
 	if (m_UsesInput && m_UsesUpdate && m_UsesFixedUpdate && m_UsesRenderer && m_UsesImGui && m_UsesDebugRenderer)
@@ -192,12 +183,4 @@ void StandardObject::RemoveFromLists()
 	{
 		m_pProgram->RemoveFromList(LoopType::debugRender);
 	}
-}
-
-void StandardObject::Awake()
-{
-}
-
-void StandardObject::Sleep()
-{
 }

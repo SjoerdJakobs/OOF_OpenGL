@@ -45,18 +45,41 @@ Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::stri
 }
 
 Rectangle::~Rectangle()
-{
-	m_pVAO->UnBind();
-	m_pVertexBuffer->Unbind();
-	m_pIndexBuffer->Unbind();
-	m_pShader->UnBind();
-	m_pTexture->UnBind();
+{	
+	
+}
 
-	delete m_pVAO;
-	delete m_pVertexBuffer;
-	delete m_pIndexBuffer;
-	delete m_pShader;
-	delete m_pTexture;
+void Rectangle::CleanUp()
+{
+	if (m_pVAO != nullptr)
+	{
+		m_pVAO->UnBind();
+		delete m_pVAO;
+	}
+
+	if (m_pVertexBuffer != nullptr)
+	{
+		m_pVertexBuffer->UnBind();
+		delete m_pVertexBuffer;
+	}
+
+	if (m_pIndexBuffer != nullptr)
+	{
+		m_pIndexBuffer->UnBind();
+		delete m_pIndexBuffer;
+	}
+
+	if (m_pShader != nullptr)
+	{
+		m_pShader->UnBind();
+		delete m_pShader;
+	}
+
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->UnBind();
+		delete m_pTexture;
+	}
 }
 
 void Rectangle::Draw() const
@@ -138,9 +161,9 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, flo
 		2, 3, 0,
 	};
 
-	m_pVAO = new VertexArray();
+	m_pVAO = DBG_NEW VertexArray();
 	//create VertexBuffer
-	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 16 * sizeof(float));
+	m_pVertexBuffer = DBG_NEW VertexBuffer(positions, xSize * ySize * 16 * sizeof(float));
 	//create VertexBufferLayout
 	VertexBufferLayout layout;
 
@@ -152,16 +175,17 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, flo
 
 	//add VertexBuffer with its layout to VertexArray
 	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
-	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
+	m_pIndexBuffer = DBG_NEW IndexBuffer(indices, xSize * ySize * 6);
 
-	m_pShader = new Shader("res/shaders/BasicTexture.shader");
+	m_pShader = DBG_NEW Shader("res/shaders/BasicTexture.shader");
 	m_pShader->Bind();
-	m_pTexture = new Texture(m_TexturePath);
+	m_pTexture = DBG_NEW Texture(m_TexturePath);
 	m_pShader->SetUniform1i("u_Texture", m_TextureSlot);
 }
 
 void Rectangle::ConstructWithColor()
 {
+	m_pTexture = nullptr;
 	const unsigned int xSize{ 1 };
 	const unsigned int ySize{ 1 };
 	float positions[] =
@@ -177,9 +201,9 @@ void Rectangle::ConstructWithColor()
 		2, 3, 0,
 	};
 
-	m_pVAO = new VertexArray();
+	m_pVAO = DBG_NEW VertexArray();
 	//create VertexBuffer
-	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 8 * sizeof(float));
+	m_pVertexBuffer = DBG_NEW VertexBuffer(positions, xSize * ySize * 8 * sizeof(float));
 	//create VertexBufferLayout
 	VertexBufferLayout layout;
 
@@ -189,9 +213,9 @@ void Rectangle::ConstructWithColor()
 
 	//add VertexBuffer with its layout to VertexArray
 	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
-	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
+	m_pIndexBuffer = DBG_NEW IndexBuffer(indices, xSize * ySize * 6);
 
-	m_pShader = new Shader("res/shaders/BasicColor.shader");
+	m_pShader = DBG_NEW Shader("res/shaders/BasicColor.shader");
 	m_pShader->Bind();
 	m_pShader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
 }

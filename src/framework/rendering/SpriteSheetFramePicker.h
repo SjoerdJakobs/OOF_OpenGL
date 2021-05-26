@@ -5,5 +5,6 @@ class SpriteSheetFramePicker final
 {
 public:
 
-	void PickFrame(const float widthSprites, const  float heightSprites, const  int frameToPick, Rectangle* rectangle);
+	void PickFrameHorizontal(const float widthSprites, const  float heightSprites, const  int frameToPick, Rectangle* rectangle);
+	void PickFrameVertical(const float widthSprites, const  float heightSprites, const  int frameToPick, Rectangle* rectangle);
 };

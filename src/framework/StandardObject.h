@@ -8,8 +8,8 @@ class StandardObject
 protected:
 	StandardObject();
 	StandardObject(int priority);
-	StandardObject(bool startsActivated, bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer,
-		bool usesImGui, bool usesDebugRenderer, int inputPriority, int updatePriority, int renderPriority,
+	StandardObject(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer,
+		bool usesImGui, bool usesDebugRenderer, bool startsActivated, int inputPriority, int updatePriority, int renderPriority,
 		int imGuiPriority);
 
 	unsigned int m_Id;
@@ -47,7 +47,7 @@ protected:
 	 * this is called when the object gets created
 	 * after the constructor but before the awake and the loops
 	 */
-	virtual void Start();
+	virtual void Start() = 0;
 
 	/**
 	 * this is called when the object gets set to active
@@ -55,13 +55,13 @@ protected:
 	 * if the object is created inactive awake will run when the object is set to active which happens right after the program loops
 	 * Awake will run every time the object goes from inactive to active
 	 */
-	virtual void Awake();
+	virtual void Awake() = 0;
 
 	/**
 	 * this is called when the object gets set to inactive
 	 * Sleep will run every time the object goes from active to inactive which happens right after the program loops
 	 */
-	virtual void Sleep();
+	virtual void Sleep() = 0;
 
 	/**
 	 * these update functions are called in this order regardless of their priority nr.
@@ -81,13 +81,13 @@ protected:
 	/**
 	 * this is called when the object gets destroyed
 	 */
-	virtual void OnDestroy();
+	virtual void OnDestroy() = 0;
 
 public:
 	/**
 	 * this destroys the object
 	 */
-	virtual void Destroy();
+	void Destroy();
 
 	void Activate();
 	void Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer,

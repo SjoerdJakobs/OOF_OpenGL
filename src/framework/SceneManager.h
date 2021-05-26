@@ -7,7 +7,7 @@ class Scene;
 
 class SceneManager final
 {
-	std::vector<Scene*>* m_pAllScenes;
+	std::vector<Scene*> m_AllScenes;
 	Scene* m_pCurrentScene = nullptr;
 
 	SceneManager();
@@ -17,8 +17,9 @@ class SceneManager final
 
 	void UpdateScene()const;
 public:
+	void CleanUp();
 	void Start();
 	void Start(SceneNames sceneName);
-	void AddScene(Scene* newScene)const;
+	void AddScene(Scene* newScene);
 	void SwitchToScene(SceneNames sceneName);
 };

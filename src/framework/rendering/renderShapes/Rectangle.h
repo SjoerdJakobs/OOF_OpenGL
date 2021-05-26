@@ -17,7 +17,8 @@ public:
 	Rectangle(float xSize, float ySize, float xPos, float yPos, std::string texturePath, int textureSlot, float xStart, float xEnd, float yStart, float yEnd);
 
 	~Rectangle();
-
+	void CleanUp();
+	
 	void Draw() const;
 	void DrawWithColor();
 	void DrawWithTexture();

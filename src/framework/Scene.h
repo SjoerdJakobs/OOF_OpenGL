@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-#include <vector>
 #include "Enums.h"
 
 class StandardObject;
@@ -21,13 +20,13 @@ private:
 	void UpdateAddObjects();
 	void UpdateRemoveObjects();
 
-	virtual void Start();
-	virtual void Stop();
+	void Start();
+	void Stop();
 
 protected:
 	
-	virtual void OnStart();
-	virtual void OnStop();
+	virtual void OnStart() = 0;
+	virtual void OnStop() = 0;
 	SceneNames m_SceneName{};
 
 public:

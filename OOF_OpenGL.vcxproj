@@ -157,6 +157,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ParallaxBackground.cpp" />
+    <ClCompile Include="src\LevelManager.cpp" />
+    <ClCompile Include="src\InGameMenu.cpp" />
     <ClCompile Include="src\framework\physics\primitives\AABB.cpp" />
     <ClCompile Include="src\framework\audio\AudioManager.cpp" />
     <ClCompile Include="src\Scenes\GameScene0.cpp" />
@@ -337,6 +340,9 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ParallaxBackground.h" />
+    <ClInclude Include="src\LevelManager.h" />
+    <ClInclude Include="src\InGameMenu.h" />
     <ClInclude Include="src\framework\audio\AudioEngine.h" />
     <ClInclude Include="src\framework\physics\primitives\AABB.h" />
     <ClInclude Include="src\framework\audio\AudioManager.h" />

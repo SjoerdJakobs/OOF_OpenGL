@@ -17,24 +17,18 @@ void ExampleProgram::CreateInstance()
 	}
 	else
 	{
-		m_pInstance = new ExampleProgram();
+		m_pInstance = DBG_NEW ExampleProgram();
 	}
 }
 
-void ExampleProgram::ProgramStart()
-{
-	//std::cout << "CHILD PROGRAM CALLS PROGRAM_START"<<std::endl;
-	Program::ProgramStart();
-
-}
 
 void ExampleProgram::func()
 {
 	std::cout << "start \n";
 	for (int i = 0; i < 2000000; ++i)
 	{
-		//new ExampleObject((rand() % 2000) + 1000);
-		new ExampleObject(1000);
+		//DBG_NEW ExampleObject((rand() % 2000) + 1000);
+		DBG_NEW ExampleObject(1000);
 	}
 	std::cout << "stop \n";
 }
@@ -48,4 +42,8 @@ void ExampleProgram::AtProgramStart()
 void ExampleProgram::AddToProgramLoopBegin()
 {
 	//std::cout << "CHILD PROGRAM ADD_TO_PROGRAM_LoopBegin" << std::endl;
+}
+
+void ExampleProgram::OnProgramEnd()
+{
 }

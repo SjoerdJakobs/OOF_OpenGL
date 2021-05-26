@@ -9,7 +9,7 @@ class Camera final : public StandardObject
 public:
 	static Camera& instance()
 	{
-		static Camera* p_instance = new Camera(1000);
+		static Camera* p_instance = DBG_NEW Camera(1000);
 		return *p_instance;
 	}
 
