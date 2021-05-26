@@ -8,9 +8,8 @@
 
 #include "SceneManager.h"
 
-Player::Player(int priority) :StandardObject(priority)
+Player::Player(int priority) : StandardObject(priority), m_pCamera(nullptr), m_pPlayerRectangle(nullptr)
 {
-	
 }
 
 Player::~Player()
@@ -29,33 +28,8 @@ void Player::Heal(int healAmount)
 void Player::Start()
 {
 	m_pCamera = &Camera::instance();
-	m_Rectangle = DBG_NEW Rectangle(200, 200, 100, 100, "res/textures/professor_walk_cycle_no_hat.png", 0, 0.555555582f, 0.666666682f, 0, 0.250000000f);
-	float col[4]{ 0.7f ,0.55f ,0.24f ,1.0f };
-	m_ColRectangle = DBG_NEW Rectangle(400, 400, 100, 100, col);
+	m_pPlayerRectangle = DBG_NEW Rectangle(100, 100, m_PlayerPos.x, m_PlayerPos.y, "res/textures/professor_walk_cycle_no_hat.png", 0);
 	m_FrameCount = m_BeginFrame;
-	for (int i = 0; i < TestRectangles; ++i)
-	{
-		for (int j = 0; j < TestRectangles; ++j)
-		{
-			float randNr = (float)rand() / ((float)(RAND_MAX / 1));
-			if (randNr < 0.25f)
-			{
-				m_Rectangles[i * TestRectangles + j] = DBG_NEW Rectangle(100.0f, 100.0f, -400.0f + 200.0f * i, -400.0f + 200.0f * j, "res/textures/BlueBlock.png", 1);
-			}
-			else if (randNr < 0.50f)
-			{
-				m_Rectangles[i * TestRectangles + j] = DBG_NEW Rectangle(100.0f, 100.0f, -400.0f + 200.0f * i, -400.0f + 200.0f * j, "res/textures/GreenBlock.png", 2);
-			}
-			else if (randNr < 0.75f)
-			{
-				m_Rectangles[i * TestRectangles + j] = DBG_NEW Rectangle(100.0f, 100.0f, -400.0f + 200.0f * i, -400.0f + 200.0f * j, "res/textures/OrangeBlock.png", 3);
-			}
-			else
-			{
-				m_Rectangles[i * TestRectangles + j] = DBG_NEW Rectangle(100.0f, 100.0f, -400.0f + 200.0f * i, -400.0f + 200.0f * j, "res/textures/PurpleBlock.png", 4);
-			}
-		}
-	}
 }
 
 void Player::Awake()
@@ -68,53 +42,45 @@ void Player::Sleep()
 
 void Player::OnDestroy()
 {
-	for (int i = 0; i < TestRectangles; ++i)
-	{
-		for (int j = 0; j < TestRectangles; ++j)
-		{
-			m_Rectangles[i * TestRectangles + j]->CleanUp();
-			delete m_Rectangles[i *TestRectangles + j];
-		}
-	}
-	
-	//delete[] m_Rectangles;
-	
-	m_Rectangle->CleanUp();
-	delete m_Rectangle;
-	m_ColRectangle->CleanUp();
-	delete m_ColRectangle;
-
+	m_pPlayerRectangle->CleanUp();
+	delete m_pPlayerRectangle;
 }
 
 void Player::Input(float deltaTime)
 {
 	m_IsMoving = false;
-	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_W)) {
-		m_PlayerPos.y += deltaTime * 500.0f;
+	m_MovementBoost = 0;
+	m_TimeUntilNextFrameSpeedUp = 0;
+	
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_RIGHT_SHIFT)) {
+		m_MovementBoost = 300;
+		m_TimeUntilNextFrameSpeedUp = 0.05;
+	}
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_W)|| GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_UP)) {
+		m_PlayerPos.y += deltaTime * (m_MovementSpeed+m_MovementBoost);
 		m_Direction = 1;
 		m_IsMoving = true;
 	}
-	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_D)) {
-		m_PlayerPos.x += deltaTime * 500.0f;
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_D) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_RIGHT)) {
+		m_PlayerPos.x += deltaTime * (m_MovementSpeed + m_MovementBoost);
 		m_Direction = 2;
 		m_IsMoving = true;
 	}
-	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_S)) {
-		m_PlayerPos.y += deltaTime * -500.0f;
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_S) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_DOWN)) {
+		m_PlayerPos.y += deltaTime * -(m_MovementSpeed + m_MovementBoost);
 		m_Direction = 3;
 		m_IsMoving = true;
 	}
-	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_A)) {
-		m_PlayerPos.x += deltaTime * -500.0f;
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_A) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_LEFT)) {
+		m_PlayerPos.x += deltaTime * -(m_MovementSpeed + m_MovementBoost);
 		m_Direction = 4;
 		m_IsMoving = true;
 	}
-	m_pCamera->SetTargetPos(m_PlayerPos);
 }
 
 void Player::Update(float deltaTime)
 {
-	if (m_Direction != m_LastDirection || m_IsMoving != m_WasMoving)
+	if ((m_Direction != m_LastDirection && deltaTime > 0) || (m_IsMoving != m_WasMoving&&deltaTime > 0))
 	{
 		if (m_IsMoving)
 		{
@@ -168,9 +134,9 @@ void Player::Update(float deltaTime)
 	}
 	
 	m_FrameTimer += deltaTime;
-	if (m_FrameTimer >= m_TimeUntilNextFrame)
+	if (m_FrameTimer >= m_TimeUntilNextFrame - m_TimeUntilNextFrameSpeedUp)
 	{
-		m_FrameTimer -= m_TimeUntilNextFrame;
+		m_FrameTimer -= m_TimeUntilNextFrame - m_TimeUntilNextFrameSpeedUp;
 		m_FrameCount++;
 	}
 
@@ -182,22 +148,37 @@ void Player::Update(float deltaTime)
 	{
 		m_FrameCount = m_BeginFrame;
 	}
+
+
+	if (m_CameraTarget.x - m_PlayerPos.x < -m_MoveCameraDistanceThreshold)
+	{
+		m_CameraTarget.x = m_PlayerPos.x - m_MoveCameraDistanceThreshold;
+	}
+	else if (m_CameraTarget.x - m_PlayerPos.x > m_MoveCameraDistanceThreshold)
+	{
+		m_CameraTarget.x = m_PlayerPos.x + m_MoveCameraDistanceThreshold;
+	}
+
+	if (m_CameraTarget.y - m_PlayerPos.y < -m_MoveCameraDistanceThreshold)
+	{
+		m_CameraTarget.y = m_PlayerPos.y - m_MoveCameraDistanceThreshold;
+	}
+	else if (m_CameraTarget.y - m_PlayerPos.y > m_MoveCameraDistanceThreshold)
+	{
+		m_CameraTarget.y = m_PlayerPos.y + m_MoveCameraDistanceThreshold;
+	}
+
+	m_pCamera->SetTargetPos(m_CameraTarget+m_CameraTargetOfset);
+	
 }
 
 void Player::Render(float deltaTime)
 {
-	m_ColRectangle->Draw();
-	m_Rectangle->SetXPos(m_PlayerPos.x + (float)m_pProgram->GetScreenWidth() / 2.0f);
-	m_Rectangle->SetYPos(m_PlayerPos.y + (float)m_pProgram->GetScreenHeight() / 2.0f);
+	m_pPlayerRectangle->SetXPos(m_PlayerPos.x);// + (float)m_pProgram->GetScreenWidth() / 2.0f);
+	m_pPlayerRectangle->SetYPos(m_PlayerPos.y);// + (float)m_pProgram->GetScreenHeight() / 2.0f);
 	SpriteSheetFramePicker picker;
-	picker.PickFrameHorizontal(9, 4, m_FrameCount, m_Rectangle);
-	for (int i = 0; i < TestRectangles; ++i)
-	{
-		for (int j = 0; j < TestRectangles; ++j)
-		{
-			m_Rectangles[i * TestRectangles + j]->DrawWithTexture();
-		}
-	}
+	picker.PickFrameHorizontal(9, 4, m_FrameCount, m_pPlayerRectangle);
+	
 }
 
 void Player::ImGuiRender(float deltaTime)
@@ -214,8 +195,4 @@ void Player::ImGuiRender(float deltaTime)
 	ImGui::Text("player y %.2f", static_cast<float>(m_PlayerPos.y));
 
 	ImGui::End();
-}
-
-void Player::DebugRender(float deltaTime)
-{
 }

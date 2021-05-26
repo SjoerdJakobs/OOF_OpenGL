@@ -138,6 +138,9 @@
     <ClCompile Include="src\ParallaxBackground.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\framework\HandyMaths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Vendor\glm\detail\func_common.inl">
@@ -1529,6 +1532,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ParallaxBackground.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\HandyMaths.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

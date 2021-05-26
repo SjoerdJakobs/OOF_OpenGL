@@ -28,8 +28,8 @@ private:
 	float m_MaxDistance{ 500 };
 	float m_CurrentDistance{ 0 };
 
-	glm::vec2 m_TargetPos{ 100,100 };
-	glm::vec2 m_LastTargetPos{ 100,100 };
+	glm::vec2 m_TargetPos{ 0,0 };
+	glm::vec2 m_LastTargetPos{ 0,0 };
 
 	glm::vec2 m_CameraPos{ 0,0 };
 	glm::vec2 m_LastCameraPos{ 0,0 };
@@ -37,12 +37,9 @@ private:
 	glm::mat4 m_View{};
 	glm::mat4 m_Proj{};
 
-	float Lerp(float a, float b, float f);
-	float GetDistance(glm::vec2 vector1, glm::vec2 vector2);
-
 public:
 
-	void SetTargetPos(glm::vec2 pos) { m_TargetPos = pos; }
+	void SetTargetPos(glm::vec2 pos) { m_TargetPos = pos + glm::vec2(-m_pProgram->GetScreenWidth() / 2, -m_pProgram->GetScreenHeight() / 2); }
 
 	void Start() override;
 	void Awake() override;
@@ -52,6 +49,8 @@ public:
 	void Update(float deltaTime) override;
 	void ImGuiRender(float deltaTime) override;
 
+	glm::vec2 GetCameraPos() const { return m_CameraPos; }
+	
 	glm::mat4 GetCameraView() const { return m_View; }
 	glm::mat4 GetCameraProj() const { return m_Proj; }
 };

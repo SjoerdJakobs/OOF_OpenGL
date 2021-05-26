@@ -254,9 +254,12 @@ void Program::Run()
 
 			/* Swap front and back buffers */
 			GL_CALL(glfwSwapBuffers(m_pWindow));
-
+			
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_I)) {
+				std::cout << "Use WASD or the arrow keys for movement and shift for sprint. \n Pickup the coins and evade enemies and bombs" << std::endl;
+			}
 			/*if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
-				glfwSetWindowShouldClose(m_pWindow, 1);
+				glfwSetWindowShouldClose(m_pWindow, 1);w
 			}*/
 		}
 	}

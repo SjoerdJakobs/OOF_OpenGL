@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\framework\HandyMaths.cpp" />
     <ClCompile Include="src\ParallaxBackground.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\InGameMenu.cpp" />
@@ -340,6 +341,7 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\framework\HandyMaths.h" />
     <ClInclude Include="src\ParallaxBackground.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\InGameMenu.h" />

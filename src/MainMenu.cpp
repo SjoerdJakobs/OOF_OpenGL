@@ -50,7 +50,8 @@ void MainMenu::ImGuiRender(float deltaTime)
 	ImGui::Begin("InvisibleWindow1", nullptr, m_WindowFlags);
 	if(ImGui::Button("HOW TO PLAY", ImVec2(m_HowToPlayButtonWidth, m_HowToPlayButtonHeight)))
 	{
-		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::HowToPlay);
+		//m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::HowToPlay);
+		std::cout << "Use WASD or the arrow keys for movement and shift for sprint. \n Pickup the coins and evade enemies and bombs" << std::endl;
 	}
 	ImGui::End();
 
@@ -58,7 +59,7 @@ void MainMenu::ImGuiRender(float deltaTime)
 	ImGui::Begin("InvisibleWindow2", nullptr, m_WindowFlags);
 	if(ImGui::Button("OPTIONS", ImVec2(m_OptionsButtonWidth, m_OptionsButtonHeight)))
 	{
-		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::Options);		
+		//m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::Options);		
 	}
 	ImGui::End();
 

@@ -55,13 +55,21 @@ void InGameMenu::ImGuiRender(float deltaTime)
 		
 		ImGui::PushFont(m_pMenuFont);
 
-		ImGui::SetNextWindowPos(ImVec2(m_QuitButtonXPos, m_QuitButtonYPos), ImGuiCond_Once);
+		ImGui::SetNextWindowPos(ImVec2(m_ResumeButtonXPos, m_ResumeButtonYPos), ImGuiCond_Once);
 		ImGui::SetNextWindowSize(ImVec2(m_MenuWidth, m_MenuHeight), ImGuiCond_Once);
 		
-		ImGui::Begin("InvisibleWindow0", nullptr, m_WindowFlags);
+		ImGui::Begin("InGameMenuWindow", nullptr, m_WindowFlags);
+		
+		if (ImGui::Button("RESUME", ImVec2(m_ResumeButtonWidth, m_ResumeButtonHeight)))
+		{
+			m_ShowMenu = !m_ShowMenu;
+			m_pProgram->SetTimeScale(m_TimeScaleWhenPaused);
+		}
 		
 		if (ImGui::Button("MAIN MENU", ImVec2(m_QuitButtonWidth, m_QuitButtonHeight)))
 		{
+			m_ShowMenu = !m_ShowMenu;
+			m_pProgram->SetTimeScale(m_TimeScaleWhenPaused);
 			m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::MainMenu);
 		}
 
@@ -89,7 +97,7 @@ void InGameMenu::OnDestroy()
 InGameMenu::InGameMenu() :
 StandardObject(true, false, false, false, true, false, true,
 			1000, 1000, 1000, 1000),
-m_ShowMenu(false),m_TimeScaleWhenPaused(0)
+m_ShowMenu(false), m_HasPressedESC(false)
 {
 }
 
