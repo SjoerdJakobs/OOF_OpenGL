@@ -30,6 +30,16 @@ void Camera::Input(float deltaTime)
 
 void Camera::Update(float deltaTime)
 {
+	if(m_ScreenShakeDuration > 0)
+	{
+		if (deltaTime > 0)
+		{
+			m_ScreenShakeDuration -= deltaTime;
+			m_CameraPos.x += rand() % 10 + -5;
+			m_CameraPos.y += rand() % 10 + -5;
+		}
+	}
+	
 	m_CurrentDistance = HandyMaths::GetDistance(m_TargetPos, m_CameraPos);
 	m_LerpRenewTickCounter += deltaTime;
 
@@ -60,4 +70,9 @@ void Camera::Update(float deltaTime)
 
 void Camera::ImGuiRender(float deltaTime)
 {
+}
+
+void Camera::ScreenShake(float duration)
+{
+	m_ScreenShakeDuration = duration;
 }

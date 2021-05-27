@@ -37,6 +37,10 @@ void MainMenu::ImGuiRender(float deltaTime)
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.05f, 0.8f, 0.8f));
 	ImGui::PushFont(m_pMenuFont);
 
+	
+	/*
+	 * this all probably does not need its own hidden winder for each button but this was the easiest solution
+	 */
 	ImGui::SetNextWindowPos(ImVec2(m_StartButtonXPos, m_StartButtonYPos), ImGuiCond_Once);
 	ImGui::Begin("InvisibleWindow0", nullptr, m_WindowFlags);
 	if(ImGui::Button("START", ImVec2(m_StartButtonWidth, m_StartButtonHeight)))
@@ -50,8 +54,9 @@ void MainMenu::ImGuiRender(float deltaTime)
 	ImGui::Begin("InvisibleWindow1", nullptr, m_WindowFlags);
 	if(ImGui::Button("HOW TO PLAY", ImVec2(m_HowToPlayButtonWidth, m_HowToPlayButtonHeight)))
 	{
-		//m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::HowToPlay);
-		std::cout << "Use WASD or the arrow keys for movement and shift for sprint. \n Pickup the coins and evade enemies and bombs" << std::endl;
+		std::cout << "Use WASD or the arrow keys for movement and shift for sprint."  << std::endl;
+		std::cout << "Pickup the coins and evade enemies and bombs" << std::endl;
+		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::HowToPlay);
 	}
 	ImGui::End();
 

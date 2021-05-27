@@ -28,6 +28,8 @@ private:
 	float m_MaxDistance{ 500 };
 	float m_CurrentDistance{ 0 };
 
+	float m_ScreenShakeDuration;
+
 	glm::vec2 m_TargetPos{ 0,0 };
 	glm::vec2 m_LastTargetPos{ 0,0 };
 
@@ -48,6 +50,7 @@ public:
 	void Input(float deltaTime) override;
 	void Update(float deltaTime) override;
 	void ImGuiRender(float deltaTime) override;
+	void ScreenShake(float duration);
 
 	glm::vec2 GetCameraPos() const { return m_CameraPos; }
 	

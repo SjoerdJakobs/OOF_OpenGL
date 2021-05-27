@@ -5,6 +5,7 @@
 #include "LevelManager.h"
 #include "ParallaxBackground.h"
 #include "Player.h"
+#include "PickupManager.h"
 
 void GameScene0::OnStart()
 {
@@ -16,6 +17,10 @@ void GameScene0::OnStart()
 	LevelManager* p_newLevelManager = DBG_NEW LevelManager();
 	AddObjectToScene(p_newLevelManager);
 	p_newLevelManager->GivePlayerPointer(p_newPlayer);
+
+	PickupManager* p_newPickupManager = DBG_NEW PickupManager();
+	AddObjectToScene(p_newPickupManager);
+	p_newPickupManager->GivePlayerPointer(p_newPlayer);
 }
 
 void GameScene0::OnStop()

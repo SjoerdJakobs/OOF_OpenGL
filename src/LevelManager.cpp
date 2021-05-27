@@ -90,10 +90,6 @@ void LevelManager::ContainPlayer() const
 	}
 }
 
-void LevelManager::UpdateObstacles(float deltaTime)
-{
-}
-
 void LevelManager::GivePlayerPointer(Player* p_player)
 {
 	m_pPlayer = p_player;

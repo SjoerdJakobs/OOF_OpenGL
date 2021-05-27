@@ -2,6 +2,7 @@
 #include "StandardObject.h"
 #include "IDamageable.h"
 #include "glm/glm.hpp"
+#include "imgui/imgui.h"
 
 class Rectangle;
 class Camera;
@@ -12,6 +13,9 @@ class Player final : public StandardObject, IDamageable
 {
 private:
 
+	ImGuiIO& m_rIO = ImGui::GetIO();
+	ImFont* m_pMenuFont = m_rIO.Fonts->Fonts[1];
+	ImGuiWindowFlags m_WindowFlags = 0;
 	Camera* m_pCamera;
 	Rectangle* m_pPlayerRectangle;
 
@@ -23,7 +27,7 @@ private:
 	float m_MovementSpeed{300};
 	float m_MovementBoost{300};
 	float m_SpecialCooldown{4};
-
+	int m_Score{ 0 };
 	int m_MaxSpecialsReady{1};
 	int m_SpecialsReady{1};
 
@@ -34,7 +38,7 @@ private:
 	int m_FrameCount{ 0 };
 	int m_BeginFrame{ 0 };
 	int m_EndFrame{ 0 };
-	float m_TimeUntilNextFrame{ 0.1f };
+	float m_TimeUntilNextFrame{ 0.08f };
 	float m_TimeUntilNextFrameSpeedUp{ 0.05f };
 	float m_FrameTimer{ 0 };
 
@@ -61,6 +65,9 @@ public:
 	void TakeDamage(int damage) override;
 	void Heal(int healAmount) override;
 
+	int GetScore() { return m_Score; };
+	void SetScore(int newScore) { m_Score = newScore; }
+	
 	glm::vec2 GetPlayerPos() { return m_PlayerPos; }
 	void SetPlayerPos(glm::vec2 newPos) { m_PlayerPos = newPos; }
 };

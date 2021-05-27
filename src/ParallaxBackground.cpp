@@ -173,20 +173,6 @@ void ParallaxBackground::Render(float deltaTime)
 
 void ParallaxBackground::ImGuiRender(float deltaTime)
 {
-	ImGui::Begin("MainMenu");
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);                   // Create a m_pWindow called "Hello, world!" and append into it.
-		
-	for (int i = 0; i < 1; ++i)
-	{
-		ImGui::Text("background1 x %.2f", static_cast<float>( m_Layer1Rectangles[i]->GetXPos()-(m_pCamera->GetCameraPos().x)));
-		ImGui::Text("background2 x %.2f", static_cast<float>(m_pCamera->GetCameraPos().x - m_Layer1Rectangles[i]->GetXPos()));
-		ImGui::Text("background y %.2f", static_cast<float>(m_Layer1Rectangles[i]->GetXPos()));
-		ImGui::Text("background y %.2f", static_cast<float>(m_Layer1Rectangles[i]->GetYPos()));
-		
-	}
-
-	ImGui::End();
 }
 
 ParallaxBackground::~ParallaxBackground()

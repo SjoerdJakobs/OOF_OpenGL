@@ -30,6 +30,15 @@ void Player::Start()
 	m_pCamera = &Camera::instance();
 	m_pPlayerRectangle = DBG_NEW Rectangle(100, 100, m_PlayerPos.x, m_PlayerPos.y, "res/textures/professor_walk_cycle_no_hat.png", 0);
 	m_FrameCount = m_BeginFrame;
+
+	m_WindowFlags |= ImGuiWindowFlags_NoTitleBar;
+	m_WindowFlags |= ImGuiWindowFlags_NoScrollbar;
+	m_WindowFlags |= ImGuiWindowFlags_NoMove;
+	m_WindowFlags |= ImGuiWindowFlags_NoResize;
+	m_WindowFlags |= ImGuiWindowFlags_NoCollapse;
+	m_WindowFlags |= ImGuiWindowFlags_NoNav;
+	m_WindowFlags |= ImGuiWindowFlags_NoBackground;
+	m_WindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 }
 
 void Player::Awake()
@@ -54,7 +63,7 @@ void Player::Input(float deltaTime)
 	
 	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_RIGHT_SHIFT)) {
 		m_MovementBoost = 300;
-		m_TimeUntilNextFrameSpeedUp = 0.05;
+		m_TimeUntilNextFrameSpeedUp = 0.05f;
 	}
 	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_W)|| GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_UP)) {
 		m_PlayerPos.y += deltaTime * (m_MovementSpeed+m_MovementBoost);
@@ -177,22 +186,17 @@ void Player::Render(float deltaTime)
 	m_pPlayerRectangle->SetXPos(m_PlayerPos.x);// + (float)m_pProgram->GetScreenWidth() / 2.0f);
 	m_pPlayerRectangle->SetYPos(m_PlayerPos.y);// + (float)m_pProgram->GetScreenHeight() / 2.0f);
 	SpriteSheetFramePicker picker;
-	picker.PickFrameHorizontal(9, 4, m_FrameCount, m_pPlayerRectangle);
+	picker.PickFrameHorizontalDownUp(9, 4, m_FrameCount, m_pPlayerRectangle);
 	
 }
 
 void Player::ImGuiRender(float deltaTime)
 {
-	ImGui::Begin("MainMenu");
-
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);                   // Create a m_pWindow called "Hello, world!" and append into it.
-	if (ImGui::Button("MainMenu"))
-	{
-		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::MainMenu);
-	}
-	int one = 1;
-	ImGui::Text("player x %.2f", static_cast<float>(m_PlayerPos.x));
-	ImGui::Text("player y %.2f", static_cast<float>(m_PlayerPos.y));
-
+	ImGui::PushFont(m_pMenuFont);
+	ImGui::SetNextWindowPos(ImVec2(920, 20), ImGuiCond_Once);
+	ImGui::Begin("scoreText",nullptr,m_WindowFlags);
+	ImGui::Text("Score: %.0f", static_cast<float>(m_Score));
 	ImGui::End();
+	ImGui::PopFont();
+
 }
