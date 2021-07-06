@@ -394,3 +394,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+src/Vendor/valgrind-3.17.0.tar.bz2

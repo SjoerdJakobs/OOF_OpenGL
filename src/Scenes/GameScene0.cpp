@@ -1,5 +1,7 @@
 #include "GameScene0.h"
 
+
+#include "AllocationMetrics.h"
 #include "Camera.h"
 #include "InGameMenu.h"
 #include "LevelManager.h"
@@ -9,23 +11,25 @@
 
 void GameScene0::OnStart()
 {
-	Player* p_newPlayer = DBG_NEW Player(1000);
+	PrintMemoryUsage("before gamescene start");
+	Player* p_newPlayer = new Player(1000);
 	AddObjectToScene(p_newPlayer);
-	AddObjectToScene(DBG_NEW InGameMenu());
-	AddObjectToScene(DBG_NEW ParallaxBackground());
-
-	LevelManager* p_newLevelManager = DBG_NEW LevelManager();
+	AddObjectToScene(new InGameMenu());
+	AddObjectToScene(new ParallaxBackground());
+	
+	LevelManager* p_newLevelManager = new LevelManager();
 	AddObjectToScene(p_newLevelManager);
 	p_newLevelManager->GivePlayerPointer(p_newPlayer);
-
-	PickupManager* p_newPickupManager = DBG_NEW PickupManager();
+	
+	PickupManager* p_newPickupManager = new PickupManager();
 	AddObjectToScene(p_newPickupManager);
 	p_newPickupManager->GivePlayerPointer(p_newPlayer);
+	PrintMemoryUsage("after gamescene start");
 }
 
 void GameScene0::OnStop()
 {
-	
+	PrintMemoryUsage("on gamescene stop");
 }
 
 GameScene0::GameScene0()
@@ -35,4 +39,5 @@ GameScene0::GameScene0()
 
 GameScene0::~GameScene0()
 {
+	PrintMemoryUsage("on gamescene destructor");
 }

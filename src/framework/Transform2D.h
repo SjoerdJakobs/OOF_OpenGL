@@ -7,4 +7,3 @@ struct Transform2D
 	glm::vec2 scale;
 	int rotation;
 };
-

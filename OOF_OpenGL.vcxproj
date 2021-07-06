@@ -72,6 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Program Files (x86)\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -88,16 +90,22 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;fmodL_vc.lib;fmodstudioL_vc.lib</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "(Path-To-Libraries )\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>copy libs</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -107,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -116,9 +124,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\core\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;fmod_vc.lib;fmodstudio_vc.lib</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "(Path-To-Libraries )\*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>copy libs</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -126,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -145,7 +159,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,13 +171,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp" />
+    <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp" />
+    <ClCompile Include="src\framework\audio\AudioEngine.cpp" />
+    <ClCompile Include="src\Scenes\ObjectsStressTestScene.cpp" />
+    <ClCompile Include="src\framework\AllocationMetricsTracker.cpp" />
     <ClCompile Include="src\PickupManager.cpp" />
     <ClCompile Include="src\framework\HandyMaths.cpp" />
     <ClCompile Include="src\ParallaxBackground.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\InGameMenu.cpp" />
-    <ClCompile Include="src\framework\physics\primitives\AABB.cpp" />
-    <ClCompile Include="src\framework\audio\AudioManager.cpp" />
     <ClCompile Include="src\Scenes\GameScene0.cpp" />
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\Scenes\MainMenuScene.cpp" />
@@ -174,16 +191,12 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp" />
     <ClCompile Include="src\framework\Scene.cpp" />
     <ClCompile Include="src\framework\Program.cpp" />
     <ClCompile Include="src\framework\rendering\Shader.cpp" />
     <ClCompile Include="src\framework\rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\framework\rendering\Renderer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp" />
-    <ClCompile Include="src\examplesAndTesting\Test.cpp" />
-    <ClCompile Include="src\examplesAndTesting\TestTexture2D.cpp" />
     <ClCompile Include="src\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui_demo.cpp" />
@@ -196,9 +209,9 @@
     <ClCompile Include="src\framework\rendering\VertexArray.cpp" />
     <ClCompile Include="src\Vendor\stb_image.h\stb_image.cpp" />
     <ClCompile Include="src\framework\rendering\Texture.cpp" />
-    <ClCompile Include="src\examplesAndTesting\TestClearColor.cpp" />
     <ClCompile Include="src\framework\StandardObject.cpp" />
     <ClCompile Include="src\framework\Transform2D.cpp" />
+    <ClCompile Include="src\examplesAndTesting\TestObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -342,14 +355,17 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\examplesAndTesting\ExampleObject.h" />
+    <ClInclude Include="src\examplesAndTesting\ExampleProgram.h" />
+    <ClInclude Include="src\framework\audio\AudioEngine.h" />
+    <ClInclude Include="src\Scenes\ObjectsStressTestScene.h" />
+    <ClInclude Include="src\framework\AllocationMetrics.h" />
+    <ClInclude Include="src\framework\AllocationMetricsTracker.h" />
     <ClInclude Include="src\PickupManager.h" />
     <ClInclude Include="src\framework\HandyMaths.h" />
     <ClInclude Include="src\ParallaxBackground.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\InGameMenu.h" />
-    <ClInclude Include="src\framework\audio\AudioEngine.h" />
-    <ClInclude Include="src\framework\physics\primitives\AABB.h" />
-    <ClInclude Include="src\framework\audio\AudioManager.h" />
     <ClInclude Include="src\Scenes\GameScene0.h" />
     <ClInclude Include="src\MainMenu.h" />
     <ClInclude Include="src\Scenes\MainMenuScene.h" />
@@ -361,7 +377,6 @@
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\examplesAndTesting\ExampleObject.h" />
     <ClInclude Include="src\framework\Scene.h" />
     <ClInclude Include="src\framework\PriorityGroup.h" />
     <ClInclude Include="src\framework\Program.h" />
@@ -369,8 +384,6 @@
     <ClInclude Include="src\framework\rendering\Shader.h" />
     <ClInclude Include="src\framework\rendering\IndexBuffer.h" />
     <ClInclude Include="src\framework\rendering\Renderer.h" />
-    <ClInclude Include="src\examplesAndTesting\ExampleProgram.h" />
-    <ClInclude Include="src\examplesAndTesting\TestTexture2D.h" />
     <ClInclude Include="src\Vendor\glm\common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_vector_relational.hpp" />
@@ -666,10 +679,9 @@
     <ClInclude Include="src\framework\rendering\VertexBufferLayout.h" />
     <ClInclude Include="src\Vendor\stb_image.h\stb_image.h" />
     <ClInclude Include="src\framework\rendering\Texture.h" />
-    <ClInclude Include="src\examplesAndTesting\Test.h" />
-    <ClInclude Include="src\examplesAndTesting\TestClearColor.h" />
     <ClInclude Include="src\framework\StandardObject.h" />
     <ClInclude Include="src\framework\Transform2D.h" />
+    <ClInclude Include="src\examplesAndTesting\TestObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\BlueBlock.png" />

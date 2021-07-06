@@ -57,21 +57,6 @@
     <ClCompile Include="src\framework\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\examplesAndTesting\Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\examplesAndTesting\TestClearColor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\examplesAndTesting\TestTexture2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -120,12 +105,6 @@
     <ClCompile Include="src\Scenes\GameScene0.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\framework\audio\AudioManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\framework\physics\primitives\AABB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\framework\Transform2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -142,6 +121,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\PickupManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\AllocationMetricsTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scenes\ObjectsStressTestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\examplesAndTesting\TestObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\audio\AudioEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1444,21 +1441,6 @@
     <ClInclude Include="src\framework\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\examplesAndTesting\ExampleObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\examplesAndTesting\ExampleProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\examplesAndTesting\Test.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\examplesAndTesting\TestClearColor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\examplesAndTesting\TestTexture2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1516,16 +1498,7 @@
     <ClInclude Include="src\Scenes\GameScene0.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\framework\audio\AudioManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\framework\physics\primitives\AABB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\framework\Transform2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\framework\audio\AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\InGameMenu.h">
@@ -1541,6 +1514,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\PickupManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\AllocationMetricsTracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\AllocationMetrics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scenes\ObjectsStressTestScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\examplesAndTesting\TestObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\examplesAndTesting\ExampleObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\examplesAndTesting\ExampleProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\audio\AudioEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

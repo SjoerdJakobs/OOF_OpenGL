@@ -11,7 +11,7 @@ const int m_BombAmount{ 8 };
 class PickupManager final : public StandardObject
 {
 public:
-	
+
 	PickupManager();
 
 private:
@@ -24,7 +24,6 @@ private:
 	void UpdateObstacles(float deltaTime);
 	void SpawnObjects();
 
-	
 	Camera* m_pCamera = nullptr;
 	Player* m_pPlayer = nullptr;
 
@@ -39,19 +38,17 @@ private:
 	/*
 	 * especially here when i need to keep track of the animations, this should be in its own class
 	 */
-	bool m_BombIsExploding[m_BombAmount] = {false,false,false,false,false,false,false,false};
-	float m_ExplosionFrameTimers[m_BombAmount]{0};
-	int m_FrameCountExplosion[m_BombAmount]{0};
+	bool m_BombIsExploding[m_BombAmount] = { false,false,false,false,false,false,false,false };
+	float m_ExplosionFrameTimers[m_BombAmount]{ 0 };
+	int m_FrameCountExplosion[m_BombAmount]{ 0 };
 
 	int m_BeginFrameExplosion{ 1 };
 	int m_EndFrameExplosion{ 24 };
 	float m_TimeUntilNextExplosionFrame{ 0.03f };
 
-
-	
-	int m_FrameCountCoins { 0 };
-	int m_BeginFrameCoins { 24};
-	int m_EndFrameCoins	  { 48 };
+	int m_FrameCountCoins{ 0 };
+	int m_BeginFrameCoins{ 24 };
+	int m_EndFrameCoins{ 48 };
 	float m_TimeUntilNextCoinFrame{ 0.1f };
 	float m_CoinFrameTimer{ 0 };
 
@@ -59,4 +56,3 @@ public:
 	~PickupManager() override;
 	void GivePlayerPointer(Player* p_player);
 };
-

@@ -17,7 +17,7 @@ private:
 	const int m_WindowHeight = m_pProgram->GetScreenHeight();
 
 	const int m_ButtonDistanceYPos = 40;
-	
+
 	const std::string m_StartButtonLabel = "START";
 	const float m_StartButtonWidth = 300.0f;
 	const float m_StartButtonHalfWidth = m_StartButtonWidth / 2.0f;
@@ -32,7 +32,7 @@ private:
 	const float m_HowToPlayButtonHeight = 100.0f;
 	const float m_HowToPlayButtonHalfHeight = m_HowToPlayButtonHeight / 2.0f;
 	const float m_HowToPlayButtonXPos = m_WindowWidth / 2.0f - m_HowToPlayButtonHalfWidth;
-	const float m_HowToPlayButtonYPos = m_StartButtonYPos+m_StartButtonHeight+m_ButtonDistanceYPos;
+	const float m_HowToPlayButtonYPos = m_StartButtonYPos + m_StartButtonHeight + m_ButtonDistanceYPos;
 
 	const std::string m_OptionsButtonLabel = "OPTIONS";
 	const float m_OptionsButtonWidth = 300.0f;
@@ -41,7 +41,7 @@ private:
 	const float m_OptionsButtonHalfHeight = m_OptionsButtonHeight / 2.0f;
 	const float m_OptionsButtonXPos = m_WindowWidth / 2.0f - m_OptionsButtonHalfWidth;
 	const float m_OptionsButtonYPos = m_HowToPlayButtonYPos + m_HowToPlayButtonHeight + m_ButtonDistanceYPos;
-	
+
 	const std::string m_ExitButtonLabel = "EXIT";
 	const float m_ExitButtonWidth = 300.0f;
 	const float m_ExitButtonHalfWidth = m_ExitButtonWidth / 2.0f;
@@ -49,7 +49,7 @@ private:
 	const float m_ExitButtonHalfHeight = m_ExitButtonHeight / 2.0f;
 	const float m_ExitButtonXPos = m_WindowWidth / 2.0f - m_ExitButtonHalfWidth;
 	const float m_ExitButtonYPos = m_OptionsButtonYPos + m_OptionsButtonHeight + m_ButtonDistanceYPos;
-	
+
 protected:
 	void Start() override;
 	void Awake() override;

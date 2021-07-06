@@ -28,7 +28,7 @@ void Player::Heal(int healAmount)
 void Player::Start()
 {
 	m_pCamera = &Camera::instance();
-	m_pPlayerRectangle = DBG_NEW Rectangle(100, 100, m_PlayerPos.x, m_PlayerPos.y, "res/textures/professor_walk_cycle_no_hat.png", 0);
+	m_pPlayerRectangle = new Rectangle(100, 100, m_PlayerPos.x, m_PlayerPos.y, "res/textures/professor_walk_cycle_no_hat.png", 0);
 	m_FrameCount = m_BeginFrame;
 
 	m_WindowFlags |= ImGuiWindowFlags_NoTitleBar;
@@ -60,13 +60,13 @@ void Player::Input(float deltaTime)
 	m_IsMoving = false;
 	m_MovementBoost = 0;
 	m_TimeUntilNextFrameSpeedUp = 0;
-	
+
 	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_LEFT_SHIFT) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_RIGHT_SHIFT)) {
 		m_MovementBoost = 300;
 		m_TimeUntilNextFrameSpeedUp = 0.05f;
 	}
-	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_W)|| GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_UP)) {
-		m_PlayerPos.y += deltaTime * (m_MovementSpeed+m_MovementBoost);
+	if (GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_W) || GLFW_PRESS == glfwGetKey(m_pProgram->GetGLFWwindow(), GLFW_KEY_UP)) {
+		m_PlayerPos.y += deltaTime * (m_MovementSpeed + m_MovementBoost);
 		m_Direction = 1;
 		m_IsMoving = true;
 	}
@@ -89,7 +89,7 @@ void Player::Input(float deltaTime)
 
 void Player::Update(float deltaTime)
 {
-	if ((m_Direction != m_LastDirection && deltaTime > 0) || (m_IsMoving != m_WasMoving&&deltaTime > 0))
+	if ((m_Direction != m_LastDirection && deltaTime > 0) || (m_IsMoving != m_WasMoving && deltaTime > 0))
 	{
 		if (m_IsMoving)
 		{
@@ -115,7 +115,8 @@ void Player::Update(float deltaTime)
 				m_BeginFrame = 19;
 				m_EndFrame = 26;
 			}
-		}else
+		}
+		else
 		{
 			m_WasMoving = m_IsMoving;
 			m_LastDirection = m_Direction;
@@ -141,7 +142,7 @@ void Player::Update(float deltaTime)
 			}
 		}
 	}
-	
+
 	m_FrameTimer += deltaTime;
 	if (m_FrameTimer >= m_TimeUntilNextFrame - m_TimeUntilNextFrameSpeedUp)
 	{
@@ -157,7 +158,6 @@ void Player::Update(float deltaTime)
 	{
 		m_FrameCount = m_BeginFrame;
 	}
-
 
 	if (m_CameraTarget.x - m_PlayerPos.x < -m_MoveCameraDistanceThreshold)
 	{
@@ -177,8 +177,7 @@ void Player::Update(float deltaTime)
 		m_CameraTarget.y = m_PlayerPos.y + m_MoveCameraDistanceThreshold;
 	}
 
-	m_pCamera->SetTargetPos(m_CameraTarget+m_CameraTargetOfset);
-	
+	m_pCamera->SetTargetPos(m_CameraTarget + m_CameraTargetOfset);
 }
 
 void Player::Render(float deltaTime)
@@ -187,16 +186,14 @@ void Player::Render(float deltaTime)
 	m_pPlayerRectangle->SetYPos(m_PlayerPos.y);// + (float)m_pProgram->GetScreenHeight() / 2.0f);
 	SpriteSheetFramePicker picker;
 	picker.PickFrameHorizontalDownUp(9, 4, m_FrameCount, m_pPlayerRectangle);
-	
 }
 
 void Player::ImGuiRender(float deltaTime)
 {
 	ImGui::PushFont(m_pMenuFont);
 	ImGui::SetNextWindowPos(ImVec2(920, 20), ImGuiCond_Once);
-	ImGui::Begin("scoreText",nullptr,m_WindowFlags);
+	ImGui::Begin("scoreText", nullptr, m_WindowFlags);
 	ImGui::Text("Score: %.0f", static_cast<float>(m_Score));
 	ImGui::End();
 	ImGui::PopFont();
-
 }

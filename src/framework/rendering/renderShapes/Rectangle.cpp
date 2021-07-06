@@ -45,8 +45,7 @@ Rectangle::Rectangle(float xSize, float ySize, float xPos, float yPos, std::stri
 }
 
 Rectangle::~Rectangle()
-{	
-	
+{
 }
 
 void Rectangle::CleanUp()
@@ -112,30 +111,17 @@ void Rectangle::DrawWithSpritesheetTextureAnimation(float xStart, float xEnd, fl
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2, xStart, yStart,	//0.0f, 0.0f,
-		m_XSize / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
-		m_XSize / 2, m_YSize / 2, xEnd, yEnd,		//1.0f, 1.0f,
-		-m_XSize / 2, m_YSize / 2, xStart, yEnd	    //0.0f, 1.0f
+		m_XSize  / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
+		m_XSize  / 2, m_YSize  / 2, xEnd, yEnd,		//1.0f, 1.0f,
+		-m_XSize / 2, m_YSize  / 2, xStart, yEnd	//0.0f, 1.0f
 	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0,
-	};
-
+	
 	VertexArray VAO = VertexArray();
 	//create VertexBuffer
 	VertexBuffer VBuffer = VertexBuffer(positions, 16 * sizeof(float));
-	//create VertexBufferLayout
-	VertexBufferLayout layout;
-
-	//set layout
-	//a vertex exists out of 2 floats, hence the 2
-	layout.Push<float>(2);
-	//a tex coord exists out of 2 floats, hence the 2
-	layout.Push<float>(2);
 
 	//add VertexBuffer with its layout to VertexArray
-	VAO.AddBuffer(VBuffer, layout);
+	VAO.AddBuffer(VBuffer, *m_pLayout);
 	//m_pIndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
 
 	m_pTexture->Bind(m_TextureSlot);
@@ -151,9 +137,9 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, flo
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2, xStart, yStart,	//0.0f, 0.0f,
-		m_XSize / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
-		m_XSize / 2, m_YSize / 2, xEnd, yEnd,		//1.0f, 1.0f,
-		-m_XSize / 2, m_YSize / 2, xStart, yEnd	//0.0f, 1.0f
+		m_XSize  / 2, -m_YSize / 2, xEnd,   yStart,	//1.0f, 0.0f,
+		m_XSize  / 2, m_YSize  / 2, xEnd,   yEnd,	//1.0f, 1.0f,
+		-m_XSize / 2, m_YSize  / 2, xStart, yEnd	//0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -161,25 +147,24 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, flo
 		2, 3, 0,
 	};
 
-	m_pVAO = DBG_NEW VertexArray();
+	m_pVAO = new VertexArray();
 	//create VertexBuffer
-	m_pVertexBuffer = DBG_NEW VertexBuffer(positions, xSize * ySize * 16 * sizeof(float));
-	//create VertexBufferLayout
-	VertexBufferLayout layout;
+	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 16 * sizeof(float));
 
 	//set layout
+	m_pLayout = new VertexBufferLayout;
 	//a vertex exists out of 2 floats, hence the 2
-	layout.Push<float>(2);
+	m_pLayout->Push<float>(2);
 	//a tex coord exists out of 2 floats, hence the 2
-	layout.Push<float>(2);
+	m_pLayout->Push<float>(2);
 
 	//add VertexBuffer with its layout to VertexArray
-	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
-	m_pIndexBuffer = DBG_NEW IndexBuffer(indices, xSize * ySize * 6);
+	m_pVAO->AddBuffer(*m_pVertexBuffer, *m_pLayout);
+	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
 
-	m_pShader = DBG_NEW Shader("res/shaders/BasicTexture.shader");
+	m_pShader = new Shader("res/shaders/BasicTexture.shader");
 	m_pShader->Bind();
-	m_pTexture = DBG_NEW Texture(m_TexturePath);
+	m_pTexture = new Texture(m_TexturePath);
 	m_pShader->SetUniform1i("u_Texture", m_TextureSlot);
 }
 
@@ -201,9 +186,9 @@ void Rectangle::ConstructWithColor()
 		2, 3, 0,
 	};
 
-	m_pVAO = DBG_NEW VertexArray();
+	m_pVAO = new VertexArray();
 	//create VertexBuffer
-	m_pVertexBuffer = DBG_NEW VertexBuffer(positions, xSize * ySize * 8 * sizeof(float));
+	m_pVertexBuffer = new VertexBuffer(positions, xSize * ySize * 8 * sizeof(float));
 	//create VertexBufferLayout
 	VertexBufferLayout layout;
 
@@ -213,9 +198,9 @@ void Rectangle::ConstructWithColor()
 
 	//add VertexBuffer with its layout to VertexArray
 	m_pVAO->AddBuffer(*m_pVertexBuffer, layout);
-	m_pIndexBuffer = DBG_NEW IndexBuffer(indices, xSize * ySize * 6);
+	m_pIndexBuffer = new IndexBuffer(indices, xSize * ySize * 6);
 
-	m_pShader = DBG_NEW Shader("res/shaders/BasicColor.shader");
+	m_pShader = new Shader("res/shaders/BasicColor.shader");
 	m_pShader->Bind();
 	m_pShader->SetUniform4f("u_Color", m_Color[0], m_Color[1], m_Color[2], m_Color[3]);
 }

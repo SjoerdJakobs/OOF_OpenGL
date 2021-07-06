@@ -14,7 +14,7 @@ void SpriteSheetFramePicker::PickFrameHorizontalDownUp(const float widthSprites,
 	rectangle->DrawWithSpritesheetTextureAnimation(xStart, xStart + xStep, yStart, yStart + yStep);
 }
 
-void SpriteSheetFramePicker::PickFrameVertical(const float widthSprites, const float heightSprites,	const int frameToPick, Rectangle* rectangle)
+void SpriteSheetFramePicker::PickFrameVertical(const float widthSprites, const float heightSprites, const int frameToPick, Rectangle* rectangle)
 {
 	float xStep = (1 / widthSprites);
 	float yStep = (1 / heightSprites);

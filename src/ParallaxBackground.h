@@ -6,7 +6,7 @@ class Rectangle;
 class Camera;
 
 class ParallaxBackground final :
-    public StandardObject
+	public StandardObject
 {
 	const float m_Layer1BaseSpeed{ 1.0f };
 	const float m_Layer1SpeedMod{ 0.3f };
@@ -19,7 +19,7 @@ class ParallaxBackground final :
 	Rectangle* m_Layer2Rectangles[4] = {};
 	Rectangle* m_Layer3Rectangles[4] = {};
 
-	Camera * m_pCamera;
+	Camera* m_pCamera;
 	glm::vec2 m_LastCameraPos;
 
 public:
@@ -40,4 +40,3 @@ protected:
 	void Render(float deltaTime) override;
 	void ImGuiRender(float deltaTime) override;
 };
-

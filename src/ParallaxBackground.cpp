@@ -3,7 +3,7 @@
 #include "Camera.h"
 #include "Rectangle.h"
 
-ParallaxBackground::ParallaxBackground() : StandardObject(false, true, false, true, true, false, true, 900, 900, 900, 900)
+ParallaxBackground::ParallaxBackground() : StandardObject(false, true, false, true, true, true, 900, 900, 900, 900)
 {
 	m_pCamera = &Camera::instance();
 	SpawnLayers();
@@ -17,22 +17,20 @@ void ParallaxBackground::SpawnLayers()
 	{
 		for (int j = 0; j < 2; ++j)
 		{
-			m_Layer1Rectangles[n] = DBG_NEW Rectangle(1536.0f, 1536.0f, -768.0f + 1536.0f * static_cast<float>(i), -768.0f + 1536.0f * static_cast<float>(j), "res/textures/backgroundSpace1.png", 9);
+			m_Layer1Rectangles[n] = new Rectangle(1536.0f, 1536.0f, -768.0f + 1536.0f * static_cast<float>(i), -768.0f + 1536.0f * static_cast<float>(j), "res/textures/backgroundSpace1.png", 9);
 			n++;
 		}
 	}
 
-	m_Layer2Rectangles[0] = DBG_NEW Rectangle(500.0f, 500.0f, -768.0f , -768.0f , "res/textures/jupiter-transparent.png", 8);
-	m_Layer2Rectangles[1] = DBG_NEW Rectangle(480.0f*0.7, 360.0f*0.7, -768.0f + 1536.0f, -768.0f , "res/textures/mars.png", 8);
-	m_Layer2Rectangles[2] = DBG_NEW Rectangle(400.0f, 400.0f, -768.0f , -768.0f + 1536.0f , "res/textures/mercury-transparent.png", 8);
-	m_Layer2Rectangles[3] = DBG_NEW Rectangle(450.0f, 450.0f, -768.0f + 1536.0f , -768.0f + 1536.0f , "res/textures/venus-transparent.png", 8);
+	m_Layer2Rectangles[0] = new Rectangle(500.0f, 500.0f, -768.0f, -768.0f, "res/textures/jupiter-transparent.png", 8);
+	m_Layer2Rectangles[1] = new Rectangle(480.0f * 0.7f, 360.0f * 0.7f, -768.0f + 1536.0f, -768.0f, "res/textures/mars.png", 8);
+	m_Layer2Rectangles[2] = new Rectangle(400.0f, 400.0f, -768.0f, -768.0f + 1536.0f, "res/textures/mercury-transparent.png", 8);
+	m_Layer2Rectangles[3] = new Rectangle(450.0f, 450.0f, -768.0f + 1536.0f, -768.0f + 1536.0f, "res/textures/venus-transparent.png", 8);
 
-	
-	m_Layer3Rectangles[0] = DBG_NEW Rectangle(1314.0f*0.3f, 870.0f*0.3f, -0, -768.0f + 1536.0f, "res/textures/transparent-star-background-2.png", 7);
-	m_Layer3Rectangles[1] = DBG_NEW Rectangle(1314.0f*0.7f, 870.0f*0.6f, -768.0f, -768.0f + 1536.0f, "res/textures/transparent-star-background-2.png", 7);
-	m_Layer3Rectangles[2] = DBG_NEW Rectangle(1314.0f, 870.0f, -768.0f + 1236.0f, -200.0f, "res/textures/transparent-star-background-2.png", 7);
-	m_Layer3Rectangles[3] = DBG_NEW Rectangle(1314.0f*0.5f, 870.0f*0.5f, -700, 900, "res/textures/transparent-star-background-2.png", 7);
-		
+	m_Layer3Rectangles[0] = new Rectangle(1314.0f * 0.3f, 870.0f * 0.3f, -0, -768.0f + 1536.0f, "res/textures/transparent-star-background-2.png", 7);
+	m_Layer3Rectangles[1] = new Rectangle(1314.0f * 0.7f, 870.0f * 0.6f, -768.0f, -768.0f + 1536.0f, "res/textures/transparent-star-background-2.png", 7);
+	m_Layer3Rectangles[2] = new Rectangle(1314.0f, 870.0f, -768.0f + 1236.0f, -200.0f, "res/textures/transparent-star-background-2.png", 7);
+	m_Layer3Rectangles[3] = new Rectangle(1314.0f * 0.5f, 870.0f * 0.5f, -700, 900, "res/textures/transparent-star-background-2.png", 7);
 }
 
 void ParallaxBackground::MoveLayers(float deltaTime)
@@ -74,7 +72,7 @@ void ParallaxBackground::MoveLayer1(glm::vec2 moveAmount, float deltaTime)
 
 void ParallaxBackground::MoveLayer2(glm::vec2 moveAmount, float deltaTime)
 {
-	const glm::vec2 calculatedAmount = glm::vec2(moveAmount * m_Layer2SpeedMod) + glm::vec2(1,1) * (m_Layer2BaseSpeed*deltaTime);
+	const glm::vec2 calculatedAmount = glm::vec2(moveAmount * m_Layer2SpeedMod) + glm::vec2(1, 1) * (m_Layer2BaseSpeed * deltaTime);
 
 	for (auto& layer2Rectangle : m_Layer2Rectangles)
 	{

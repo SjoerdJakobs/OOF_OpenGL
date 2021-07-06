@@ -4,11 +4,9 @@
 #include "IndexBuffer.h"
 #include "Shader.h"
 
-
 /**
- * this is only still here for testing purposes 
+ * this is only still here for testing purposes
  */
-
 
 #define ASSERT(x) if(!(x)) __debugbreak();
 #define GL_CALL(x) GLClearError();\

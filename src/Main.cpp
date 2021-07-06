@@ -1,31 +1,22 @@
+//#include "AllocationMetricsTracker.h"
 #include "Game.h"
-
-int ScreenWidth = 1280;
-int ScreenHeight = 800;
-
-static void glfw_error_callback(int error, const char* description)
-{
-	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
-
-static void glfw_window_size_callback(GLFWwindow* m_pWindow, int width, int height) {
-	ScreenWidth = width;
-	ScreenHeight = height;
-
-	/* update any perspective matrices used here */
-}
+#include "AllocationMetrics.h"
 
 int main(int argc, char* argv[])
 {
 	//check for memory leaks
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	PrintMemoryUsage("at begin main");
 	srand(static_cast<unsigned int>(time(nullptr)));
-	
+
 	Game::CreateInstance();
+	PrintMemoryUsage("after create game instance");
 	Game* p_GameProgram = dynamic_cast<Game*>(Game::GetInstance());
+	PrintMemoryUsage("after get game instance");
 	p_GameProgram->ProgramStart();
+	PrintMemoryUsage("after program start(which has the program loop)");
 	Game::DeleteInstance();
-	exit(EXIT_SUCCESS);
-	//return 0;
+	PrintMemoryUsage("after delete game instance");
+	//exit(EXIT_SUCCESS);
+	return 0;
 }

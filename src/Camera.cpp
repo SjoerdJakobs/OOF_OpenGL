@@ -3,7 +3,7 @@
 #include "HandyMaths.h"
 
 Camera::Camera(int priority) :StandardObject(priority),
-                              m_Proj(glm::ortho(0.0f, static_cast<float>(m_pProgram->GetScreenWidth()), 0.0f, static_cast<float>(m_pProgram->GetScreenHeight()), -1.0f, 1.0f))
+m_Proj(glm::ortho(0.0f, static_cast<float>(m_pProgram->GetScreenWidth()), 0.0f, static_cast<float>(m_pProgram->GetScreenHeight()), -1.0f, 1.0f))
 {
 	Start();
 }
@@ -30,7 +30,7 @@ void Camera::Input(float deltaTime)
 
 void Camera::Update(float deltaTime)
 {
-	if(m_ScreenShakeDuration > 0)
+	if (m_ScreenShakeDuration > 0)
 	{
 		if (deltaTime > 0)
 		{
@@ -39,7 +39,7 @@ void Camera::Update(float deltaTime)
 			m_CameraPos.y += rand() % 10 + -5;
 		}
 	}
-	
+
 	m_CurrentDistance = HandyMaths::GetDistance(m_TargetPos, m_CameraPos);
 	m_LerpRenewTickCounter += deltaTime;
 

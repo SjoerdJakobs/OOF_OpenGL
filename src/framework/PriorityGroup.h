@@ -10,7 +10,7 @@ public:
 	{
 		m_StandardObjects.clear();
 	}
-	
+
 	unsigned int PriorityNr;
 	std::vector<StandardObject*> m_StandardObjects;
 	bool operator<(const PriorityGroup& group) const

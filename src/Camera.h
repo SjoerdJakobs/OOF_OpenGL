@@ -9,7 +9,7 @@ class Camera final : public StandardObject
 public:
 	static Camera& instance()
 	{
-		static Camera* p_instance = DBG_NEW Camera(1000);
+		static Camera* p_instance = new Camera(1000);
 		return *p_instance;
 	}
 
@@ -28,7 +28,7 @@ private:
 	float m_MaxDistance{ 500 };
 	float m_CurrentDistance{ 0 };
 
-	float m_ScreenShakeDuration;
+	float m_ScreenShakeDuration{0};
 
 	glm::vec2 m_TargetPos{ 0,0 };
 	glm::vec2 m_LastTargetPos{ 0,0 };
@@ -53,7 +53,7 @@ public:
 	void ScreenShake(float duration);
 
 	glm::vec2 GetCameraPos() const { return m_CameraPos; }
-	
+
 	glm::mat4 GetCameraView() const { return m_View; }
 	glm::mat4 GetCameraProj() const { return m_Proj; }
 };

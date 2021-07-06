@@ -1,8 +1,10 @@
 #include "Game.h"
 
+#include "ObjectsStressTestScene.h"
 #include "GameScene0.h"
 #include "MainMenuScene.h"
 #include "SceneManager.h"
+
 
 Game::Game() :Program()
 {
@@ -10,7 +12,6 @@ Game::Game() :Program()
 
 Game::~Game()
 {
-	
 }
 
 void Game::CreateInstance()
@@ -21,7 +22,7 @@ void Game::CreateInstance()
 	}
 	else
 	{
-		m_pInstance = DBG_NEW Game();
+		m_pInstance = new Game();
 	}
 }
 
@@ -36,13 +37,13 @@ void Game::DeleteInstance()
 	{
 		std::cout << "Singleton has already been deleted" << std::endl;
 	}
-	
 }
 
 void Game::AtProgramStart()
 {
-	AddScene(static_cast<Scene*>(DBG_NEW MainMenuScene()));
-	AddScene(static_cast<Scene*>(DBG_NEW GameScene0()));
+	AddScene(static_cast<Scene*>(new MainMenuScene()));
+	AddScene(static_cast<Scene*>(new ObjectsStressTestScene()));
+	AddScene(static_cast<Scene*>(new GameScene0()));
 }
 
 void Game::AddToProgramLoopBegin()
@@ -51,5 +52,4 @@ void Game::AddToProgramLoopBegin()
 
 void Game::OnProgramEnd()
 {
-	
 }

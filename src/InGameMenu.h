@@ -10,7 +10,7 @@ private:
 	bool m_ShowMenu;
 	bool m_HasPressedESC;
 	float m_TimeScaleWhenPaused = 0;
-	
+
 	ImGuiIO& m_rIO = ImGui::GetIO();
 	ImFont* m_pMenuFont = m_rIO.Fonts->Fonts[1];
 	ImGuiWindowFlags m_WindowFlags = 0;
@@ -53,8 +53,8 @@ private:
 	const float m_ExitButtonXPos = m_WindowWidth / 2.0f - m_ExitButtonHalfWidth;
 	const float m_ExitButtonYPos = m_OptionsButtonYPos + m_OptionsButtonHeight + m_ButtonDistancePos;
 
-	const float m_MenuWidth = m_QuitButtonWidth+ m_ButtonDistancePos;
-	const float m_MenuHeight = m_ResumeButtonHeight+ m_QuitButtonHeight + m_OptionsButtonHeight + m_ExitButtonHeight + m_ButtonDistancePos*2-3;
+	const float m_MenuWidth = m_QuitButtonWidth + m_ButtonDistancePos;
+	const float m_MenuHeight = m_ResumeButtonHeight + m_QuitButtonHeight + m_OptionsButtonHeight + m_ExitButtonHeight + m_ButtonDistancePos * 2 - 3;
 
 protected:
 	void Start() override;
@@ -67,5 +67,3 @@ public:
 	InGameMenu();
 	~InGameMenu() override;
 };
-
-

@@ -42,7 +42,7 @@ void PickupManager::Render(float deltaTime)
 	for (auto& coinRectangle : m_CoinRectangles)
 	{
 		SpriteSheetFramePicker picker;
-		picker.PickFrameHorizontalDownUp(6, 8,m_FrameCountCoins, coinRectangle);
+		picker.PickFrameHorizontalDownUp(6, 8, m_FrameCountCoins, coinRectangle);
 	}
 	for (auto& bombRectangle : m_BombRectangles)
 	{
@@ -53,13 +53,17 @@ void PickupManager::Render(float deltaTime)
 		if (m_BombIsExploding[i])
 		{
 			SpriteSheetFramePicker picker;
-			picker.PickFrameHorizontalDownUp(5, 5, m_FrameCountExplosion[i], m_ExplosionRectangles[i]);			
+			picker.PickFrameHorizontalDownUp(5, 5, m_FrameCountExplosion[i], m_ExplosionRectangles[i]);
 		}
 	}
 }
 
 void PickupManager::UpdateObstacles(float deltaTime)
 {
+	for (int i = 0; i < m_BombAmount; ++i)
+	{
+		m_BombRectangles[i]->AddToPos(normalize(glm::vec2(m_pPlayer->GetPlayerPos()-m_BombRectangles[i]->GetPos()))*(1000*deltaTime));
+	}
 	m_CoinFrameTimer += deltaTime;
 	if (m_CoinFrameTimer >= m_TimeUntilNextCoinFrame)
 	{
@@ -75,10 +79,10 @@ void PickupManager::UpdateObstacles(float deltaTime)
 	{
 		m_FrameCountCoins = m_EndFrameCoins;
 	}
-	
+
 	for (int i = 0; i < m_BombAmount; ++i)
 	{
-		if(m_BombIsExploding[i])
+		if (m_BombIsExploding[i])
 		{
 			m_ExplosionFrameTimers[i] += deltaTime;
 			if (m_ExplosionFrameTimers[i] >= m_TimeUntilNextExplosionFrame)
@@ -102,19 +106,18 @@ void PickupManager::UpdateObstacles(float deltaTime)
 		}
 	}
 
-	
 	for (int i = 0; i < m_CoinAmount; ++i)
 	{
 		if (HandyMaths::GetDistance(m_pPlayer->GetPlayerPos(), m_CoinRectangles[i]->GetPos()) < 50)
 		{
 			m_pPlayer->SetScore((m_pPlayer->GetScore() + 1));
 			//m_pCamera->ScreenShake(0.3f);
-			m_CoinRectangles[i]->SetXPos((rand() % 740) + -370);
+			m_CoinRectangles[i]->SetXPos((rand() % 740) + -370.0f);
 			m_CoinRectangles[i]->SetYPos((rand() % 3000) + (1000 + m_pPlayer->GetPlayerPos().y));
 		}
 		else if (m_pPlayer->GetPlayerPos().y - m_CoinRectangles[i]->GetYPos() > 2000)
 		{
-			m_CoinRectangles[i]->SetXPos((rand() % 740) + -370);
+			m_CoinRectangles[i]->SetXPos((rand() % 740) + -370.0f);
 			m_CoinRectangles[i]->SetYPos((rand() % 3000) + (1000 + m_pPlayer->GetPlayerPos().y));
 		}
 	}
@@ -126,12 +129,12 @@ void PickupManager::UpdateObstacles(float deltaTime)
 			m_BombIsExploding[i] = true;
 			m_ExplosionRectangles[i]->SetPos(m_BombRectangles[i]->GetPos());
 			m_FrameCountExplosion[i] = 24;
-			m_BombRectangles[i]->SetXPos((rand() % 740) + -370);
+			m_BombRectangles[i]->SetXPos((rand() % 740) + -370.0f);
 			m_BombRectangles[i]->SetYPos((rand() % 3000) + (1000 + m_pPlayer->GetPlayerPos().y));
 		}
 		else if (m_pPlayer->GetPlayerPos().y - m_CoinRectangles[i]->GetYPos() > 2000)
 		{
-			m_BombRectangles[i]->SetXPos((rand() % 740) + -370);
+			m_BombRectangles[i]->SetXPos((rand() % 740) + -370.0f);
 			m_BombRectangles[i]->SetYPos((rand() % 3000) + (1000 + m_pPlayer->GetPlayerPos().y));
 		}
 	}
@@ -141,27 +144,27 @@ void PickupManager::SpawnObjects()
 {
 	for (int i = 0; i < 8; ++i)
 	{
-		m_CoinRectangles[i] = DBG_NEW Rectangle(63, 63, 300, 0 + 130 * i, "res/textures/coins2.png", 5);
+		m_CoinRectangles[i] = new Rectangle(63, 63, 300, 0.0f + 130.0f * static_cast<float>(i), "res/textures/coins2.png", 5);
 	}
 	for (int i = 0; i < 8; ++i)
 	{
-		m_BombRectangles[i] = DBG_NEW Rectangle(50, 57, -300, 0+130*i, "res/textures/bomb.png", 4);
+		m_BombRectangles[i] = new Rectangle(50, 57, -300, 0.0f + 130.0f * static_cast<float>(i), "res/textures/bomb.png", 4);
 	}
 	for (int i = 0; i < 8; ++i)
 	{
-		m_ExplosionRectangles[i] = DBG_NEW Rectangle(129, 125, -3000, 0, "res/textures/explosion2.png", 3);
+		m_ExplosionRectangles[i] = new Rectangle(129, 125, -3000, 0, "res/textures/explosion2.png", 3);
 	}
 }
 
-PickupManager::PickupManager(): StandardObject(false, true, false, true, false, false, true,
-		920, 920, 920, 920)
+PickupManager::PickupManager() : StandardObject(false, true, false, true, false, true,
+	920, 920, 1020, 920)
 {
 	m_pCamera = &Camera::instance();
 }
 
 PickupManager::~PickupManager() = default;
 
-void PickupManager::GivePlayerPointer(Player* p_player)
+void PickupManager::GivePlayerPointer(Player * p_player)
 {
 	m_pPlayer = p_player;
 }

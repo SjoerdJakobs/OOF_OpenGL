@@ -3,7 +3,7 @@
 
 void MainMenuScene::OnStart()
 {
-	AddObjectToScene(static_cast<StandardObject*>(DBG_NEW MainMenu()));
+	AddObjectToScene(static_cast<StandardObject*>(new MainMenu()));
 }
 
 void MainMenuScene::OnStop()

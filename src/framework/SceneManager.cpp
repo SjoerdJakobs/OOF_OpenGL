@@ -1,4 +1,6 @@
 #include "SceneManager.h"
+
+#include "Program.h"
 #include "Scene.h"
 
 SceneManager::SceneManager()
@@ -32,6 +34,8 @@ void SceneManager::SwitchToScene(SceneNames sceneName)
 			break;
 		}
 	}
+	
+	Program::GetInstance()->SetShouldCleanUpGroups(true);
 	m_pCurrentScene->Start();
 }
 
@@ -52,7 +56,7 @@ void SceneManager::UpdateScene()const
 
 void SceneManager::CleanUp()
 {
-	for (int i = 0; i < m_AllScenes.size(); i++)
+	for (unsigned int i = 0; i < m_AllScenes.size(); i++)
 	{
 		m_AllScenes[i]->Stop();
 		delete m_AllScenes[i];

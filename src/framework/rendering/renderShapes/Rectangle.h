@@ -18,7 +18,7 @@ public:
 
 	~Rectangle();
 	void CleanUp();
-	
+
 	void Draw() const;
 	void DrawWithColor();
 	void DrawWithTexture();
@@ -34,11 +34,12 @@ private:
 	glm::vec2	m_Pos;
 	float m_Color[4];
 
-	VertexArray*	m_pVAO;
-	VertexBuffer*	m_pVertexBuffer;
-	IndexBuffer*	m_pIndexBuffer;
-	Shader*			m_pShader;
-	Texture*		m_pTexture;
+	VertexArray* m_pVAO;
+	VertexBuffer* m_pVertexBuffer;
+	IndexBuffer* m_pIndexBuffer;
+	Shader* m_pShader;
+	Texture* m_pTexture;
+	VertexBufferLayout* m_pLayout;
 
 	void ConstructWithTexture(float xStart = 0.0f, float xEnd = 1.0f, float yStart = 0.0f, float yEnd = 1.0f);
 	void ConstructWithColor();

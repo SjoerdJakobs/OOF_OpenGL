@@ -25,15 +25,13 @@ public:
 	}
 	//****************************
 
-	
 	static float Lerp(float a, float b, float f)
 	{
 		return (a * (1.0f - f)) + (b * f);
 	}
-	
+
 	static float GetDistance(glm::vec2 vector1, glm::vec2 vector2)
 	{
 		return(sqrtf(powf(fabsf(vector1.x - vector2.x), 2) + powf(fabsf(vector1.y - vector2.y), 2)));
 	}
 };
-

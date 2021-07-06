@@ -17,7 +17,7 @@ void ExampleProgram::CreateInstance()
 	}
 	else
 	{
-		m_pInstance = DBG_NEW ExampleProgram();
+		m_pInstance = new ExampleProgram();
 	}
 }
 
@@ -28,7 +28,7 @@ void ExampleProgram::func()
 	for (int i = 0; i < 2000000; ++i)
 	{
 		//DBG_NEW ExampleObject((rand() % 2000) + 1000);
-		DBG_NEW ExampleObject(1000);
+		new ExampleObject(1000);
 	}
 	std::cout << "stop \n";
 }

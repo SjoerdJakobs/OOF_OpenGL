@@ -9,7 +9,7 @@ protected:
 	StandardObject();
 	StandardObject(int priority);
 	StandardObject(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer,
-		bool usesImGui, bool usesDebugRenderer, bool startsActivated, int inputPriority, int updatePriority, int renderPriority,
+		bool usesImGui, bool startsActivated, int inputPriority, int updatePriority, int renderPriority,
 		int imGuiPriority);
 
 	unsigned int m_Id;
@@ -26,7 +26,6 @@ protected:
 	bool m_UsesUpdate;          //tells if this object use the update loop
 	bool m_UsesFixedUpdate;     //tells if this object use the fixedUpdate loop
 	bool m_UsesRenderer;        //tells if this object use the render loop
-	bool m_UsesDebugRenderer;   //tells if this object use the debugRender loop
 	bool m_UsesImGui;           //tells if this object use the ImGui loop
 
 	unsigned int m_InputPriority;       //lower goes first, the object created first goes first if priority numbers are the same
@@ -75,9 +74,7 @@ protected:
 	virtual void Render(float deltaTime);
 
 	virtual void ImGuiRender(float deltaTime);
-
-	virtual void DebugRender(float deltaTime);
-
+	
 	/**
 	 * this is called when the object gets destroyed
 	 */
@@ -90,7 +87,7 @@ public:
 	void Destroy();
 
 	void Activate();
-	void Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer,
+	void Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui,
 		int inputPriority = 1000, int updatePriority = 1000, int renderPriority = 1000, int imGuiPriority = 1000);
 	void DeActivate();
 
@@ -106,7 +103,6 @@ public:
 	bool GetUsesUpdate()         const { return m_UsesUpdate; }
 	bool GetUsesFixedUpdate()    const { return m_UsesFixedUpdate; }
 	bool GetUsesRenderer()       const { return m_UsesRenderer; }
-	bool GetUsesDebugRenderer()  const { return m_UsesDebugRenderer; }
 	bool GetUsesImGui()          const { return m_UsesImGui; }
 
 	unsigned int GetInputPriority()         const { return m_InputPriority; }        //lower goes first, the object created first goes first if priority numbers are the same

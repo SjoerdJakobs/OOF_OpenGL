@@ -5,7 +5,7 @@
 
 StandardObject::StandardObject() :
 	m_pProgram(Program::GetInstance()), m_UsesInput(true), m_UsesUpdate(true), m_UsesFixedUpdate(true), m_UsesRenderer(true),
-	m_UsesDebugRenderer(true), m_UsesImGui(true), m_InputPriority(1000), m_UpdatePriority(1000),
+	m_UsesImGui(true), m_InputPriority(1000), m_UpdatePriority(1000),
 	m_RenderPriority(1000), m_ImGuiPriority(1000), m_ShouldBeActive(true), m_IsActiveState(true), m_Id(reinterpret_cast<unsigned int>(this))
 {
 	//Start();
@@ -15,7 +15,7 @@ StandardObject::StandardObject() :
 
 StandardObject::StandardObject(int priority) :
 	m_pProgram(Program::GetInstance()), m_UsesInput(true), m_UsesUpdate(true), m_UsesFixedUpdate(true), m_UsesRenderer(true),
-	m_UsesDebugRenderer(true), m_UsesImGui(true), m_InputPriority(priority), m_UpdatePriority(priority),
+	m_UsesImGui(true), m_InputPriority(priority), m_UpdatePriority(priority),
 	m_RenderPriority(priority), m_ImGuiPriority(priority), m_ShouldBeActive(true), m_IsActiveState(true), m_Id(reinterpret_cast<unsigned int>(this))
 {
 	//Start();
@@ -23,10 +23,10 @@ StandardObject::StandardObject(int priority) :
 	AddToLists();
 }
 StandardObject::StandardObject
-(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui, bool usesDebugRenderer, bool startsActivated = true,
+(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui , bool startsActivated = true,
 	int inputPriority = 1000, int updatePriority = 1000, int renderPriority = 1000, int imGuiPriority = 1000) :
 	m_pProgram(Program::GetInstance()), m_UsesInput(usesInput), m_UsesUpdate(usesUpdate), m_UsesFixedUpdate(usesFixedUpdate),
-	m_UsesRenderer(usesRenderer), m_UsesDebugRenderer(usesDebugRenderer), m_UsesImGui(usesImGui), m_InputPriority(inputPriority),
+	m_UsesRenderer(usesRenderer), m_UsesImGui(usesImGui), m_InputPriority(inputPriority),
 	m_UpdatePriority(updatePriority), m_RenderPriority(renderPriority), m_ImGuiPriority(imGuiPriority), m_ShouldBeActive(startsActivated),
 	m_IsActiveState(startsActivated), m_Id(reinterpret_cast<unsigned int>(this))
 {
@@ -37,7 +37,6 @@ StandardObject::StandardObject
 	}
 }
 
-
 void StandardObject::Destroy()
 {
 	m_ShouldDestruct = true;
@@ -46,7 +45,6 @@ void StandardObject::Destroy()
 	m_UsesFixedUpdate = false;
 	m_UsesRenderer = false;
 	m_UsesImGui = false;
-	m_UsesDebugRenderer = false;
 	m_pProgram->RemoveFromAllLists();
 	m_pProgram->RemoveFromObjectsList();
 	if (m_IsInAScene)
@@ -62,7 +60,7 @@ void StandardObject::Activate()
 }
 
 void StandardObject::Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui,
-	bool usesDebugRenderer, int inputPriority, int updatePriority, int renderPriority, int imGuiPriority)
+	 int inputPriority, int updatePriority, int renderPriority, int imGuiPriority)
 {
 	m_InputPriority = inputPriority;
 	m_UpdatePriority = updatePriority;
@@ -73,7 +71,6 @@ void StandardObject::Activate(bool usesInput, bool usesUpdate, bool usesRenderer
 	m_UsesFixedUpdate = false;
 	m_UsesRenderer = usesRenderer;
 	m_UsesImGui = usesImGui;
-	m_UsesDebugRenderer = usesDebugRenderer;
 	AddToLists();
 }
 
@@ -84,13 +81,11 @@ void StandardObject::DeActivate()
 	m_UsesFixedUpdate = false;
 	m_UsesRenderer = false;
 	m_UsesImGui = false;
-	m_UsesDebugRenderer = false;
 	m_pProgram->RemoveFromAllLists();
 }
 
 StandardObject::~StandardObject()
 {
-	
 }
 
 void StandardObject::Input(float deltaTime)
@@ -109,13 +104,9 @@ void StandardObject::ImGuiRender(float deltaTime)
 {
 }
 
-void StandardObject::DebugRender(float deltaTime)
-{
-}
-
 void StandardObject::AddToLists()
 {
-	if (m_UsesInput && m_UsesUpdate && m_UsesFixedUpdate && m_UsesRenderer && m_UsesImGui && m_UsesDebugRenderer)
+	if (m_UsesInput && m_UsesUpdate && m_UsesFixedUpdate && m_UsesRenderer && m_UsesImGui)
 	{
 		m_pProgram->AddToAllLists(this);
 		return;
@@ -145,16 +136,11 @@ void StandardObject::AddToLists()
 	{
 		m_pProgram->AddToList(this, LoopType::imGuiRender);
 	}
-
-	if (m_UsesDebugRenderer)
-	{
-		m_pProgram->AddToList(this, LoopType::debugRender);
-	}
 }
 
 void StandardObject::RemoveFromLists()
 {
-	if (!m_UsesInput && !m_UsesUpdate && !m_UsesFixedUpdate && !m_UsesRenderer && !m_UsesImGui && !m_UsesDebugRenderer)
+	if (!m_UsesInput && !m_UsesUpdate && !m_UsesFixedUpdate && !m_UsesRenderer && !m_UsesImGui)
 	{
 		m_pProgram->RemoveFromAllLists();
 		return;
@@ -178,9 +164,5 @@ void StandardObject::RemoveFromLists()
 	if (!m_UsesImGui)
 	{
 		m_pProgram->RemoveFromList(LoopType::imGuiRender);
-	}
-	if (!m_UsesDebugRenderer)
-	{
-		m_pProgram->RemoveFromList(LoopType::debugRender);
 	}
 }

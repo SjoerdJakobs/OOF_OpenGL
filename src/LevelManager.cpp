@@ -4,8 +4,8 @@
 #include "Rectangle.h"
 
 LevelManager::LevelManager()
-	: StandardObject(false, true,false,true,false,false,true,
-					910, 910, 910, 910)
+	: StandardObject(false, true, false, true, false,  true,
+		910, 910, 910, 910)
 {
 	m_pCamera = &Camera::instance();
 }
@@ -33,7 +33,6 @@ void LevelManager::OnDestroy()
 
 LevelManager::~LevelManager()
 {
-	
 }
 
 void LevelManager::Update(float deltaTime)
@@ -54,7 +53,7 @@ void LevelManager::SpawnObjects()
 {
 	for (int i = 0; i < 2; ++i)
 	{
-		m_GroundRectangles[i] = DBG_NEW Rectangle(795.0f, 1000.0f, 0, 400.0f+ 1000.0f * static_cast<float>(i), "res/textures/ground.png", 0);		
+		m_GroundRectangles[i] = new Rectangle(795.0f, 1000.0f, 0, 400.0f + 1000.0f * static_cast<float>(i), "res/textures/ground.png", 0);
 	}
 }
 
@@ -66,7 +65,7 @@ void LevelManager::MoveGround()
 		{
 			groundRectangle->AddToYPos(1000.0f * 2);
 		}
-		else if (groundRectangle->GetYPos() - m_pCamera->GetCameraPos().y > 1400&&m_pPlayer->GetPlayerPos().y>500)
+		else if (groundRectangle->GetYPos() - m_pCamera->GetCameraPos().y > 1400 && m_pPlayer->GetPlayerPos().y > 500)
 		{
 			groundRectangle->AddToYPos(-1000.0f * 2);
 		}
@@ -76,17 +75,17 @@ void LevelManager::MoveGround()
 //this will be replaced with actual collision eventually, for now this will do the job and hopefully no one sees its all fake
 void LevelManager::ContainPlayer() const
 {
-	if(m_pPlayer->GetPlayerPos().x > 370)
+	if (m_pPlayer->GetPlayerPos().x > 370)
 	{
 		m_pPlayer->SetPlayerPos(glm::vec2(370, m_pPlayer->GetPlayerPos().y));
 	}
-	else if(m_pPlayer->GetPlayerPos().x < -370)
+	else if (m_pPlayer->GetPlayerPos().x < -370)
 	{
 		m_pPlayer->SetPlayerPos(glm::vec2(-370, m_pPlayer->GetPlayerPos().y));
 	}
 	if (m_pPlayer->GetPlayerPos().y < -45)
 	{
-		m_pPlayer->SetPlayerPos(glm::vec2(m_pPlayer->GetPlayerPos().x ,-45));
+		m_pPlayer->SetPlayerPos(glm::vec2(m_pPlayer->GetPlayerPos().x, -45));
 	}
 }
 

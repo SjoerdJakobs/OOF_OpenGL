@@ -21,18 +21,18 @@ private:
 
 	void ChooseRightAnimationFrame();
 
-	float m_Health{5};
-	float m_HealthRegen{0};
+	float m_Health{ 5 };
+	float m_HealthRegen{ 0 };
 
-	float m_MovementSpeed{300};
-	float m_MovementBoost{300};
-	float m_SpecialCooldown{4};
+	float m_MovementSpeed{ 300 };
+	float m_MovementBoost{ 300 };
+	float m_SpecialCooldown{ 4 };
 	int m_Score{ 0 };
-	int m_MaxSpecialsReady{1};
-	int m_SpecialsReady{1};
+	int m_MaxSpecialsReady{ 1 };
+	int m_SpecialsReady{ 1 };
 
-	bool m_IsMoving{false};
-	bool m_WasMoving{true};
+	bool m_IsMoving{ false };
+	bool m_WasMoving{ true };
 	int m_Direction{ 1 };
 	int m_LastDirection{ 0 };
 	int m_FrameCount{ 0 };
@@ -67,7 +67,7 @@ public:
 
 	int GetScore() { return m_Score; };
 	void SetScore(int newScore) { m_Score = newScore; }
-	
+
 	glm::vec2 GetPlayerPos() { return m_PlayerPos; }
 	void SetPlayerPos(glm::vec2 newPos) { m_PlayerPos = newPos; }
 };

@@ -1,22 +1,24 @@
 #pragma once
 // debug_new.cpp
 // compile by using: cl /EHsc /W4 /D_DEBUG /MDd debug_new.cpp
-#define _CRTDBG_MAP_ALLOC
-#include <cstdlib>
-#include <crtdbg.h>
-
-#ifdef _DEBUG
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
-// allocations to be of _CLIENT_BLOCK type
-#else
-#define DBG_NEW new
-#endif
+//#define _CRTDBG_MAP_ALLOC
+//#include <cstdlib>
+//#include <crtdbg.h>
+//
+//#ifdef _DEBUG
+//#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+//// allocations to be of _CLIENT_BLOCK type
+//#else
+//#define DBG_NEW new
+//#endif
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <vld.h>
 
 #include <memory>
+
 #include <vector>
 #include <list>
 #include <algorithm>
@@ -49,7 +51,7 @@ public:
 	static Program* GetInstance();
 	static bool Exists();
 	void ProgramStart();
-	virtual ~Program();
+	virtual ~Program() = default;
 
 protected:
 	static Program* m_pInstance;
@@ -65,16 +67,19 @@ protected:
 	GLsizei m_ScreenWidth = 1280;
 	GLsizei m_ScreenHeight = 800;
 
-	GLFWwindow*   m_pWindow;
+	GLFWwindow* m_pWindow;
 	SceneManager* m_pSceneManager;
 
 private:
 
+	bool m_ShouldCleanGroups{false};	
+	void CleanupEmptyGroups();
 	void CleanUp();
 
 	void Run();
-	void AddStandardObjectsMarkedForAdding();
-	void AddToPrioritygroup(LoopType type, unsigned int priorityNr, std::list<StandardObject*> objectsForInsert);
+	void CheckStandardObjectsMarkedForAdding();
+	void AddStandardObjectsMarkedForAdding(std::list<StandardObject*>& p_ObjectsToBeAdded, std::vector<PriorityGroup*>& p_ObjectGroupsToBeAddedTo, bool& ShouldAddToListBool);
+	void AddToPrioritygroup(std::vector<PriorityGroup*>& p_ObjectGroups, unsigned int priorityNr, std::list<StandardObject*>& objectsForInsert);
 
 	const float m_MaxElapsedSeconds{ 0.1f };
 	const float m_FixedTimeStep{ 1.0f / 60.0f };
@@ -147,6 +152,7 @@ public:
 	void SetRunProgram(bool b) { m_RunProgram = b; atomic_RunProgram = b; }
 	void SetPaused(bool b) { m_IsPaused = b; atomic_IsPaused = b; }
 	void SetTruePaused(bool b) { m_IsTruePaused = b; atomic_IsTruePaused = b; }
+	void SetShouldCleanUpGroups(bool b) { m_ShouldCleanGroups = b; }
 
 	float GetDeltaTime() const { return m_DeltaTime; }
 	float GetTimeScale() const { return m_TimeScale; }

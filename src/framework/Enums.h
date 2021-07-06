@@ -5,7 +5,8 @@ enum class SceneNames
 	MainMenu = 0,
 	HowToPlay = 1,
 	Options = 2,
-	Scene1 = 3
+	Scene1 = 3,
+	ObjectTestScene = 4
 };
 
 enum class LoopType
@@ -14,6 +15,5 @@ enum class LoopType
 	update = 1,
 	fixedUpdate = 2,
 	render = 3,
-	imGuiRender = 4,
-	debugRender = 5
+	imGuiRender = 4
 };

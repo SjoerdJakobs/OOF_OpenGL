@@ -23,13 +23,12 @@ private:
 	void ContainPlayer() const;
 
 	Rectangle* m_GroundRectangles[2] = {};
-	
-	Camera*	   m_pCamera = nullptr;
-	Player*    m_pPlayer = nullptr;
+
+	Camera* m_pCamera = nullptr;
+	Player* m_pPlayer = nullptr;
 
 public:
 	~LevelManager() override;
 	void GivePlayerPointer(Player* p_player);
 protected:
 };
-

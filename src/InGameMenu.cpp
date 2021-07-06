@@ -41,7 +41,7 @@ void InGameMenu::Input(float deltaTime)
 	}
 	else
 	{
-		m_HasPressedESC = false;		
+		m_HasPressedESC = false;
 	}
 }
 
@@ -49,23 +49,23 @@ void InGameMenu::ImGuiRender(float deltaTime)
 {
 	if (m_ShowMenu)
 	{
-		ImGui::PushStyleColor(ImGuiCol_Button,			(ImVec4)ImColor::HSV(0.05f, 0.6f, 0.6f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered,	(ImVec4)ImColor::HSV(0.05f, 0.7f, 0.7f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonActive,		(ImVec4)ImColor::HSV(0.05f, 0.8f, 0.8f));
-		
+		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.05f, 0.6f, 0.6f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.05f, 0.7f, 0.7f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.05f, 0.8f, 0.8f));
+
 		ImGui::PushFont(m_pMenuFont);
 
 		ImGui::SetNextWindowPos(ImVec2(m_ResumeButtonXPos, m_ResumeButtonYPos), ImGuiCond_Once);
 		ImGui::SetNextWindowSize(ImVec2(m_MenuWidth, m_MenuHeight), ImGuiCond_Once);
-		
+
 		ImGui::Begin("InGameMenuWindow", nullptr, m_WindowFlags);
-		
+
 		if (ImGui::Button("RESUME", ImVec2(m_ResumeButtonWidth, m_ResumeButtonHeight)))
 		{
 			m_ShowMenu = !m_ShowMenu;
 			m_pProgram->SetTimeScale(m_TimeScaleWhenPaused);
 		}
-		
+
 		if (ImGui::Button("MAIN MENU", ImVec2(m_QuitButtonWidth, m_QuitButtonHeight)))
 		{
 			m_ShowMenu = !m_ShowMenu;
@@ -95,13 +95,12 @@ void InGameMenu::OnDestroy()
 }
 
 InGameMenu::InGameMenu() :
-StandardObject(true, false, false, false, true, false, true,
-			1000, 1000, 1000, 1000),
-m_ShowMenu(false), m_HasPressedESC(false)
+	StandardObject(true, false, false, false, true, false,
+		1000, 1000, 1000, 1000),
+	m_ShowMenu(false), m_HasPressedESC(false)
 {
 }
 
 InGameMenu::~InGameMenu()
 {
-	
 }
