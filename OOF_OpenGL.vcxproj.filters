@@ -138,7 +138,7 @@
     <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\framework\audio\AudioEngine.cpp">
+    <ClCompile Include="src\framework\physics\CollisionFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1534,7 +1534,7 @@
     <ClInclude Include="src\examplesAndTesting\ExampleProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\framework\audio\AudioEngine.h">
+    <ClInclude Include="src\framework\physics\CollisionFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

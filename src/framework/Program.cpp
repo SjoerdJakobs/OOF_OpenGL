@@ -105,6 +105,7 @@ void Program::Run()
 		m_RunProgram = false;
 	}
 
+
 	/* Make the m_pWindow's context current */
 	glfwMakeContextCurrent(m_pWindow);
 
@@ -148,7 +149,6 @@ void Program::Run()
 
 		this->AtProgramStart();
 		m_pSceneManager->Start();
-
 		// Set start time
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
 		while (!glfwWindowShouldClose(m_pWindow) && m_RunProgram)
