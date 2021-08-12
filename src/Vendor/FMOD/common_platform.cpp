@@ -27,12 +27,12 @@ void (*Common_Private_Update)(unsigned int*);
 void (*Common_Private_Print)(const char*);
 void (*Common_Private_Close)();
 
-int main(int argc, char** argv)
-{
-    Common_Private_Argc = argc;
-    Common_Private_Argv = argv;
-    return FMOD_Main();
-}
+//int main(int argc, char** argv)
+//{
+//    Common_Private_Argc = argc;
+//    Common_Private_Argv = argv;
+//    return FMOD_Main();
+//}
 
 void Common_Init(void** /*extraDriverData*/)
 {
@@ -178,6 +178,7 @@ void Common_DrawText(const char *text)
 void Common_LoadFileMemory(const char *name, void **buff, int *length)
 {
     FILE *file = NULL;
+#pragma warning(suppress : 4996)
     file = fopen(name, "rb");
     
     fseek(file, 0, SEEK_END);
@@ -235,6 +236,7 @@ const char *Common_MediaPath(const char *fileName)
     {
         const char *emptyPrefix = "";
         const char *mediaPrefix = "../media/";
+#pragma warning(suppress : 4996)
         FILE *file = fopen(fileName, "r");
         if (file)
         {
@@ -246,8 +248,9 @@ const char *Common_MediaPath(const char *fileName)
             pathPrefix = mediaPrefix;
         }
     }
-
+#pragma warning(suppress : 4996)   
     strcat(filePath, pathPrefix);
+#pragma warning(suppress : 4996)   
     strcat(filePath, fileName);
 
     gPathList.push_back(filePath);
@@ -266,6 +269,7 @@ void Common_TTY(const char *format, ...)
 
     va_list args;
     va_start(args, format);
+#pragma warning(suppress : 4996)
     Common_vsnprintf(string, 1023, format, args);
     va_end(args);
 

@@ -15,8 +15,9 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#ifdef _DEBUG
 #include <vld.h>
-
+#endif
 #include <memory>
 
 #include <vector>

@@ -74,11 +74,11 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files (x86)\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files (x86)\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,21 +92,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)src\Vendor\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)src\Vendor\FMOD\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\FMOD\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;fmod$(Suffix)_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist ..\bin mkdir ..\bin
-copy /Y "$(TargetPath)" ..\bin
-copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" ..\bin
-copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)Dependencies\FMOD\lib\x86\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>
@@ -121,7 +118,7 @@ copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)src\Vendor\FMOD\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -130,14 +127,11 @@ copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib\Release\Win32;$(SolutionDir)Dependencies\GLFW\lib-vc2019;$(SolutionDir)Dependencies\FMOD\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;glew32s.lib;fmod$(Suffix)_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist ..\bin mkdir ..\bin
-copy /Y "$(TargetPath)" ..\bin
-copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" ..\bin
-copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)"</Command>
+      <Command>xcopy /y /d "$(SolutionDir)Dependencies\FMOD\lib\x86\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>
@@ -207,6 +201,8 @@ copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)
     <ClCompile Include="src\framework\rendering\IndexBuffer.cpp" />
     <ClCompile Include="src\framework\rendering\Renderer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Vendor\FMOD\common.cpp" />
+    <ClCompile Include="src\Vendor\FMOD\common_platform.cpp" />
     <ClCompile Include="src\Vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\Vendor\imgui\imgui_demo.cpp" />
@@ -394,6 +390,8 @@ copy /Y "$(SolutionDir)src\Vendor\FMOD\lib\$(Arch)\fmod$(Suffix).dll" "$(OutDir)
     <ClInclude Include="src\framework\rendering\Shader.h" />
     <ClInclude Include="src\framework\rendering\IndexBuffer.h" />
     <ClInclude Include="src\framework\rendering\Renderer.h" />
+    <ClInclude Include="src\Vendor\FMOD\common.h" />
+    <ClInclude Include="src\Vendor\FMOD\common_platform.h" />
     <ClInclude Include="src\Vendor\glm\common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\Vendor\glm\detail\compute_vector_relational.hpp" />

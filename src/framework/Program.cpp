@@ -1,6 +1,7 @@
 #include "Program.h"
 
 #include "AllocationMetrics.h"
+#include "fmod.hpp"
 #include "StandardObject.h"
 #include "PriorityGroup.h"
 #include "SceneManager.h"
@@ -121,6 +122,41 @@ void Program::Run()
 	{
 		std::cout << glGetString(GL_VERSION) << std::endl;
 	}
+
+	//***************************************************
+	//Sound
+	//***************************************************
+	FMOD::System* system;
+	FMOD::Sound* sound1, * sound2, * sound3;
+	FMOD::Channel* channel = 0;
+	FMOD_RESULT       result;
+	unsigned int      version;
+	void* extradriverdata = 0;
+
+
+	/*
+		Create a System object and initialize
+	*/
+	result = FMOD::System_Create(&system);
+
+	result = system->getVersion(&version);
+
+	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
+
+	result = system->createSound("res/media/drumloop.wav", FMOD_DEFAULT, 0, &sound1);
+
+	result = sound1->setMode(FMOD_LOOP_OFF);    /* drumloop.wav has embedded loop points which automatically makes looping turn on, */                         
+												/* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
+
+	result = system->createSound("res/media/jaguar.wav", FMOD_DEFAULT, 0, &sound2);
+
+	result = system->createSound("res/media/swish.wav", FMOD_DEFAULT, 0, &sound3);
+
+	//***************************************************
+	//Sound
+	//***************************************************
+
+
 
 	{
 		GL_CALL(glEnable(GL_BLEND));
@@ -279,11 +315,42 @@ void Program::Run()
 			{
 				m_pSceneManager->SwitchToScene(SceneNames::MainMenu);
 			}
+
+			//***************************************************
+			//Sound
+			//***************************************************
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_1)) {
+
+				result = system->playSound(sound1, 0, false, &channel);
+			}
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_2)) {
+
+				result = system->playSound(sound2, 0, false, &channel);
+			}
+			if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_3)) {
+
+				result = system->playSound(sound3, 0, false, &channel);
+			}
+
+			result = system->update();
+
+
+
+			//***************************************************
+			//Sound
+			//***************************************************
+
 			/*if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE)) {
-				glfwSetWindowShouldClose(m_pWindow, 1);w
+				glfwSetWindowShouldClose(m_pWindow, 1);
 			}*/
 		}
 	}
+
+	result = sound1->release();
+	result = sound2->release();
+	result = sound3->release();
+	result = system->close();
+	result = system->release();
 
 	CleanUp();
 	//exit(EXIT_SUCCESS);

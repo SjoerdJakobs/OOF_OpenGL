@@ -23,6 +23,7 @@ void Common_Format(char *buffer, int bufferSize, const char *formatString...)
 {
     va_list args;
     va_start(args, formatString);
+#pragma warning(suppress : 4996)
     Common_vsnprintf(buffer, bufferSize, formatString, args);
     va_end(args);
     buffer[bufferSize-1] = '\0';
@@ -34,6 +35,7 @@ void Common_Fatal(const char *format, ...)
 
     va_list args;
     va_start(args, format);
+#pragma warning(suppress : 4996)
     Common_vsnprintf(error, 1024, format, args);
     va_end(args);
     error[1023] = '\0';
@@ -60,6 +62,7 @@ void Common_Draw(const char *format, ...)
 
     va_list args;
     va_start(args, format);
+#pragma warning(suppress : 4996)
     Common_vsnprintf(string, 1024, format, args);
     va_end(args);
     string[1023] = '\0';

@@ -141,6 +141,12 @@
     <ClCompile Include="src\framework\physics\CollisionFunctions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Vendor\FMOD\common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vendor\FMOD\common_platform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Vendor\glm\detail\func_common.inl">
@@ -1535,6 +1541,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\framework\physics\CollisionFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vendor\FMOD\common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vendor\FMOD\common_platform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

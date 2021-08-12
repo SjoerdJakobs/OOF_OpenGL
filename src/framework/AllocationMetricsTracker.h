@@ -2,7 +2,7 @@
 #include "AllocationMetrics.h"
 
 AllocationMetrics e_AllocationMetrics;
-
+#ifdef _DEBUG
 void* operator new(size_t size)
 {
 	/*if(size > 24)
@@ -22,3 +22,4 @@ void operator delete(void* memory, size_t size)
     e_AllocationMetrics.TotalFreed += size;
     return free(memory);
 }
+#endif
