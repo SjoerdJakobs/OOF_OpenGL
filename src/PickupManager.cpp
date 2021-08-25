@@ -175,7 +175,7 @@ void PickupManager::UpdateObstacles(float deltaTime)
 		{
 			//m_pSoundManager->PlayExplosion();
 			m_pPlayer->TakeDamage(1);
-			m_pCamera->ScreenShake(0.1f);
+			m_pCamera->ScreenShake(0.3f);
 		}
 		else if (m_pPlayer->GetPlayerPos().y - m_ZombieRectangles[i]->GetYPos() > 1500)
 		{

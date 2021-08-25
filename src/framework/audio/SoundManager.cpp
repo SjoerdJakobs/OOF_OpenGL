@@ -82,7 +82,8 @@ void SoundManager::Start()
 	result = m_pSystem->createSound("res/sounds/coin.wav", FMOD_DEFAULT, 0, &m_pCoin);
 	result = m_pSystem->createSound("res/sounds/click.wav", FMOD_DEFAULT, 0, &m_pClick);
 	result = m_pSystem->createSound("res/sounds/boom.wav", FMOD_DEFAULT, 0, &m_pExplosion);
-
+	
+	StartBackgroundMusic1();
 	//***************************************************
 	//Sound
 	//***************************************************

@@ -7,9 +7,9 @@ class Rectangle;
 class Camera;
 class SoundManager;
 
-const int m_CoinAmount{ 1 };
-const int m_BombAmount{ 1 };
-const int m_ZombieAmount{ 1 };
+const int m_CoinAmount{ 8 };
+const int m_BombAmount{ 6 };
+const int m_ZombieAmount{ 4 };
 const int m_LaserAmount{ 2 };
 
 class PickupManager final : public StandardObject

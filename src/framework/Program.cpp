@@ -130,6 +130,7 @@ void Program::Run()
 		const Renderer renderer;
 
 		m_pSceneManager = new SceneManager();
+		m_pSoundManager = &SoundManager::instance();
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -150,9 +151,6 @@ void Program::Run()
 
 		this->AtProgramStart();
 		m_pSceneManager->Start();
-
-		m_pSoundManager = &SoundManager::instance();
-		m_pSoundManager->StartBackgroundMusic1();
 
 		// Set start time
 		std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
