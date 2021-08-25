@@ -84,8 +84,11 @@ void Rectangle::CleanUp()
 void Rectangle::Draw() const
 {
 	Renderer renderer;
-
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+
+	model = glm::rotate(model, m_Rotation, glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(m_XScale, m_YScale, 1));
+	
 	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
@@ -93,6 +96,8 @@ void Rectangle::DrawWithColor()
 {
 	Renderer renderer;
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+	model = glm::rotate(model, m_Rotation, glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(m_XScale, m_YScale, 1));
 	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
@@ -102,6 +107,8 @@ void Rectangle::DrawWithTexture()
 
 	m_pTexture->Bind(m_TextureSlot);
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+	model = glm::rotate(model, m_Rotation, glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(m_XScale, m_YScale, 1));
 	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
@@ -126,6 +133,8 @@ void Rectangle::DrawWithSpritesheetTextureAnimation(float xStart, float xEnd, fl
 
 	m_pTexture->Bind(m_TextureSlot);
 	glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_Pos.x, m_Pos.y, 0));
+	model = glm::rotate(model, m_Rotation, glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(m_XScale, m_YScale, 1));
 	renderer.Draw(VAO, *m_pIndexBuffer, *m_pShader, model);
 }
 

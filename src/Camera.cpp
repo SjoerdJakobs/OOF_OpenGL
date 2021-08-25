@@ -5,7 +5,7 @@
 Camera::Camera(int priority) :StandardObject(priority),
 m_Proj(glm::ortho(0.0f, static_cast<float>(m_pProgram->GetScreenWidth()), 0.0f, static_cast<float>(m_pProgram->GetScreenHeight()), -1.0f, 1.0f))
 {
-	Start();
+	//Start();
 }
 
 void Camera::Start()

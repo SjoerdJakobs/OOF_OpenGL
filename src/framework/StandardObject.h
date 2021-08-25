@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 
+class Collider2D;
+
 class Program;
 
 class StandardObject
@@ -74,6 +76,8 @@ protected:
 	virtual void Render(float deltaTime);
 
 	virtual void ImGuiRender(float deltaTime);
+
+	virtual void OnCollision(Collider2D* other);
 	
 	/**
 	 * this is called when the object gets destroyed
@@ -97,6 +101,8 @@ public:
 	friend bool ShouldDestructStandardObject(StandardObject* object);
 	friend class Scene;
 	friend class Program;
+	//TODO change the way collision is structured
+	friend class Collider2D;
 
 	bool GetIsInAScene()         const { return m_IsInAScene; }
 	bool GetUsesInput()          const { return m_UsesInput; }

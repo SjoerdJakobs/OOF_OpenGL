@@ -9,6 +9,7 @@ enum class SceneNames
 	ObjectTestScene = 4
 };
 
+//ill change the 
 enum class LoopType
 {
 	input = 0,

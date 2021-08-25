@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics\2DCollision;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Scenes;src\examplesAndTesting;src\framework\rendering;src\framework\physics\2DCollision;src\framework\physics;src\framework\audio;src\framework\rendering\renderShapes;src\framework;src\tests;src\vendor;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\FMOD\inc;$(SolutionDir)src\Vendor\FMOD;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
@@ -175,9 +175,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\framework\physics\CollisionFunctions.cpp" />
+    <ClCompile Include="src\framework\audio\SoundManager.cpp" />
+    <ClCompile Include="src\framework\physics\2DCollision\Collision2DManager.cpp" />
+    <ClCompile Include="src\framework\physics\2DCollision\Collider2D.cpp" />
+    <ClCompile Include="src\framework\physics\2DCollision\CollisionFunctions2D.cpp" />
     <ClCompile Include="src\examplesAndTesting\ExampleObject.cpp" />
     <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp" />
+    <ClCompile Include="src\framework\physics\2DCollision\PolygonCollider.cpp" />
     <ClCompile Include="src\Scenes\ObjectsStressTestScene.cpp" />
     <ClCompile Include="src\framework\AllocationMetricsTracker.cpp" />
     <ClCompile Include="src\PickupManager.cpp" />
@@ -361,9 +365,15 @@
     <None Include="src\Vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\framework\physics\CollisionFunctions.h" />
+    <ClInclude Include="src\framework\audio\SoundManager.h" />
+    <ClInclude Include="src\framework\physics\2DCollision\CircleCollider.h" />
+    <ClInclude Include="src\framework\physics\2DCollision\Collision2DManager.h" />
+    <ClInclude Include="src\framework\physics\2DCollision\Collider2D.h" />
+    <ClInclude Include="src\framework\physics\2DCollision\CollisionFunctions2D.h" />
     <ClInclude Include="src\examplesAndTesting\ExampleObject.h" />
     <ClInclude Include="src\examplesAndTesting\ExampleProgram.h" />
+    <ClInclude Include="src\framework\physics\2DCollision\PolygonCollider.h" />
+    <ClInclude Include="src\framework\physics\CollisionEnums.h" />
     <ClInclude Include="src\Scenes\ObjectsStressTestScene.h" />
     <ClInclude Include="src\framework\AllocationMetrics.h" />
     <ClInclude Include="src\framework\AllocationMetricsTracker.h" />

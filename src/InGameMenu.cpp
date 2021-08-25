@@ -93,7 +93,7 @@ void InGameMenu::ImGuiRender(float deltaTime)
 
 void InGameMenu::OnDestroy()
 {
-	std::cout << "nou" << std::endl;
+	//std::cout << "InGameMenu destroyed" << std::endl;
 }
 
 InGameMenu::InGameMenu() :StandardObject(true, false, false, false, true, true,

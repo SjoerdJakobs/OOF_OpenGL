@@ -138,13 +138,25 @@
     <ClCompile Include="src\examplesAndTesting\ExampleProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\framework\physics\CollisionFunctions.cpp">
+    <ClCompile Include="src\framework\physics\2DCollision\CollisionFunctions2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Vendor\FMOD\common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Vendor\FMOD\common_platform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\physics\2DCollision\Collider2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\physics\2DCollision\Collision2DManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\physics\2DCollision\PolygonCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framework\audio\SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1540,13 +1552,31 @@
     <ClInclude Include="src\examplesAndTesting\ExampleProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\framework\physics\CollisionFunctions.h">
+    <ClInclude Include="src\framework\physics\2DCollision\CollisionFunctions2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vendor\FMOD\common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Vendor\FMOD\common_platform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\physics\2DCollision\Collider2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\physics\2DCollision\Collision2DManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\physics\CollisionEnums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\physics\2DCollision\PolygonCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\physics\2DCollision\CircleCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\audio\SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

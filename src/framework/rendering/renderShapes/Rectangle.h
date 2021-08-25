@@ -31,6 +31,9 @@ private:
 	int			m_TextureSlot;
 	float		m_XSize;
 	float		m_YSize;
+	float		m_XScale{ 1 };
+	float		m_YScale{ 1 };
+	float		m_Rotation{0};
 	glm::vec2	m_Pos;
 	float m_Color[4];
 
@@ -45,6 +48,24 @@ private:
 	void ConstructWithColor();
 
 public:
+
+	void SetRotationDegrees(float degrees)
+	{
+		m_Rotation = glm::radians(degrees);
+	}
+	void SetRotationRadians(float radians)
+	{
+		m_Rotation = radians;
+	}
+
+	void AddToRotationDegrees(float degrees)
+	{
+		m_Rotation += glm::radians(degrees);
+	}
+	void AddToRotationRadians(float radians)
+	{
+		m_Rotation += radians;
+	}
 
 	void AddToXPos(float xPos)
 	{
@@ -93,4 +114,10 @@ public:
 	}
 
 	float GetYPos() const { return m_Pos.y; }
+
+	void SetScale(float x, float y)
+	{
+		m_XScale = x;
+		m_YScale = y;
+	}
 };

@@ -2,6 +2,7 @@
 #include "Program.h"
 #include "scene.h"
 #include "SceneManager.h"
+#include "Collider2D.h"
 
 StandardObject::StandardObject() :
 	m_pProgram(Program::GetInstance()), m_UsesInput(true), m_UsesUpdate(true), m_UsesFixedUpdate(true), m_UsesRenderer(true),
@@ -102,6 +103,11 @@ void StandardObject::Render(float deltaTime)
 
 void StandardObject::ImGuiRender(float deltaTime)
 {
+}
+
+void StandardObject::OnCollision(Collider2D* other)
+{
+
 }
 
 void StandardObject::AddToLists()

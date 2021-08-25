@@ -14,11 +14,17 @@ Player::Player(int priority) : StandardObject(priority), m_pCamera(nullptr), m_p
 
 Player::~Player()
 {
-	std::cout << "player destroyed\n";
+	//std::cout << "player destroyed\n";
 }
 
 void Player::TakeDamage(int damage)
 {
+	m_Health -= damage;
+	if (m_Health <= 0)
+	{
+		m_Health = 0;
+		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::MainMenu);
+	}
 }
 
 void Player::Heal(int healAmount)
@@ -194,6 +200,10 @@ void Player::ImGuiRender(float deltaTime)
 	ImGui::SetNextWindowPos(ImVec2(920, 20), ImGuiCond_Once);
 	ImGui::Begin("scoreText", nullptr, m_WindowFlags);
 	ImGui::Text("Score: %.0f", static_cast<float>(m_Score));
+	ImGui::End();
+	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Once);
+	ImGui::Begin("HEALTH: ", nullptr, m_WindowFlags);
+	ImGui::Text("Health: %.0f", static_cast<float>(m_Health));
 	ImGui::End();
 	ImGui::PopFont();
 }

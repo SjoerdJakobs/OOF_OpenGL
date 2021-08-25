@@ -1,4 +1,6 @@
 #pragma once
+
+#include <algorithm>
 #include "glm/glm.hpp"
 class HandyMaths
 {
@@ -32,6 +34,70 @@ public:
 
 	static float GetDistance(glm::vec2 vector1, glm::vec2 vector2)
 	{
-		return(sqrtf(powf(fabsf(vector1.x - vector2.x), 2) + powf(fabsf(vector1.y - vector2.y), 2)));
+		return(sqrtf(GetDistanceSquared(vector1,vector2)));
+	}
+	static float GetDistanceSquared(glm::vec2 vector1, glm::vec2 vector2)
+	{
+		return(powf(fabsf(vector1.x - vector2.x), 2) + powf(fabsf(vector1.y - vector2.y), 2));
+	}
+
+	static float minimum_distance(glm::vec2 v, glm::vec2 w, glm::vec2 p) {
+		// Return minimum distance between line segment vw and point p
+		const float l2 = GetDistanceSquared(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
+		if (l2 == 0.0) return GetDistance(p, v);   // v == w case
+		// Consider the line extending the segment, parameterized as v + t (w - v).
+		// We find projection of point p onto the line. 
+		// It falls where t = [(p-v) . (w-v)] / |w-v|^2
+		// We clamp t from [0,1] to handle points outside the segment vw.
+		const float t = std::clamp(dot(p - v, w - v) / l2,0.0f,1.0f);
+		const glm::vec2 projection = v + t * (w - v);  // Projection falls on the segment
+		return distance(p, projection);
+	}
+
+
+	//ty for the comprehensive explanation joshua: https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment?page=1&tab=votes#tab-top
+	//and poulbourke: http://paulbourke.net/geometry/pointlineplane/
+	//not working atm sadly :(
+	/*
+	static float GetShortestDistanceFromFiniteLine(glm::vec2 lineStartA, glm::vec2 lineEndB, glm::vec2 pointC)
+	{
+		glm::vec2 CA = pointC - lineStartA;
+		glm::vec2 BA = lineEndB - lineStartA;
+		float dot = glm::dot(CA, BA);
+		float lengthSquared = BA.x * BA.x + BA.y * BA.y;
+		float param{ -1 };
+		if (lengthSquared != 0)
+		{
+			param = dot / lengthSquared;
+		}
+		glm::vec2 xy;
+
+		if (param < 0)//closest point is the start of the line
+		{
+			xy = lineStartA;
+		}
+		else if (param > 1)//closest point is the end of the line
+		{
+			xy = lineEndB;
+		}
+		else//closest point is inbetween the start and the end of the line
+		{
+			xy = lineStartA + param * lineEndB;
+		}
+
+		return GetDistance(pointC,xy); 
+	}*/
+
+	static float AngleBetweenVectors(glm::vec2 v1, glm::vec2 v2) {
+		//Vector2.Dot(v1,v2) / (Vector2.Dot())
+		double dot = v1.x * v2.x + v1.y * v2.y;
+		double det = v1.x * v2.y + v1.y * v2.x;
+		return atan2(det, dot);
+	}
+
+	static float LookAtVectorInRadians(glm::vec2 looking, glm::vec2 at) {
+		// +1.5707963268 because north is 0 degrees in this case instead of east
+		return AngleBetweenVectors(glm::vec2(1, 0), glm::vec2(at.x - looking.x, at.y - looking.y));
 	}
 };
+

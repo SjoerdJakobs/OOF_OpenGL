@@ -44,6 +44,7 @@ class StandardObject;
 class ExampleObject;
 class PriorityGroup;
 class SceneManager;
+class SoundManager;
 
 class Program
 {
@@ -72,6 +73,8 @@ protected:
 	SceneManager* m_pSceneManager;
 
 private:
+
+	SoundManager* m_pSoundManager = nullptr;
 
 	bool m_ShouldCleanGroups{false};	
 	void CleanupEmptyGroups();

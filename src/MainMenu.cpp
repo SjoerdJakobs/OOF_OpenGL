@@ -53,8 +53,11 @@ void MainMenu::ImGuiRender(float deltaTime)
 	ImGui::Begin("InvisibleWindow1", nullptr, m_WindowFlags);
 	if (ImGui::Button("HOW TO PLAY", ImVec2(m_HowToPlayButtonWidth, m_HowToPlayButtonHeight)))
 	{
-		std::cout << "Use WASD or the arrow keys for movement and shift for sprint." << std::endl;
-		std::cout << "Pickup the coins and evade enemies and bombs" << std::endl;
+		std::cout << "Use WASD or the arrow keys for movement." << std::endl;
+		std::cout << "pressing shift will make you sprint." << std::endl;
+		std::cout << "Coins give you points!." << std::endl;
+		std::cout << "EVERYTHING ELSE WILL DAMAGE YOU IF IT TOUCHES YOU" << std::endl;
+		std::cout << "try to get as many points as possible until you die" << std::endl;
 		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::HowToPlay);
 	}
 	ImGui::End();
@@ -64,7 +67,7 @@ void MainMenu::ImGuiRender(float deltaTime)
 	if (ImGui::Button("OPTIONS", ImVec2(m_OptionsButtonWidth, m_OptionsButtonHeight)))
 	{
 		//m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::Options);
-		m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::ObjectTestScene);
+		//m_pProgram->GetSceneManager()->SwitchToScene(SceneNames::ObjectTestScene);
 	}
 	ImGui::End();
 
@@ -94,5 +97,5 @@ MainMenu::MainMenu() :
 
 MainMenu::~MainMenu()
 {
-	std::cout << "mainmenu destroyed\n";
+	//std::cout << "mainmenu destroyed\n";
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include "glm/glm.hpp"
 
-struct Transform2D
+struct Transform2D final
 {
-	glm::vec2 position;
-	glm::vec2 scale;
-	int rotation;
+	Transform2D();
+	~Transform2D();
+	glm::vec2 position{};
+	glm::vec2 scale{};
+	float rotation = 0;
 };

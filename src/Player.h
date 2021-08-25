@@ -21,7 +21,7 @@ private:
 
 	void ChooseRightAnimationFrame();
 
-	float m_Health{ 5 };
+	float m_Health{ 100 };
 	float m_HealthRegen{ 0 };
 
 	float m_MovementSpeed{ 300 };

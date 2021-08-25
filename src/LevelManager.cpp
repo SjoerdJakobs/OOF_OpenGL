@@ -63,11 +63,11 @@ void LevelManager::MoveGround()
 	{
 		if (groundRectangle->GetYPos() - m_pCamera->GetCameraPos().y < -700)
 		{
-			groundRectangle->AddToYPos(1000.0f * 2);
+			groundRectangle->AddToYPos(2000.0f);
 		}
-		else if (groundRectangle->GetYPos() - m_pCamera->GetCameraPos().y > 1400 && m_pPlayer->GetPlayerPos().y > 500)
+		else if (groundRectangle->GetYPos() - m_pCamera->GetCameraPos().y > 1400 && !(groundRectangle->GetYPos() - 2000 < -500))
 		{
-			groundRectangle->AddToYPos(-1000.0f * 2);
+			groundRectangle->AddToYPos(-2000.0f);
 		}
 	}
 }
