@@ -106,7 +106,6 @@ void Program::Run()
 		m_RunProgram = false;
 	}
 
-
 	/* Make the m_pWindow's context current */
 	glfwMakeContextCurrent(m_pWindow);
 
@@ -256,15 +255,14 @@ void Program::Run()
 
 			CheckStandardObjectsMarkedForAdding();
 			RemoveStandardObjectsMarkedForRemove();
-			
-			if(m_ShouldCleanGroups)
+
+			if (m_ShouldCleanGroups)
 			{
 				PrintMemoryUsage("before group cleanup");
 				CleanupEmptyGroups();
 				PrintMemoryUsage("after group cleanup");
 			}
 			m_pSceneManager->UpdateScene();
-
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -293,15 +291,12 @@ void Program::Run()
 			////Sound
 			////***************************************************
 			//if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_1)) {
-
 			//	result = system->playSound(sound1, 0, false, &channel);
 			//}
 			//if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_2)) {
-
 			//	result = system->playSound(sound2, 0, false, &channel);
 			//}
 			//if (GLFW_PRESS == glfwGetKey(m_pWindow, GLFW_KEY_3)) {
-
 			//	result = system->playSound(sound3, 0, false, &channel);
 			//}
 
@@ -317,7 +312,6 @@ void Program::Run()
 		}
 	}
 
-
 	CleanUp();
 	//exit(EXIT_SUCCESS);
 }
@@ -327,22 +321,18 @@ void Program::CleanupEmptyGroups()
 	m_pInputObjectGroups.erase(std::remove_if(m_pInputObjectGroups.begin(), m_pInputObjectGroups.end(), ShouldRemoveGroupFromLoop), m_pInputObjectGroups.end());
 	m_pInputObjectGroups.shrink_to_fit();
 
-
 	m_pUpdateObjectGroups.erase(std::remove_if(m_pUpdateObjectGroups.begin(), m_pUpdateObjectGroups.end(), ShouldRemoveGroupFromLoop), m_pUpdateObjectGroups.end());
 	m_pUpdateObjectGroups.shrink_to_fit();
-
 
 	m_pFixedUpdateObjectGroups.erase(std::remove_if(m_pFixedUpdateObjectGroups.begin(), m_pFixedUpdateObjectGroups.end(), ShouldRemoveGroupFromLoop), m_pFixedUpdateObjectGroups.end());
 	m_pFixedUpdateObjectGroups.shrink_to_fit();
 
-
 	m_pRenderObjectGroups.erase(std::remove_if(m_pRenderObjectGroups.begin(), m_pRenderObjectGroups.end(), ShouldRemoveGroupFromLoop), m_pRenderObjectGroups.end());
 	m_pRenderObjectGroups.shrink_to_fit();
 
-
 	m_pImGuiRenderObjectGroups.erase(std::remove_if(m_pImGuiRenderObjectGroups.begin(), m_pImGuiRenderObjectGroups.end(), ShouldRemoveGroupFromLoop), m_pImGuiRenderObjectGroups.end());
 	m_pImGuiRenderObjectGroups.shrink_to_fit();
-	
+
 	m_ShouldCleanGroups = false;
 }
 
@@ -418,24 +408,24 @@ void Program::CheckStandardObjectsMarkedForAdding()
 		m_ShouldAddToObjectList = false;
 	}
 
-	if (m_ShouldAddToInputList)			{	AddStandardObjectsMarkedForAdding(m_pInputObjectsToBeAdded,		m_pInputObjectGroups,      m_ShouldAddToInputList);	}
+	if (m_ShouldAddToInputList) { AddStandardObjectsMarkedForAdding(m_pInputObjectsToBeAdded, m_pInputObjectGroups, m_ShouldAddToInputList); }
 
-	if (m_ShouldAddToUpdateList)		{	AddStandardObjectsMarkedForAdding(m_pUpdateObjectsToBeAdded,		m_pUpdateObjectGroups,	  m_ShouldAddToUpdateList);	}
+	if (m_ShouldAddToUpdateList) { AddStandardObjectsMarkedForAdding(m_pUpdateObjectsToBeAdded, m_pUpdateObjectGroups, m_ShouldAddToUpdateList); }
 
-	if (m_ShouldAddToFixedUpdateList)	{	/*AddStandardObjectsMarkedForAdding(m_pFixedUpdateObjectsToBeAdded, LoopType::fixedUpdate, m_ShouldAddToFixedUpdateList);*/	}
+	if (m_ShouldAddToFixedUpdateList) {	/*AddStandardObjectsMarkedForAdding(m_pFixedUpdateObjectsToBeAdded, LoopType::fixedUpdate, m_ShouldAddToFixedUpdateList);*/ }
 
-	if (m_ShouldAddToRenderList)		{	AddStandardObjectsMarkedForAdding(m_pRenderObjectsToBeAdded,		m_pRenderObjectGroups,	  m_ShouldAddToRenderList);	}
+	if (m_ShouldAddToRenderList) { AddStandardObjectsMarkedForAdding(m_pRenderObjectsToBeAdded, m_pRenderObjectGroups, m_ShouldAddToRenderList); }
 
-	if (m_ShouldAddToImGuiRenderList)	{	AddStandardObjectsMarkedForAdding(m_pImGuiRenderObjectsToBeAdded,	m_pImGuiRenderObjectGroups,m_ShouldAddToImGuiRenderList);}
+	if (m_ShouldAddToImGuiRenderList) { AddStandardObjectsMarkedForAdding(m_pImGuiRenderObjectsToBeAdded, m_pImGuiRenderObjectGroups, m_ShouldAddToImGuiRenderList); }
 }
 
-void Program::AddStandardObjectsMarkedForAdding(std::list<StandardObject*>& p_ObjectsToBeAdded, std::vector<PriorityGroup*>& p_ObjectGroupsToBeAddedTo, bool& ShouldAddToListBool)
+void Program::AddStandardObjectsMarkedForAdding(std::list<StandardObject*>&p_ObjectsToBeAdded, std::vector<PriorityGroup*>&p_ObjectGroupsToBeAddedTo, bool& ShouldAddToListBool)
 {
 	//sort list with lambda
 	p_ObjectsToBeAdded.sort([](const StandardObject* p_obj1, const StandardObject* p_obj2)
-			{
-				return p_obj1->GetRenderPriority() < p_obj2->GetRenderPriority();
-			});
+		{
+			return p_obj1->GetRenderPriority() < p_obj2->GetRenderPriority();
+		});
 
 	unsigned int lastPriorityNr = p_ObjectsToBeAdded.front()->GetRenderPriority();
 	std::list<StandardObject*>::iterator i = p_ObjectsToBeAdded.begin();
@@ -460,7 +450,7 @@ void Program::AddStandardObjectsMarkedForAdding(std::list<StandardObject*>& p_Ob
 }
 
 //Todo: template the repeated code here or make a function which can be used by all looptypes
-void Program::AddToPrioritygroup(std::vector<PriorityGroup*>& p_ObjectGroups, unsigned int priorityNr, std::list<StandardObject*>& objectsForInsert)
+void Program::AddToPrioritygroup(std::vector<PriorityGroup*>&p_ObjectGroups, unsigned int priorityNr, std::list<StandardObject*>&objectsForInsert)
 {
 	for (PriorityGroup* group : p_ObjectGroups)
 	{
@@ -492,7 +482,7 @@ void Program::RemoveStandardObjectsMarkedForRemove()
 			group->m_StandardObjects.erase(
 				std::remove_if(group->m_StandardObjects.begin(), group->m_StandardObjects.end(), ShouldRemoveStandardObjectFromInputLoop),
 				group->m_StandardObjects.end());
-			
+
 			if (group->m_StandardObjects.capacity() >= group->m_StandardObjects.size() + m_ObjectListResizeThreshold)
 			{
 				group->m_StandardObjects.shrink_to_fit();

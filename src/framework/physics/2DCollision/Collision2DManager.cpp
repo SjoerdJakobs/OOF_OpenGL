@@ -6,7 +6,6 @@ Collision2DManager::Collision2DManager(int priority)
 
 void Collision2DManager::Start()
 {
-
 }
 
 void Collision2DManager::Awake()

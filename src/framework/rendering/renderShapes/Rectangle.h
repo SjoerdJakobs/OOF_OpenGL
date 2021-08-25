@@ -33,7 +33,7 @@ private:
 	float		m_YSize;
 	float		m_XScale{ 1 };
 	float		m_YScale{ 1 };
-	float		m_Rotation{0};
+	float		m_Rotation{ 0 };
 	glm::vec2	m_Pos;
 	float m_Color[4];
 

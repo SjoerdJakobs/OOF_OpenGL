@@ -61,6 +61,4 @@ private:
 	virtual void OnDestroy() override;
 
 	void OnCollision(Collider2D other);
-
 };
-

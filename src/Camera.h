@@ -28,7 +28,7 @@ private:
 	float m_MaxDistance{ 500 };
 	float m_CurrentDistance{ 0 };
 
-	float m_ScreenShakeDuration{0};
+	float m_ScreenShakeDuration{ 0 };
 
 	glm::vec2 m_TargetPos{ 0,0 };
 	glm::vec2 m_LastTargetPos{ 0,0 };

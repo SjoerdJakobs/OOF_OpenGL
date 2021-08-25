@@ -76,7 +76,7 @@ private:
 
 	SoundManager* m_pSoundManager = nullptr;
 
-	bool m_ShouldCleanGroups{false};	
+	bool m_ShouldCleanGroups{ false };
 	void CleanupEmptyGroups();
 	void CleanUp();
 

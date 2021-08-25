@@ -2,21 +2,20 @@
 
 #include <iostream>
 
-ExampleObject::ExampleObject(int priority): StandardObject(priority), m_pBigNr0(nullptr), m_pBigNr1(nullptr),
-                                            m_pBigNr2(nullptr),
-                                            m_pBigNr3(nullptr),
-                                            m_pBigNr4(nullptr),
-                                            m_pBigNr5(nullptr),
-                                            m_pBigNr6(nullptr),
-                                            m_pBigNr7(nullptr),
-                                            m_pBigNr8(nullptr),
-                                            m_pBigNr9(nullptr)
+ExampleObject::ExampleObject(int priority) : StandardObject(priority), m_pBigNr0(nullptr), m_pBigNr1(nullptr),
+m_pBigNr2(nullptr),
+m_pBigNr3(nullptr),
+m_pBigNr4(nullptr),
+m_pBigNr5(nullptr),
+m_pBigNr6(nullptr),
+m_pBigNr7(nullptr),
+m_pBigNr8(nullptr),
+m_pBigNr9(nullptr)
 {
 }
 
 ExampleObject::~ExampleObject()
 {
-	
 }
 
 void ExampleObject::Start()
@@ -31,7 +30,7 @@ void ExampleObject::Start()
 	m_pBigNr7 = new _LONGDOUBLE{ 10000000.0 };
 	m_pBigNr8 = new _LONGDOUBLE{ 10000000.0 };
 	m_pBigNr9 = new _LONGDOUBLE{ 10000000.0 };
-	m_DeathPoint = ( static_cast<float>(rand() % 600) + 300.0f)/100.0f;
+	m_DeathPoint = (static_cast<float>(rand() % 600) + 300.0f) / 100.0f;
 	//std::cout << m_DeathPoint <<std::endl;
 }
 
@@ -61,7 +60,7 @@ void ExampleObject::Input(float deltaTime)
 {
 	//m_Counter += deltaTime;
 	//std::cout << "deathpoint " << m_DeathPoint<< " and counter: "<< m_Counter<< std::endl;
-	if(m_Counter >= m_DeathPoint)
+	if (m_Counter >= m_DeathPoint)
 	{
 		Destroy();
 	}

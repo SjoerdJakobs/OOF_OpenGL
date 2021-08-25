@@ -14,4 +14,3 @@ private:
 	void AddToProgramLoopBegin() override;
 	void OnProgramEnd() override;
 };
-

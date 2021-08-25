@@ -38,6 +38,4 @@ protected:
 	//probably should make this a callback thingy
 	virtual void OnCollide(Collider2D* other);
 public:
-
 };
-

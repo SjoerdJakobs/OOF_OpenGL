@@ -11,4 +11,3 @@ public:
 	ObjectsStressTestScene();
 	~ObjectsStressTestScene() override;
 };
-

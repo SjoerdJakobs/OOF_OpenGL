@@ -34,7 +34,7 @@ public:
 
 	static float GetDistance(glm::vec2 vector1, glm::vec2 vector2)
 	{
-		return(sqrtf(GetDistanceSquared(vector1,vector2)));
+		return(sqrtf(GetDistanceSquared(vector1, vector2)));
 	}
 	static float GetDistanceSquared(glm::vec2 vector1, glm::vec2 vector2)
 	{
@@ -46,14 +46,13 @@ public:
 		const float l2 = GetDistanceSquared(v, w);  // i.e. |w-v|^2 -  avoid a sqrt
 		if (l2 == 0.0) return GetDistance(p, v);   // v == w case
 		// Consider the line extending the segment, parameterized as v + t (w - v).
-		// We find projection of point p onto the line. 
+		// We find projection of point p onto the line.
 		// It falls where t = [(p-v) . (w-v)] / |w-v|^2
 		// We clamp t from [0,1] to handle points outside the segment vw.
-		const float t = std::clamp(dot(p - v, w - v) / l2,0.0f,1.0f);
+		const float t = std::clamp(dot(p - v, w - v) / l2, 0.0f, 1.0f);
 		const glm::vec2 projection = v + t * (w - v);  // Projection falls on the segment
 		return distance(p, projection);
 	}
-
 
 	//ty for the comprehensive explanation joshua: https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment?page=1&tab=votes#tab-top
 	//and poulbourke: http://paulbourke.net/geometry/pointlineplane/
@@ -85,7 +84,7 @@ public:
 			xy = lineStartA + param * lineEndB;
 		}
 
-		return GetDistance(pointC,xy); 
+		return GetDistance(pointC,xy);
 	}*/
 
 	static float AngleBetweenVectors(glm::vec2 v1, glm::vec2 v2) {
@@ -100,4 +99,3 @@ public:
 		return AngleBetweenVectors(glm::vec2(1, 0), glm::vec2(at.x - looking.x, at.y - looking.y));
 	}
 };
-

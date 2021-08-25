@@ -4,7 +4,7 @@
 #include "Rectangle.h"
 
 LevelManager::LevelManager()
-	: StandardObject(false, true, false, true, false,  true,
+	: StandardObject(false, true, false, true, false, true,
 		910, 910, 910, 910)
 {
 	m_pCamera = &Camera::instance();

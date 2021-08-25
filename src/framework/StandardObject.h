@@ -78,7 +78,7 @@ protected:
 	virtual void ImGuiRender(float deltaTime);
 
 	virtual void OnCollision(Collider2D* other);
-	
+
 	/**
 	 * this is called when the object gets destroyed
 	 */

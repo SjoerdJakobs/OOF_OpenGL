@@ -28,4 +28,3 @@ public:
 	void Render(float deltaTime) override;
 	void ImGuiRender(float deltaTime) override;
 };
-

@@ -1,12 +1,10 @@
 #include "ObjectsStressTestScene.h"
 
-
 #include "AllocationMetrics.h"
 #include "ExampleObject.h"
 
 void ObjectsStressTestScene::OnStart()
 {
-
 	PrintMemoryUsage("before ObjectsStressTestScene start");
 	for (int i = 0; i < 1000; ++i)
 	{
@@ -27,5 +25,5 @@ ObjectsStressTestScene::ObjectsStressTestScene()
 
 ObjectsStressTestScene::~ObjectsStressTestScene()
 {
-	PrintMemoryUsage("on ObjectsStressTestScene destructor");	
+	PrintMemoryUsage("on ObjectsStressTestScene destructor");
 }

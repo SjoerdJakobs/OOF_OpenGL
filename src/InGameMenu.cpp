@@ -47,7 +47,6 @@ void InGameMenu::Input(float deltaTime)
 
 void InGameMenu::ImGuiRender(float deltaTime)
 {
-
 	if (m_ShowMenu)
 	{
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.05f, 0.6f, 0.6f));
@@ -97,12 +96,11 @@ void InGameMenu::OnDestroy()
 }
 
 InGameMenu::InGameMenu() :StandardObject(true, false, false, false, true, true,
-		1000, 1000, 1000, 1000),
+	1000, 1000, 1000, 1000),
 	m_ShowMenu(false), m_HasPressedESC(false)
 {
 }
 
 InGameMenu::~InGameMenu()
 {
-
 }

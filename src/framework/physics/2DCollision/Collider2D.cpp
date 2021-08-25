@@ -4,10 +4,8 @@
 
 void Collider2D::OnCollide(Collider2D* other)
 {
-
 	if (ownerObject != nullptr)
 	{
 		ownerObject->OnCollision(other);
 	}
-
 }

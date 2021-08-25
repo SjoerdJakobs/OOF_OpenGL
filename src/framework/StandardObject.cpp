@@ -24,7 +24,7 @@ StandardObject::StandardObject(int priority) :
 	AddToLists();
 }
 StandardObject::StandardObject
-(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui , bool startsActivated = true,
+(bool usesInput, bool usesUpdate, bool usesFixedUpdate, bool usesRenderer, bool usesImGui, bool startsActivated = true,
 	int inputPriority = 1000, int updatePriority = 1000, int renderPriority = 1000, int imGuiPriority = 1000) :
 	m_pProgram(Program::GetInstance()), m_UsesInput(usesInput), m_UsesUpdate(usesUpdate), m_UsesFixedUpdate(usesFixedUpdate),
 	m_UsesRenderer(usesRenderer), m_UsesImGui(usesImGui), m_InputPriority(inputPriority),
@@ -61,7 +61,7 @@ void StandardObject::Activate()
 }
 
 void StandardObject::Activate(bool usesInput, bool usesUpdate, bool usesRenderer, bool usesImGui,
-	 int inputPriority, int updatePriority, int renderPriority, int imGuiPriority)
+	int inputPriority, int updatePriority, int renderPriority, int imGuiPriority)
 {
 	m_InputPriority = inputPriority;
 	m_UpdatePriority = updatePriority;
@@ -107,7 +107,6 @@ void StandardObject::ImGuiRender(float deltaTime)
 
 void StandardObject::OnCollision(Collider2D* other)
 {
-
 }
 
 void StandardObject::AddToLists()

@@ -51,8 +51,6 @@ private:
 	SoundManager(SoundManager const&) {}            // copy constructor is private
 	SoundManager& operator=(SoundManager const&) {} // assignment operator is private
 
-
-
 	// Inherited via StandardObject
 	virtual void Start() override;
 
@@ -63,7 +61,6 @@ private:
 	virtual void Sleep() override;
 
 	virtual void OnDestroy() override;
-
 };
 
 struct Sound

@@ -1,6 +1,5 @@
 #include "GameScene0.h"
 
-
 #include "AllocationMetrics.h"
 #include "Camera.h"
 #include "InGameMenu.h"
@@ -16,11 +15,11 @@ void GameScene0::OnStart()
 	AddObjectToScene(p_newPlayer);
 	AddObjectToScene(new InGameMenu());
 	AddObjectToScene(new ParallaxBackground());
-	
+
 	LevelManager* p_newLevelManager = new LevelManager();
 	AddObjectToScene(p_newLevelManager);
 	p_newLevelManager->GivePlayerPointer(p_newPlayer);
-	
+
 	PickupManager* p_newPickupManager = new PickupManager();
 	AddObjectToScene(p_newPickupManager);
 	p_newPickupManager->GivePlayerPointer(p_newPlayer);

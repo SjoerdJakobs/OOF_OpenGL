@@ -34,7 +34,7 @@ void SceneManager::SwitchToScene(SceneNames sceneName)
 			break;
 		}
 	}
-	
+
 	Program::GetInstance()->SetShouldCleanUpGroups(true);
 	m_pCurrentScene->Start();
 }

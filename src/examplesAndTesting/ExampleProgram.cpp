@@ -1,7 +1,7 @@
 #include "ExampleProgram.h"
 #include "ExampleObject.h"
 
-ExampleProgram::ExampleProgram():Program()
+ExampleProgram::ExampleProgram() :Program()
 {
 }
 
@@ -20,7 +20,6 @@ void ExampleProgram::CreateInstance()
 		m_pInstance = new ExampleProgram();
 	}
 }
-
 
 void ExampleProgram::func()
 {

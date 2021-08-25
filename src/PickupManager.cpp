@@ -112,11 +112,18 @@ void PickupManager::UpdateObstacles(float deltaTime)
 		}
 	}
 
+
+
+
+
+
+
+
+
 	for (int i = 0; i < m_CoinAmount; ++i)
 	{
 		if (HandyMaths::GetDistance(m_pPlayer->GetPlayerPos(), m_CoinRectangles[i]->GetPos()) < 50)
 		{
-
 			m_pSoundManager->PlayCoin();
 			m_pPlayer->SetScore((m_pPlayer->GetScore() + 1));
 			//m_pCamera->ScreenShake(0.3f);
@@ -129,6 +136,15 @@ void PickupManager::UpdateObstacles(float deltaTime)
 			m_CoinRectangles[i]->SetYPos((rand() % 3000) + (1000 + m_pPlayer->GetPlayerPos().y));
 		}
 	}
+
+
+
+
+
+
+
+
+
 	//way to much magic numbers, this will be fixed when it will be moved too its own class
 	m_CurrentBombMovementSpeed += m_BombMovementSpeedGrowthPerSecond * deltaTime;
 	for (int i = 0; i < m_BombAmount; ++i)
@@ -136,7 +152,6 @@ void PickupManager::UpdateObstacles(float deltaTime)
 		m_BombRectangles[i]->AddToPos(m_BombDirections[i] * (m_CurrentBombMovementSpeed * deltaTime));
 		if (HandyMaths::GetDistance(m_pPlayer->GetPlayerPos(), m_BombRectangles[i]->GetPos()) < 50)
 		{
-
 			m_pSoundManager->PlayExplosion();
 			m_pCamera->ScreenShake(0.5f);
 			m_BombIsExploding[i] = true;
@@ -146,7 +161,6 @@ void PickupManager::UpdateObstacles(float deltaTime)
 			m_BombRectangles[i]->SetYPos((rand() % 1000) + (500 + m_pPlayer->GetPlayerPos().y));
 			m_BombDirections[i] = normalize(glm::vec2(m_pPlayer->GetPlayerPos() - m_BombRectangles[i]->GetPos()));
 			m_pPlayer->TakeDamage(5);
-
 		}
 		else if (m_pPlayer->GetPlayerPos().y - m_BombRectangles[i]->GetYPos() > 1500)
 		{
@@ -198,7 +212,7 @@ void PickupManager::UpdateObstacles(float deltaTime)
 			m_LaserIsShootingBottomPos[i].y = m_pCamera->GetCameraPos().y - 5000;
 			m_LaserRectangles[i]->SetYPos(m_pCamera->GetCameraPos().y);
 		}
-		else if(m_LaserIsShootingBool[i])
+		else if (m_LaserIsShootingBool[i])
 		{
 			if ((m_LaserTimeCounter[i] <= -2.0))
 			{
@@ -234,7 +248,7 @@ void PickupManager::UpdateObstacles(float deltaTime)
 					m_LaserRectangles[i]->SetXPos(m_LaserIsShootingTopPos[i].x + ((m_LaserIsShootingBottomPos[i].x - m_LaserIsShootingTopPos[i].x) / 2));
 				}
 			}
-			m_LaserRectangles[i]->SetRotationRadians(HandyMaths::LookAtVectorInRadians(m_LaserRectangles[i]->GetPos(), m_LaserIsShootingTopPos[i]));	
+			m_LaserRectangles[i]->SetRotationRadians(HandyMaths::LookAtVectorInRadians(m_LaserRectangles[i]->GetPos(), m_LaserIsShootingTopPos[i]));
 		}
 	}
 }
@@ -258,7 +272,7 @@ void PickupManager::SpawnObjects()
 	for (int i = 0; i < m_LaserAmount; i++)
 	{
 		m_LaserRectangles[i] = new Rectangle(7000, 100, -30000, 0, "res/textures/redLaser.png", 7);
-		m_LaserTimeCounter[i] = (rand() % (m_MaxSecondsForLaser - m_MinSecondsForLaser+1)+m_MinSecondsForLaser);
+		m_LaserTimeCounter[i] = (rand() % (m_MaxSecondsForLaser - m_MinSecondsForLaser + 1) + m_MinSecondsForLaser);
 	}
 }
 

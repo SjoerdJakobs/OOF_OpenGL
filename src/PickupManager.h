@@ -46,20 +46,20 @@ private:
 
 	Rectangle* m_LaserRectangles[m_LaserAmount] = {};
 	float m_LaserTimeCounter[m_LaserAmount] = {};
-	bool m_LaserIsShootingBool[m_LaserAmount] = {false};
+	bool m_LaserIsShootingBool[m_LaserAmount] = { false };
 	glm::vec2 m_LaserIsShootingTopPos[m_LaserAmount] = {};
 	glm::vec2 m_LaserIsShootingBottomPos[m_BombAmount] = {};
 
 	/*
 	 * especially here when i need to keep track of the animations, this should be in its own class
 	 */
-	bool m_BombIsExploding[m_BombAmount]{false};
+	bool m_BombIsExploding[m_BombAmount]{ false };
 	float m_ExplosionFrameTimers[m_BombAmount]{ 0 };
 	int m_FrameCountExplosion[m_BombAmount]{ 0 };
 
-	float m_BaseBombMovementSpeed{350};
+	float m_BaseBombMovementSpeed{ 350 };
 	float m_CurrentBombMovementSpeed{};
-	float m_BombMovementSpeedGrowthPerSecond{2};
+	float m_BombMovementSpeedGrowthPerSecond{ 2 };
 
 	int m_BeginFrameExplosion{ 1 };
 	int m_EndFrameExplosion{ 24 };

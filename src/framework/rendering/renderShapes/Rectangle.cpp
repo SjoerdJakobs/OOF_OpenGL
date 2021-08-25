@@ -88,7 +88,7 @@ void Rectangle::Draw() const
 
 	model = glm::rotate(model, m_Rotation, glm::vec3(0, 0, 1));
 	model = glm::scale(model, glm::vec3(m_XScale, m_YScale, 1));
-	
+
 	renderer.Draw(*m_pVAO, *m_pIndexBuffer, *m_pShader, model);
 }
 
@@ -118,11 +118,11 @@ void Rectangle::DrawWithSpritesheetTextureAnimation(float xStart, float xEnd, fl
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2, xStart, yStart,	//0.0f, 0.0f,
-		m_XSize  / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
-		m_XSize  / 2, m_YSize  / 2, xEnd, yEnd,		//1.0f, 1.0f,
-		-m_XSize / 2, m_YSize  / 2, xStart, yEnd	//0.0f, 1.0f
+		m_XSize / 2, -m_YSize / 2, xEnd, yStart,	//1.0f, 0.0f,
+		m_XSize / 2, m_YSize / 2, xEnd, yEnd,		//1.0f, 1.0f,
+		-m_XSize / 2, m_YSize / 2, xStart, yEnd	//0.0f, 1.0f
 	};
-	
+
 	VertexArray VAO = VertexArray();
 	//create VertexBuffer
 	VertexBuffer VBuffer = VertexBuffer(positions, 16 * sizeof(float));
@@ -146,9 +146,9 @@ void Rectangle::ConstructWithTexture(float xStart, float xEnd, float yStart, flo
 	float positions[] =
 	{
 		-m_XSize / 2, -m_YSize / 2, xStart, yStart,	//0.0f, 0.0f,
-		m_XSize  / 2, -m_YSize / 2, xEnd,   yStart,	//1.0f, 0.0f,
-		m_XSize  / 2, m_YSize  / 2, xEnd,   yEnd,	//1.0f, 1.0f,
-		-m_XSize / 2, m_YSize  / 2, xStart, yEnd	//0.0f, 1.0f
+		m_XSize / 2, -m_YSize / 2, xEnd,   yStart,	//1.0f, 0.0f,
+		m_XSize / 2, m_YSize / 2, xEnd,   yEnd,	//1.0f, 1.0f,
+		-m_XSize / 2, m_YSize / 2, xStart, yEnd	//0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {

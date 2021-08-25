@@ -5,7 +5,6 @@
 #include "MainMenuScene.h"
 #include "SceneManager.h"
 
-
 Game::Game() :Program()
 {
 }
